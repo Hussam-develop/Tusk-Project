@@ -20,9 +20,19 @@ return new class extends Migration
             $table->boolean('email_is_verified');
             $table->string('verification_code');
             $table->string('password');
-            $table->boolean('register_accepted')->default(false);
-            $table->rememberToken();
+            $table->string('remember_token', 100)->nullable();
             $table->string('phone');
+            $table->string('lab_name');
+            $table->char('lab_address', 50);
+            $table->string('lab_province');
+            $table->char('lab_phone', 14);
+            $table->dateTime('lab_register_date');
+            $table->boolean('subscription_is_valid_now');
+            $table->boolean('register_accepted');
+            $table->time('lab_from_hour');
+            $table->time('lab_to_hour');
+            $table->string('lab_logo');
+            $table->string('lab_type');
         });
     }
 

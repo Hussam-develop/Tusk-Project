@@ -9,10 +9,25 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class Dentist extends Authenticatable implements JWTSubject
 {
     protected $fillable = [
-        'name',
-        'email',
+        'first_name',
+        'last_name',
         'password',
+        'phone',
+        'image_path',
+        'email',
+        'email_is_verified',
+        'email_verified_at',
+        'verification_code',
+        'register_accepted',
+        'rememberToken',
 
+        //clinic details :
+        'clinic_name',
+        'clinic_address',
+        'clinic_province',
+        'clinic_phone',
+        'clinic_register_date',
+        'subscription_is_valid_now',
     ];
 
     protected $hidden = [
@@ -28,8 +43,66 @@ class Dentist extends Authenticatable implements JWTSubject
         ];
     }
 
+    /// relations
+
+    public function accountRecords()
+    {
+        return $this->hasMany(AccountRecord::class);
+    }
+    public function bills()
+    {
+        return $this->hasMany(Bill::class);
+    }
+    public function secretaries()
+    {
+        return $this->hasMany(Secretary::class);
+    }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+    public function patients()
+    {
+        return $this->hasMany(Patient::class);
+    }
+    public function labManager()
+    {
+        return $this->belongsToMany(LabManager::class, "dentist_labManagers", 'dentist_id', 'lab_manager_id');
+    }
+    public function medicalCases()
+    {
+        return $this->hasMany(MedicalCase::class);
+    }
+
+    //Morph
+    public function patientPayments()
+    {
+        return $this->morphMany(PatientPayment::class, 'creatorable');
+    }
+
+    public function appointments()
+    {
+        return $this->morphMany(Appointment::class, 'creatorable');
+    }
+    public function categories()
+    {
+        return $this->morphMany(Category::class, 'categoryable');
+    }
+    public function history()
+    {
+        return $this->morphMany(History::class, 'userable');
+    }
+    public function items()
+    {
+        return $this->morphMany(Item::class, 'creatorable');
+    }
+    public function subscriptions()
+    {
+        return $this->morphMany(Subscription::class, 'subscriptionable');
+    }
 
 
+    // jwt integration
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -44,5 +117,4 @@ class Dentist extends Authenticatable implements JWTSubject
     {
         return [];
     }
-
 }

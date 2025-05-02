@@ -9,9 +9,20 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class Secretary extends Authenticatable implements JWTSubject
 {
     protected $fillable = [
-        'name',
-        'email',
+        'dentist_id',
+
+        'first_name',
+        'last_name',
+        'address',
+        'is_staged',
         'password',
+        'attendence_time',
+        'phone',
+        'email',
+        'rememberToken',
+        'email_is_verified',
+        'email_verified_at',
+        'verification_code',
 
     ];
 
@@ -19,6 +30,26 @@ class Secretary extends Authenticatable implements JWTSubject
         'password',
         'remember_token',
     ];
+
+
+    public function dentist()
+    {
+        return $this->belongsTo(Dentist::class);
+    }
+
+    // Morph :
+    public function patientPayments()
+    {
+        return $this->morphMany(PatientPayment::class, 'creatorable');
+    }
+    public function appointments()
+    {
+        return $this->morphMany(Appointment::class, 'creatorable');
+    }
+    public function history()
+    {
+        return $this->morphMany(History::class, 'userable');
+    }
 
     protected function casts(): array
     {

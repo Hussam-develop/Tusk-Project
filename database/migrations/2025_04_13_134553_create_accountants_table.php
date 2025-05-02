@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('accountants', function (Blueprint $table) {
+
             $table->id();
+            $table->foreignId('lab_manager_id')->constrained()->onDelete('cascade');
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email')->unique();
@@ -21,10 +23,9 @@ return new class extends Migration
             $table->boolean('is_staged');
             $table->string('verification_code');
             $table->string('password');
-            $table->rememberToken();
+            $table->string('remember_token', 100)->nullable();
             $table->string('phone');
             $table->boolean('register_accepted')->default(false);
-
         });
     }
 

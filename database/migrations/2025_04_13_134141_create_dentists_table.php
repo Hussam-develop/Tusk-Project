@@ -19,10 +19,17 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('email_is_verified');
             $table->string('verification_code');
+            $table->string('image_path')->nullable();
             $table->string('password');
-            $table->rememberToken();
+            $table->string('remember_token', 100)->nullable();
             $table->integer('phone');
             $table->boolean('register_accepted')->default(false);
+            $table->string('clinic_name');
+            $table->char('clinic_address', 50);
+            $table->string('clinic_province');
+            $table->char('clinic_phone', 14);
+            $table->date('clinic_register_date');
+            $table->boolean('subscription_is_valid_now');
 
         });
     }
