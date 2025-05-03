@@ -40,8 +40,6 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-<<<<<<< HEAD
-=======
         'admin' => [
             'driver' => 'jwt',
             'provider' => 'admins',
@@ -66,7 +64,6 @@ return [
             'driver' => 'jwt',
             'provider' => 'inventory_managers',
         ],
->>>>>>> 27bbbff (Create Multi Guard)
     ],
 
     /*
@@ -91,8 +88,6 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
-<<<<<<< HEAD
-=======
         'admins' => [
             'driver' => 'eloquent',
             'model' =>  App\Models\Admin::class,
@@ -117,7 +112,6 @@ return [
             'driver' => 'eloquent',
             'model' =>  App\Models\InventoryManager::class,
         ],
->>>>>>> 27bbbff (Create Multi Guard)
 
         // 'users' => [
         //     'driver' => 'database',

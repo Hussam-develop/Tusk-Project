@@ -8,13 +8,9 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
-<<<<<<< HEAD
-        "laravel/tinker": "^2.10.1"
-=======
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
         "tymon/jwt-auth": "^2.2"
->>>>>>> 27bbbff (Create Multi Guard)
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

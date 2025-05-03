@@ -1,12 +1,6 @@
 <?php
 
 namespace App\Providers;
-
-<<<<<<< HEAD
-=======
->>>>>>> 27bbbff (Create Multi Guard)
-namespace App\Providers;
-
 use App\Models\Accountant;
 use App\Models\Admin;
 use App\Models\Dentist;
@@ -26,12 +20,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-<<<<<<< HEAD
-        //
-=======
         $this->app->bind(AuthRepositoryInterface::class, AuthRepository::class);
 
->>>>>>> 27bbbff (Create Multi Guard)
     }
 
     /**
