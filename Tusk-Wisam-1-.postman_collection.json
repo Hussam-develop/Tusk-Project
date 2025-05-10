@@ -1,0 +1,348 @@
+{
+	"info": {
+		"_postman_id": "57dd541b-8396-4286-8443-6a19d13195f4",
+		"name": "Tusk-Wisam",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "مدير المنصة",
+			"item": [
+				{
+					"name": "عرض المخابر المشتركة بالمنصة",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/admin/subcribed-labs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"subcribed-labs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "عرض العيادات المشتركة",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/admin/subscribed-clinics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"subscribed-clinics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "فلترة المخابر",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/admin/subscribed-labs/filter?lab_name=&lab_register_date=2025-05-04",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"subscribed-labs",
+								"filter"
+							],
+							"query": [
+								{
+									"key": "lab_name",
+									"value": ""
+								},
+								{
+									"key": "lab_register_date",
+									"value": "2025-05-04"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "فلترة العيادات",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"امجد احمد\",\r\n    \"clinic_register_date\": \"2025-05-04\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/admin/subscribed-clinics/filter",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"subscribed-clinics",
+								"filter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "عرض المخابر الغير مجددة الاشتراك",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/admin/labs/null-subscription",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"labs",
+								"null-subscription"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "عرض العيادات الغير مجددة الاشتراك",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/admin/clinics/null-subscription",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"clinics",
+								"null-subscription"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "عرض طلبات المخابر الانضمام للمنصة",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/admin/joinorderslabs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"joinorderslabs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "عرض طلبات الاطباء الانضمام للمنصة",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/admin/joinordersclinics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"joinordersclinics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "تجديد اشتراك مخبر",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/admin/renew-subscription-of-lab?lab_id=1&months=1&subscription_value=25552525",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"renew-subscription-of-lab"
+							],
+							"query": [
+								{
+									"key": "lab_id",
+									"value": "1"
+								},
+								{
+									"key": "months",
+									"value": "1"
+								},
+								{
+									"key": "subscription_value",
+									"value": "25552525"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "تجديد اشتراك عيادة",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/admin/renew-subscription-of-clinic?dentist_id=2&months=3&subscription_value=1000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"renew-subscription-of-clinic"
+							],
+							"query": [
+								{
+									"key": "dentist_id",
+									"value": "2"
+								},
+								{
+									"key": "months",
+									"value": "3"
+								},
+								{
+									"key": "subscription_value",
+									"value": "1000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "قبول طلب انضمام مخبر للمنصة",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/admin/lab-manager/5/accept-join-order-of-lab",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"lab-manager",
+								"5",
+								"accept-join-order-of-lab"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "قبول طلب انضمام عيادة للمنصة",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/admin/clinic/accept-join-order-of-clinic/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"clinic",
+								"accept-join-order-of-clinic",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
