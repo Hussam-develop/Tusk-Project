@@ -2,9 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\Admin;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Dentist;
+use App\Models\LabManager;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,9 +19,68 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        Admin::create([
+            'first_name' => "admin",
+            'last_name' => "admin",
+            'phone' => "0987070814",
+            // 'type' => "admin",
+            // 'register_accepted' => true,
+            'email' => "a@gmail.com",
+            'password' => Hash::make('password'),
+
         ]);
+        for ($i = 1; $i <= 10; $i++) {
+            Dentist::create([
+                'first_name' => "dentist" . $i,
+                'last_name' => "dentist" . $i,
+                'phone' => "0987070814",
+                'email' => "dentist$i" . "@gmail.com",
+                // 'type' => "admin",
+                // 'register_accepted' => true,
+                'email_is_verified' => true,
+                'verification_code' => 55555,
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+                'address' => "سوق الحميدية", //clinic address
+                'image_path' => 'image_path',
+                'register_accepted' => true,
+                'province' => "Damascus",
+                // 'rememberToken' => '',
+                'register_date' => now(),
+                'subscription_is_valid_now' => 1,
+            ]);
+        }
+        for ($i = 1; $i <= 10; $i++) {
+            LabManager::create([
+                'first_name' => "manager" . $i,
+                'last_name' => "manager" . $i,
+                // 'type' => "admin",
+                // 'register_accepted' => true,
+                'email' => "manager$i" . "@gmail.com",
+                'email_is_verified' => true,
+                'verification_code' => 55555,
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+
+                'register_accepted' => true,
+                // 'rememberToken' => '',
+
+                'lab_name' => "lab$i",
+                'lab_address' => "alzaheraa",
+                'lab_province' => "Damascus",
+                'lab_phone' => json_encode([
+                    'home' => fake()->phoneNumber(),
+                    'work' => fake()->phoneNumber(),
+                    'mobile' => fake()->phoneNumber(),
+                ]),
+
+                'register_date' => now(),
+                'subscription_is_valid_now' => 1,
+                'lab_logo' => "logo_path",
+                'lab_type' => "teeth",
+                'lab_from_hour' => "08:00",
+                'lab_to_hour' => "05:00",
+            ]);
+        }
     }
 }

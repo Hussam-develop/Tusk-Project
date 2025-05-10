@@ -9,13 +9,12 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class LabManager extends Authenticatable implements JWTSubject
 {
-    public $timestamps=false;
+    public $timestamps = false;
 
     protected $fillable = [
         'first_name',
         'last_name',
         'password',
-        'phone',
         'email',
         'email_is_verified',
         'email_verified_at',
@@ -29,7 +28,7 @@ class LabManager extends Authenticatable implements JWTSubject
         'lab_address',
         'lab_province',
         'lab_phone',
-        'lab_register_date',
+        'register_date',
         'subscription_is_valid_now',
         'lab_logo',
         'lab_type',

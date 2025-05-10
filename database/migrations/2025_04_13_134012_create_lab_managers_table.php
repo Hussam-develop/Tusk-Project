@@ -23,17 +23,15 @@ return new class extends Migration
             $table->rememberToken();
             $table->string('lab_type');
             $table->string('lab_name');
-            $table->string('lab_address',100);
+            $table->string('lab_address', 100);
             $table->string('lab_province');
-             $table->json('lab_phone');
-             $table->string('lab_logo')->nullable();
-             $table->time('lab_from_hour');
+            $table->json('lab_phone');
+            $table->string('lab_logo')->nullable();
+            $table->time('lab_from_hour');
             $table->time('lab_to_hour');
             $table->dateTime('register_date');
             $table->boolean('subscription_is_valid_now')->default(0);
-            $table->boolean('register_accepted')->default(0);
-
-
+            $table->boolean('register_accepted')->nullable()->default(null);
         });
     }
 

@@ -20,14 +20,14 @@ return new class extends Migration
             $table->rememberToken();
             $table->integer('phone');
             $table->string('address');
+            $table->string('province');
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('email_is_verified')->default(0);
             $table->string('verification_code')->nullable();
             $table->string('image_path')->nullable();
-            $table->boolean('register_accepted')->default(false);
+            $table->boolean('register_accepted')->nullable()->default(null);
             $table->date('register_date')->nullable();
             $table->boolean('subscription_is_valid_now')->default(0);
-
         });
     }
 

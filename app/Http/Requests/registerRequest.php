@@ -11,7 +11,7 @@ class registerRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return in_array($this->input('guard'),['dentist', 'lab_manager']);
+        return in_array($this->input('guard'), ['dentist', 'lab_manager']);
     }
 
     /**
@@ -72,10 +72,10 @@ class registerRequest extends FormRequest
             'image_path.required'           => 'Dentist profile image is required.',
             'clinic_name.required'          => 'Clinic name is required.',
             'clinic_province.required'      => 'Clinic province is required.',
-            'clinic_address.required'       => 'Clinic address is required.',
+            'address.required'       => 'Clinic address is required.',
             'clinic_phone.required'         => 'Clinic phone is required.',
-            'clinic_register_date.required' => 'Clinic register date is required.',
-            'clinic_register_date.date'     => 'Clinic register date must be a valid date.',
+            'register_date.required' => 'Clinic register date is required.',
+            'register_date.date'     => 'Clinic register date must be a valid date.',
 
             'lab_logo.required'      => 'Lab logo is required.',
             'lab_name.required'      => 'Lab name is required.',
