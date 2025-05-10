@@ -60,9 +60,9 @@ return [
             'driver' => 'jwt',
             'provider' => 'secrataries',
         ],
-        'inventory_manager' => [
+        'inventory_employee' => [
             'driver' => 'jwt',
-            'provider' => 'inventory_managers',
+            'provider' => 'inventory_employees',
         ],
     ],
 
@@ -108,9 +108,9 @@ return [
             'driver' => 'eloquent',
             'model' =>  App\Models\Secretary::class,
         ],
-        'inventory_managers' => [
+        'inventory_employees' => [
             'driver' => 'eloquent',
-            'model' =>  App\Models\InventoryManager::class,
+            'model' =>  App\Models\InventoryEmployee::class,
         ],
 
         // 'users' => [

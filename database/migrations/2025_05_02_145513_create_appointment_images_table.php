@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('appointment_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->boolean('is_diagram');
-            $table->timestamps();
+            $table->boolean('is_diagram')->default(0);
 
         });
     }

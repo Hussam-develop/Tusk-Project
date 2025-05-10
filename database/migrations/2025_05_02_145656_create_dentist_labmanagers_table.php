@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('lab_manager_id')->constrained()->onDelete('cascade');
             $table->foreignId('dentist_id')->constrained()->onDelete('cascade');
-            $table->boolean('request_is_accepted');
+            $table->boolean('request_is_accepted')->nullable();
             $table->timestamps();
         });
     }

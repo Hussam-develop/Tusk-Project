@@ -8,6 +8,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Secretary extends Authenticatable implements JWTSubject
 {
+    public $timestamps=false;
+
     protected $fillable = [
         'dentist_id',
 

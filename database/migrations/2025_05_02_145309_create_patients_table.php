@@ -13,15 +13,14 @@ return new class extends Migration
     {
         Schema::create('patients', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('dentist_id')->constrained()->onDelete('cascade');
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->foreignId('dentist_id')->constrained('dentists')->onDelete('cascade');
+            $table->string('full_name');
             $table->char('address', 50);
             $table->char('phone', 14);
             $table->date('birthday');
-            $table->double('current_balance');
+            $table->double('current_balance')->nullable();
             $table->boolean('is_smoker');
-            $table->enum('gender', ['male', 'female']);
+            $table->enum('gender', ['male','female']);
             $table->timestamps();
         });
     }

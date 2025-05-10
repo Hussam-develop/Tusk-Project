@@ -18,10 +18,10 @@ return new class extends Migration
             $table->morphs('creatorable');
             $table->string('name');
             $table->unsignedBigInteger('quantity');
-            $table->unsignedBigInteger('standard_quantity');
+            $table->unsignedBigInteger('standard_quantity')->default(0);
             $table->unsignedBigInteger('minimum_quantity');
             $table->boolean('is_static')->default(false);
-            $table->char('unit', 12);
+            $table->string('unit',50);
             $table->timestamps();
         });
     }

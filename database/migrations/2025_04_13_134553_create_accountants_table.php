@@ -19,13 +19,12 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->boolean('email_is_verified');
-            $table->boolean('is_staged');
-            $table->string('verification_code');
+            $table->boolean('email_is_verified')->default(0);
+            $table->boolean('is_staged')->default(0);
+            $table->string('verification_code')->nullable();
             $table->string('password');
-            $table->string('remember_token', 100)->nullable();
+            $table->rememberToken();
             $table->string('phone');
-            $table->boolean('register_accepted')->default(false);
         });
     }
 

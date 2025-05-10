@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('midical_case_id')->constrained('medical_cases')->onDelete('cascade');
             $table->string('name');
-            $table->boolean('is_case_image');
+            $table->boolean('is_case_image')->default(1);
             $table->timestamps();
         });
     }

@@ -15,14 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('dentist_id')->constrained()->onDelete('cascade');
             $table->foreignId('lab_manager_id')->constrained()->onDelete('cascade');
-            $table->foreignId('bill_id')->constrained()->onDelete('cascade');
+            $table->foreignId('bill_id')->nullable()->constrained()->onDelete('cascade');
             $table->morphs('creatorable');
             $table->double('signed_value');
-            $table->string('note');
+            $table->string('note')->nullable();
             $table->string('type');
             $table->double('current_account');
             $table->timestamps();
-
         });
     }
 

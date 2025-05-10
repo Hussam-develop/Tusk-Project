@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('bill_id')->constrained('bills')->onDelete('cascade');
             $table->foreignId('medical_case_id')->constrained('medical_cases')->onDelete('cascade');
-            $table->double('case_cost');
+            $table->double('case_cost')->nullable();
             $table->timestamps();
         });
     }

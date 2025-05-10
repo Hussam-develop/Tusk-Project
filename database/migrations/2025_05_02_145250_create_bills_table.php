@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
             $table->string('bill_number');
-            $table->foreignId('dentist_id')->constrained()->onDelete('cascade');
-            $table->foreignId('lab_manager_id')->constrained()->onDelete('cascade');
+            $table->foreignId('dentist_id')->constrained('dentists')->onDelete('cascade');
+            $table->foreignId('lab_manager_id')->constrained('lab_managers')->onDelete('cascade');
             $table->morphs('creatorable');
-            $table->double('total_cost');
+            $table->double('total_cost')->nullable();
             $table->date('date_from');
             $table->date('date_to');
             $table->timestamps();

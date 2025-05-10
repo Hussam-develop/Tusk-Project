@@ -17,7 +17,7 @@ return new class extends Migration
             $table->morphs('subscriptionable');
             $table->date('subscription_from');
             $table->date('subscription_to');
-            $table->boolean('subscription_is_valid');
+            $table->boolean('subscription_is_valid')->default(0);
             $table->double('subscription_value');
             $table->timestamps();
         });

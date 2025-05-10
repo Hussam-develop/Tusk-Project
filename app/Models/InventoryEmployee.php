@@ -9,6 +9,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class InventoryEmployee extends Authenticatable implements JWTSubject
 {
+    public $timestamps=false;
 
     protected $fillable = [
 

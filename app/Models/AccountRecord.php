@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class AccountRecord extends Model
 {
+    
     protected $fillable = [
 
         'dentist_id',

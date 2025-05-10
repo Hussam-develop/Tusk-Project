@@ -16,23 +16,24 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->boolean('email_is_verified');
-            $table->string('verification_code');
             $table->string('password');
-            $table->string('remember_token', 100)->nullable();
-            $table->string('phone');
-            $table->string('lab_name');
-            $table->char('lab_address', 50);
-            $table->string('lab_province');
-            $table->char('lab_phone', 14);
-            $table->dateTime('lab_register_date');
-            $table->boolean('subscription_is_valid_now');
-            $table->boolean('register_accepted');
-            $table->time('lab_from_hour');
-            $table->time('lab_to_hour');
-            $table->string('lab_logo');
+            $table->timestamp('email_verified_at')->nullable();
+            $table->boolean('email_is_verified')->default(0);
+            $table->string('verification_code')->nullable();
+            $table->rememberToken();
             $table->string('lab_type');
+            $table->string('lab_name');
+            $table->string('lab_address',100);
+            $table->string('lab_province');
+             $table->json('lab_phone');
+             $table->string('lab_logo')->nullable();
+             $table->time('lab_from_hour');
+            $table->time('lab_to_hour');
+            $table->dateTime('register_date');
+            $table->boolean('subscription_is_valid_now')->default(0);
+            $table->boolean('register_accepted')->default(0);
+
+
         });
     }
 

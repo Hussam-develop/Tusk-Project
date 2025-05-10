@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->morphs('userable');
             $table->string('operation_name');
-            $table->longText('details');
+            $table->longText('details')->nullable();
             $table->date('date_time');
             $table->timestamps();
         });

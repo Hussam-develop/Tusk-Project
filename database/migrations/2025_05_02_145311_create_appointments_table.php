@@ -16,11 +16,11 @@ return new class extends Migration
             $table->foreignId('patient_id')->constrained('patients')->onDelete('cascade');
             $table->morphs('creatorable');
             $table->string('title');
-            $table->time('from_houre');
-            $table->time('to_houre');
+            $table->time('from_hour');
+            $table->time('to_hour');
             $table->date('date');
-            $table->text('details');
-            $table->double('cost');
+            $table->text('details')->nullable();
+            $table->double('cost')->nullable();
             $table->boolean('is_paid')->default(false);
             $table->timestamps();
         });

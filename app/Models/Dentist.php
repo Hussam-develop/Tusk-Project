@@ -8,27 +8,25 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Dentist extends Authenticatable implements JWTSubject
 {
+    public $timestamps = false;
+
     protected $fillable = [
         'first_name',
         'last_name',
-        'password',
-        'phone',
-        'image_path',
         'email',
+        'password',
+        'image_path',
+        'phone', // phone clinic
+        'address', //clinic address
+        'province',
         'email_is_verified',
         'email_verified_at',
         'verification_code',
         'register_accepted',
-        'rememberToken',
-
-        //clinic details :
-        'clinic_name',
-        'clinic_address',
-        'clinic_province',
-        'clinic_phone',
         'clinic_register_date',
         'subscription_is_valid_now',
     ];
+
 
     protected $hidden = [
         'password',
