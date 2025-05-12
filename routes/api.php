@@ -27,8 +27,12 @@ Route::group(
     ],
     function () {
         Route::get('/send-verification-code/{guard}/{email}', [MailController::class, 'send_verification_code']);
+
+        Route::post('/check_verification_code', [MailController::class, 'check_verification_code']);
     }
 );
+
+
 
 //_________________________________________________________________admin routes
 route::group(

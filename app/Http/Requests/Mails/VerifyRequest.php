@@ -15,7 +15,7 @@ class VerifyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return in_array($this->input('guard'), ['dentist', 'lab_manager']);
+        return in_array($this->input('guard'), ['dentist', 'lab_manager', 'secratary', 'inventory_employee', 'accountant', 'admin']);
     }
 
     /**
@@ -30,10 +30,10 @@ class VerifyRequest extends FormRequest
             'email'      => [
                 'required',
                 'email',
-                // 'unique:' . $this->getTableName($guard) . ',email'
+                'exists:' . $this->getTableName($guard) . ',email'
             ],
             'guard'      => ['required', 'in:dentist,lab_manager'],
-            // 'verification_code' => ['required', 'integer'/*,"digits:6"*/]
+            'verification_code' => ['required', 'integer'/*,"digits:6"*/]
         ];
         return $rules;
     }
@@ -43,20 +43,24 @@ class VerifyRequest extends FormRequest
 
             'email.required' => 'لم يتم إدخال الإيميل',
             'email.email' => 'الإيميل غير مكتوب بطريقة صحيحة',
-            // 'email.exists' => 'هذا الإيميل غير مسجل مسبقاً. الرجاء إدخال إيميل آخر',
+            'email.exists' => 'هذا الإيميل غير مسجل مسبقاً. الرجاء إدخال إيميل آخر',
 
             'guard.required'      => 'نوع المستخدم مطلوب',
             'guard.in'            => 'نوع المستخدم يجب أن يكون dentist أو lab_manager.',
 
-            // 'verification_code.required' => 'لم يتم إدخال رمز التحقق',
-            // 'verification_code.integer' => 'يجب أن يكون رمز التحقق مكون من أرقام فقط',
+            'verification_code.required' => 'لم يتم إدخال رمز التحقق',
+            'verification_code.integer' => 'يجب أن يكون رمز التحقق مكون من أرقام فقط',
         ];
     }
     private function getTableName(string $guard): string
     {
         return match ($guard) {
-            'dentist'     => 'dentists',
+            'admin'     => 'admins',
             'lab_manager' => 'lab_managers',
+            'dentist'     => 'dentists',
+            'secratary'     => 'secretaries',
+            'inventory_employee'   => 'inventory_employees',
+            'accountant'     => 'accountants',
         };
     }
 

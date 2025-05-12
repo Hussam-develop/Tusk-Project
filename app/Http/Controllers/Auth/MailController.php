@@ -61,4 +61,18 @@ class MailController extends Controller
             return $this->returnErrorMessage("حدث خطأ , لم يتم إرسال رمز التحقق للإيميل . حاول مجدداً", 502);
         }
     }
+    public function check_verification_code(VerifyRequest $request)
+    {
+        $modelPath = $this->getModel($request->guard);
+        $user = $modelPath::where('email', $request->email)->first();
+        try {
+            if ($request->verification_code == $user->verification_code) {
+
+                return $this->returnSuccessMessage(200, "رمز التحقق من الإيميل صحيح");
+            }
+            return $this->returnErrorMessage("رمز التحقق غير مطابق. الرجاء إعادة كتابة الرمز أو طلب إعادة إرساله للإيميل", "Error", 422);
+        } catch (Exception $e) {
+            Log::error("Unable to send email ," . $e->getMessage());
+        }
+    }
 }
