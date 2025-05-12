@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\MailController;
 
 
 
@@ -19,7 +20,7 @@ route::group([
     Route::get('/profile', [AuthController::class, 'profile']);
 });
 
-//___________________________________________________________________________________________admin routes
+//_________________________________________________________________admin routes
 route::group(
     [
         'prefix' => 'admin',
@@ -43,4 +44,4 @@ route::group(
         Route::put('/clinic/accept-join-order-of-clinic/{id}', [AdminController::class, 'updateRegisterAcceptedclinic']);
     }
 );
-//___________________________________________________________________________________________end admin routes
+//_________________________________________________________________end admin routes

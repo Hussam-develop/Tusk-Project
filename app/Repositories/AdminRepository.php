@@ -2,11 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Models\LabManager;
+use Carbon\Carbon;
 
 use App\Models\Dentist;
-use Carbon\Carbon;
+use App\Models\LabManager;
 use App\Models\Subscription;
+use App\Http\Controllers\Auth\MailController;
 
 class AdminRepository
 {
@@ -162,6 +163,11 @@ class AdminRepository
         if ($labManager) {
             $labManager->register_accepted = 1;
             $labManager->save();
+
+            //Send Welcome Mail
+            $MailController = new MailController();
+            $MailController->send_welcome_mail($labManager->email, "LabManager");
+
             return 'yes';
         }
 
@@ -173,6 +179,11 @@ class AdminRepository
         if ($clinic) {
             $clinic->register_accepted = 1;
             $clinic->save();
+
+            //Send Welcome Mail
+            $MailController = new MailController();
+            $MailController->send_welcome_mail($clinic->email, "Dentist");
+
             return 'yes';
         }
         return NULL;
