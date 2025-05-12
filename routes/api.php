@@ -27,8 +27,10 @@ Route::group(
     ],
     function () {
         Route::get('/send-verification-code/{guard}/{email}', [MailController::class, 'send_verification_code']);
-
         Route::post('/check_verification_code', [MailController::class, 'check_verification_code']);
+
+        // not needed I think (samae check_verification_code): Route::post('/verify-mail-code-after-register', [MailController::class, 'verify_email_code']);
+        Route::post('/forget-password', [MailController::class, 'forget_password']);
     }
 );
 

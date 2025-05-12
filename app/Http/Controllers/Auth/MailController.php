@@ -10,8 +10,10 @@ use app\Traits\handleResponseTrait;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\Mails\VerifyRequest;
+use App\Http\Requests\Mails\ForgetPasswordRequest;
 
 class MailController extends Controller
 {
@@ -71,6 +73,21 @@ class MailController extends Controller
                 return $this->returnSuccessMessage(200, "رمز التحقق من الإيميل صحيح");
             }
             return $this->returnErrorMessage("رمز التحقق غير مطابق. الرجاء إعادة كتابة الرمز أو طلب إعادة إرساله للإيميل", "Error", 422);
+        } catch (Exception $e) {
+            Log::error("Unable to send email ," . $e->getMessage());
+        }
+    }
+    public function forget_password(ForgetPasswordRequest $request)
+    {
+        $modelPath = $this->getModel($request->guard);
+        $user = $modelPath::where('email', $request->email)->first();
+
+        try {
+            $user->update([
+                'password' => Hash::make($request->new_password),
+            ]);
+            $user->save();
+            return $this->returnSuccessMessage(200, "تمّ حفظ كلمة السر الجديدة بنجاح .");
         } catch (Exception $e) {
             Log::error("Unable to send email ," . $e->getMessage());
         }
