@@ -20,6 +20,16 @@ route::group([
     Route::get('/profile', [AuthController::class, 'profile']);
 });
 
+/// E-Mails
+Route::group(
+    [
+        'prefix' => 'auth/mails',
+    ],
+    function () {
+        Route::get('/send-verification-code/{guard}/{email}', [MailController::class, 'send_verification_code']);
+    }
+);
+
 //_________________________________________________________________admin routes
 route::group(
     [

@@ -23,14 +23,16 @@ class AuthController extends Controller
 
     public function register(registerRequest $request)
     {
-         $data = $this->authService->register($request->validated(),$request->guard);
+        $data = $this->authService->register($request->validated(), $request->guard);
+
+        $MailController = new MailController();
+        $MailController->send_verification_code($request->guard, $request->email);
 
         return response()->json([
             'status' => 'success',
             'user'   => $data['user'],
             'token'  => $data['token'],
         ], 201);
-
     }
 
 
@@ -39,15 +41,15 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
 
-        $credentials = $request->only('password','email');
-        $guard=$request->guard;
-        $token = $this->authService->login($guard,$credentials);
+        $credentials = $request->only('password', 'email');
+        $guard = $request->guard;
+        $token = $this->authService->login($guard, $credentials);
 
         if (!$token) {
             return $this->returnErrorMessage('Invalid credentials', 401);
         }
-         $reponseData['access_token']=$token;
-         $reponseData['expires_at']=JWTAuth::factory()->getTTL() * 60;
+        $reponseData['access_token'] = $token;
+        $reponseData['expires_at'] = JWTAuth::factory()->getTTL() * 60;
 
         return $this->returnData('data', $reponseData, 'Login Successfully', 200);
     }
@@ -61,7 +63,7 @@ class AuthController extends Controller
         return $this->returnSuccessMessage('Successfully logged out', 200);
     }
 
-   //////////////////Refresh a token.
+    //////////////////Refresh a token.
 
     public function refresh(): JsonResponse
     {
@@ -78,7 +80,7 @@ class AuthController extends Controller
     }
 
 
-   ////////////////// User profile.
+    ////////////////// User profile.
 
     public function profile(): JsonResponse
     {
