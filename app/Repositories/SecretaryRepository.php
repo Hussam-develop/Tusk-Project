@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Models\Secretary;
 use App\Models\Dentist;
+use App\Models\Secretary;
 
 class SecretaryRepository
 {
@@ -30,5 +30,12 @@ class SecretaryRepository
         $secretary = Secretary::find($id);
 
         return $secretary;
+    }
+    public function create($id, array $data)
+    {
+        $data['dentist_id'] = $id;
+        $data['password'] = NULL;
+
+        return Secretary::create($data);
     }
 }

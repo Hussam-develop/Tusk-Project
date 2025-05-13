@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Services\SecretaryService;
+use App\Http\Requests\addSecretary;
+use App\Http\Requests\addSecretaryRequest;
 use App\Http\Requests\updatesecretaryequest;
+use App\Services\SecretaryService;
 
 class DentistController extends Controller
 {
@@ -27,5 +28,10 @@ class DentistController extends Controller
     public function deleteSecretary($id)
     {
         return $this->secretaryService->removeSecretary($id);
+    }
+    public function addSecretary(addSecretaryRequest $request)
+    {
+        $data = $request->validated();
+        return $this->secretaryService->addSecretary($data);
     }
 }

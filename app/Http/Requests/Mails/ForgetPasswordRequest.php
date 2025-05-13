@@ -32,7 +32,7 @@ class ForgetPasswordRequest extends FormRequest
                 'email',
                 'exists:' . $this->getTableName($guard) . ',email'
             ],
-            'guard'      => ['required', 'in:dentist,lab_manager'],
+            'guard'      => ['required', 'in: dentist,lab_manager,secratary,inventory_employee,accountant,admin'],
             'new_password' => [
                 'required',
                 'min:6',

@@ -79,6 +79,7 @@ Route::group([
         Route::get('/', [DentistController::class, 'getSecretaries']);
         Route::put('/update/{id}', [DentistController::class, 'updateSecretary']);
         Route::delete('delete/{id}', [DentistController::class, 'deleteSecretary']);
+        Route::post('addsecretary', [DentistController::class, 'addSecretary']);
     });
 });
 

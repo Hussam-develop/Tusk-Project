@@ -7,13 +7,14 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class updatesecretaryequest extends FormRequest
+class addSecretaryRequest extends FormRequest
 {
-    use handleResponseTrait;
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize()
+    use handleResponseTrait;
+
+    public function authorize(): bool
     {
         return true;
     }
@@ -23,14 +24,14 @@ class updatesecretaryequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:15', 'unique:secretaries,phone'],
             'email' => ['required', 'string', 'max:255', 'unique:secretaries,email'],
-            'attendance_time' => ['required', 'string', 'max:255'],
+            'attendence_time' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255']
 
         ];
@@ -56,9 +57,9 @@ class updatesecretaryequest extends FormRequest
             'email.max' => 'حقل البريد الإلكتروني يجب أن لا يتجاوز 255 حرفًا.',
             'email.unique' => 'حقل البريد الإلكتروني مكرر ادخل غيره .',
 
-            'attendance_time.required' => 'حقل وقت الحضور مطلوب.',
-            'attendance_time.string' => 'حقل وقت الحضور يجب أن يكون نصًا.',
-            'attendance_time.max' => 'حقل وقت الحضور يجب أن لا يتجاوز 255 حرفًا.',
+            'attendence_time.required' => 'حقل وقت الحضور مطلوب.',
+            'attendence_time.string' => 'حقل وقت الحضور يجب أن يكون نصًا.',
+            'attendence_time.max' => 'حقل وقت الحضور يجب أن لا يتجاوز 255 حرفًا.',
         ];
     }
     protected function failedValidation(Validator $validator)

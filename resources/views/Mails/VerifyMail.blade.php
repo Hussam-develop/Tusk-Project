@@ -23,7 +23,7 @@
         @if ($guard == 'dentist')
             كطبيب أسنان
         @endif
-        {{-- @if ($guard == 'accountant')
+        @if ($guard == 'accountant')
             كمحاسب
         @endif
         @if ($guard == 'inventory_employee')
@@ -34,7 +34,7 @@
         @endif
         @if ($guard == 'admin')
             كمدير منصة
-        @endif --}}
+        @endif
         ,
         لقد تلقينا طلبًا للوصول إلى حسابك على Google
         من خلال عنوان بريدك الإلكتروني التالي :

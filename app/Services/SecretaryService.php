@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
-use App\Http\Resources\secretaryresource;
-
-use App\Repositories\SecretaryRepository;
 use app\Traits\handleResponseTrait;
+
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\secretaryresource;
+use App\Repositories\SecretaryRepository;
+use App\Http\Controllers\Auth\MailController;
 
 class SecretaryService
 {
@@ -65,6 +67,23 @@ class SecretaryService
             return $this->returnSuccessMessage(200, 'تم حذف السكرتيرة  ');
         }
         return $this->returnErrorMessage('  السكرتيرة غير موجودة  .', 404);
+    }
+    public function addSecretary(array $data)
+    {
+
+        try {
+            $dentistId = Auth::id();
+            $fromaddrepo = $this->secretaryRepository->create($dentistId, $data);
+            $MailController = new MailController();
+
+            if ($fromaddrepo) {
+                $MailController->send_verification_code('secratary', $data['email']);
+                return $this->returnSuccessMessage(200, 'تم إضافة السكرتيرة بنجاح. ');
+            }
+        } catch (\Exception $e) {
+            Log::error("Unable to addSecretary," . $e->getMessage());
+            return $this->returnErrorMessage('حدث خطأ أثناء اضافة  السكرتيرة.', 500);
+        }
     }
 }
 //

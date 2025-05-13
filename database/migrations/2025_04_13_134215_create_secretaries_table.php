@@ -22,11 +22,11 @@ return new class extends Migration
             $table->boolean('email_is_verified')->default(0);
             $table->boolean('is_staged')->default(0);
             $table->string('verification_code')->nullable();
-            $table->string('password');
+            $table->string('password')->default(NULL)->nullable(); // إذا كنت تريد تعيين قيمة افتراضية كسلسلة فارغة
             $table->rememberToken();
             $table->string('phone');
             $table->string('attendence_time');
-            // $table->boolean('register_accepted')->default(false); not needed here
+            // $table->boolean('register_accepted')->default(false);
         });
     }
 
