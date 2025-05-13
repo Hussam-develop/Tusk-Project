@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\Mails\StageRequest;
 use App\Http\Requests\Mails\VerifyRequest;
 use App\Http\Requests\Mails\ForgetPasswordRequest;
 
@@ -69,7 +70,9 @@ class MailController extends Controller
         $user = $modelPath::where('email', $request->email)->first();
         try {
             if ($request->verification_code == $user->verification_code) {
-
+                $user->email_is_verified = true;
+                $user->email_verified_at = now();
+                $user->save();
                 return $this->returnSuccessMessage(200, "رمز التحقق من الإيميل صحيح");
             }
             return $this->returnErrorMessage("رمز التحقق غير مطابق. الرجاء إعادة كتابة الرمز أو طلب إعادة إرساله للإيميل", "Error", 422);
@@ -90,6 +93,29 @@ class MailController extends Controller
             return $this->returnSuccessMessage(200, "تمّ حفظ كلمة السر الجديدة بنجاح .");
         } catch (Exception $e) {
             Log::error("Unable to send email ," . $e->getMessage());
+        }
+    }
+    public function stageEmployee(StageRequest $request)
+    {
+        $modelPath = $this->getModel($request->guard);
+        $user = $modelPath::where('email', $request->email)->first();
+        try {
+
+            if ($request->verification_code == $user->verification_code) {
+                $user->update([
+                    'email_is_verified' => 1,
+                    'email_verified_at' => now(),
+                    "is_staged" => true, //only for JWT CleanCode , if MVC : unComment the two lines below.
+                    'password' => Hash::make($request->stage_password)
+                ]);
+                // $user->save();
+                // $user->update(["is_staged" => true]); //in other table in mvc Project
+                $user->save();
+                return $this->returnData($request->guard, $user, "تمّ توثيق الحساب  بنجاح ", 200);
+            }
+        } catch (Exception $e) {
+            Log::error("Unable to stage_employee ," . $e->getMessage());
+            return $this->returnErrorMessage(422, "رمز التحقق غير صحيح. الرجاء المحاولة مجدداً برمز آخر أو إعادة إرسال الرمز للإيميل مرة أخرى .");
         }
     }
 }

@@ -162,6 +162,7 @@ class AdminRepository
         $labManager = LabManager::find($id);
         if ($labManager) {
             $labManager->register_accepted = 1;
+            $labManager->register_date = now();
             $labManager->save();
 
             //Send Welcome Mail
@@ -178,6 +179,8 @@ class AdminRepository
         $clinic = Dentist::find($id);
         if ($clinic) {
             $clinic->register_accepted = 1;
+            $clinic->register_date = now();
+
             $clinic->save();
 
             //Send Welcome Mail
