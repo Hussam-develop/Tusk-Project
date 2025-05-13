@@ -8,9 +8,9 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Accountant extends Authenticatable implements JWTSubject
 {
-    protected $table='accountants';
+    protected $table = 'accountants';
     protected $fillable = [
-       'lab_manager_id',
+        'lab_manager_id',
 
         'first_name',
         'last_name',
@@ -18,7 +18,7 @@ class Accountant extends Authenticatable implements JWTSubject
         'password',
         'is_staged',
         'phone',
-        'rememberToken',
+        'remember_token',
         'email_is_verified',
         'email_verified_at',
         'verification_code',

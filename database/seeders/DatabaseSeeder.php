@@ -46,7 +46,7 @@ class DatabaseSeeder extends Seeder
                 'image_path' => 'image_path',
                 'register_accepted' => true,
                 'province' => "Damascus",
-                // 'rememberToken' => '',
+                // 'remember_token' => '',
                 'register_date' => now(),
                 'subscription_is_valid_now' => 1,
             ]);
@@ -64,7 +64,7 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('password'),
 
                 'register_accepted' => true,
-                // 'rememberToken' => '',
+                // 'remember_token' => '',
 
                 'lab_name' => "lab$i",
                 'lab_address' => "alzaheraa",

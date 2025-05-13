@@ -21,7 +21,7 @@ class LabManager extends Authenticatable implements JWTSubject
         'email_verified_at',
         'verification_code',
         'register_accepted',
-        'rememberToken',
+        'remember_token',
 
         // lab details :
 

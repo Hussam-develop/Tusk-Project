@@ -21,7 +21,7 @@ return new class extends Migration
             $table->boolean('email_is_verified')->default(0);
             $table->string('verification_code')->nullable();
             $table->boolean('is_staged')->default(0);
-            $table->string('password');
+            $table->string('password')->nullable()->default(null);
             $table->rememberToken();
             $table->string('phone');
         });

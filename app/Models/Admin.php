@@ -8,14 +8,14 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Admin extends Authenticatable implements JWTSubject
 {
-    public $timestamps=false;
+    public $timestamps = false;
     protected $fillable = [
         'first_name',
         'last_name',
         'email',
         'password',
         'phone',
-        'rememberToken',
+        'remember_token',
         'email_is_verified',
         'email_verified_at',
         'verification_code',

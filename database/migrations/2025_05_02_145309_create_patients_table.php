@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('birthday');
             $table->double('current_balance')->nullable();
             $table->boolean('is_smoker');
-            $table->enum('gender', ['male','female']);
+            $table->enum('gender', ['male', 'female']);
             $table->timestamps();
         });
     }
