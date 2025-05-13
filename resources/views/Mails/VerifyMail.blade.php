@@ -29,7 +29,7 @@
         @if ($guard == 'inventory_employee')
             كموظف مخزون
         @endif
-        @if ($guard == 'secratary')
+        @if ($guard == 'secretary')
             كموظف سكرتاريا
         @endif
         @if ($guard == 'admin')

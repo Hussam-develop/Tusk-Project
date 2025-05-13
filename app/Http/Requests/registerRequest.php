@@ -6,15 +6,15 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class registerRequest extends FormRequest
 {
-    /**
+    /*
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return in_array($this->input('guard'), ['dentist', 'lab_manager']);
+        return true;
     }
 
-    /**
+    /*
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
@@ -24,27 +24,36 @@ class registerRequest extends FormRequest
         $guard = $this->input('guard');
 
         $commonRules = [
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name'  => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'min:3', 'max:15'],
+            'last_name'  => ['required', 'string', 'min:3', 'max:255'],
             'email'      => ['required', 'email', 'unique:' . $this->getTableName($guard) . ',email'],
-            'password'   => ['required', 'string', 'min:6'],
             'guard'      => ['required', 'in:dentist,lab_manager'],
+            'password'   => [
+                'required',
+                'string',
+                'min:8',                  // الحد الأدنى للطول
+                'regex:/[a-z]/',          // حرف صغير على الأقل
+                'regex:/[A-Z]/',          // حرف كبير على الأقل
+                'regex:/[0-9]/',          // رقم واحد على الأقل
+                'regex:/[@$!%*#?&]/',     // رمز خاص واحد على الأقل
+                'confirmed',              // تأكيد كلمة المرور],
+            ],
 
         ];
 
         $labManagerRules = [
-            'lab_name'      => ['required', 'string'],
-            'lab_type'      => ['required', 'string'],
-            'lab_from_hour' => ['required'],
-            'lab_to_hour'   => ['required'],
-            'lab_phone'     => ['required'],
-            'lab_province'  => ['required', 'string'],
-            'lab_address'   => ['required', 'string'],
+            'lab_name'      => ['required', 'string', 'max:30'],
+            'lab_type'      => ['required', 'string', 'max:20'],
+            'lab_from_hour' => ['required', 'date_format:H:i'],
+            'lab_to_hour'   => ['required', 'date_format:H:i', 'after:lab_from_hour'],
+            'lab_phone'     => ['required', 'size:2'],
+            'lab_province'  => ['required', 'string', 'max:15'],
+            'lab_address'   => ['required', 'string', 'max:60'],
 
         ];
         $dentistRules = [
             'phone'      => ['required', 'string', 'max:20'],
-            'address'    => ['required', 'string'],
+            'address'    => ['required', 'string', 'min:10'],
         ];
 
         return match ($guard) {
@@ -52,39 +61,35 @@ class registerRequest extends FormRequest
             'lab_manager' => array_merge($commonRules, $labManagerRules),
         };
     }
-
-
     public function messages(): array
     {
         return [
-            'first_name.required' => 'First name is required.',
-            'last_name.required'  => 'Last name is required.',
-            'email.required'      => 'Email is required.',
-            'email.email'         => 'Please enter a valid email address.',
-            'email.unique'        => 'This email is already registered.',
-            'password.required'   => 'Password is required.',
-            'password.min'        => 'Password must be at least 6 characters.',
-            'password.confirmed'  => 'Password confirmation does not match.',
-            'phone.required'      => 'Phone number is required.',
-            'guard.required'      => 'User type is required.',
-            'guard.in'            => 'User type must be either dentist or lab manager.',
+            'first_name.required' => 'الاسم الأول مطلوب.',
+            'last_name.required'  => 'اسم العائلة مطلوب.',
+            'email.required'      => 'البريد الإلكتروني مطلوب.',
+            'email.email'         => 'يرجى إدخال عنوان بريد إلكتروني صالح.',
+            'email.unique'        => 'هذا البريد الإلكتروني مسجّل بالفعل.',
+            'password.required'   => 'كلمة المرور مطلوبة.',
+            'password.min'        => 'يجب أن تكون كلمة المرور 6 أحرف على الأقل.',
+            'password.regex'     => 'كلمة المرور يجب أن تحتوي على حرف كبير، حرف صغير، رقم، ورمز خاص.',
+            'password.confirmed'  => 'تأكيد كلمة المرور غير مطابق.',
+            'phone.required'      => 'رقم الهاتف مطلوب.',
+            'guard.required'      => 'نوع المستخدم مطلوب.',
+            'guard.in'            => 'يجب أن يكون نوع المستخدم طبيب أسنان أو مدير مخبر.',
+            'address.required'       => 'عنوان العيادة مطلوب.',
+            //'lab_register_date.required' => 'تاريخ تسجيل المخبر مطلوب.',
+            // 'lab_register_date.date'     => 'يجب أن يكون تاريخ تسجيل المخبر تاريخًا صالحًا.',
+            //'lab_logo.required'      => 'شعار المخبر مطلوب.',
+            'lab_name.required'      => 'اسم المختبر مطلوب.',
+            'lab_province.required'  => 'المحافظة التي يقع فيها المختبر مطلوبة.',
+            'lab_address.required'   => 'عنوان المختبر مطلوب.',
+            'lab_phone.required'     => 'هاتف المختبر مطلوب.',
+            'lab_type.required'      => 'نوع المختبر مطلوب.',
+            'lab_from_hour.required' => 'ساعة افتتاح المختبر مطلوبة.',
+            'lab_to_hour.required'   => 'ساعة إغلاق المختبر مطلوبة.',
+            'lab_to_hour.date_format' => 'ساعة الإغلاق يجب أن تكون بصيغة (ساعة:دقيقة) مثل 17:00.',
+            'lab_to_hour.after' => 'ساعة الإغلاق يجب أن تكون بعد ساعة الافتتاح.',
 
-            'image_path.required'           => 'Dentist profile image is required.',
-            'clinic_name.required'          => 'Clinic name is required.',
-            'clinic_province.required'      => 'Clinic province is required.',
-            'address.required'       => 'Clinic address is required.',
-            'clinic_phone.required'         => 'Clinic phone is required.',
-            'register_date.required' => 'Clinic register date is required.',
-            'register_date.date'     => 'Clinic register date must be a valid date.',
-
-            'lab_logo.required'      => 'Lab logo is required.',
-            'lab_name.required'      => 'Lab name is required.',
-            'lab_province.required'  => 'Lab province is required.',
-            'lab_address.required'   => 'Lab address is required.',
-            'lab_phone.required'     => 'Lab phone is required.',
-            'lab_type.required'      => 'Lab type is required.',
-            'lab_from_hour.required' => 'Lab opening hour is required.',
-            'lab_to_hour.required'   => 'Lab closing hour is required.',
         ];
     }
 

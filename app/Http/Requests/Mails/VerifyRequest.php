@@ -15,7 +15,7 @@ class VerifyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return in_array($this->input('guard'), ['dentist', 'lab_manager', 'secratary', 'inventory_employee', 'accountant', 'admin']);
+        return in_array($this->input('guard'), ['dentist', 'lab_manager', 'secretary', 'inventory_employee', 'accountant', 'admin']);
     }
 
     /**
@@ -58,7 +58,7 @@ class VerifyRequest extends FormRequest
             'admin'     => 'admins',
             'lab_manager' => 'lab_managers',
             'dentist'     => 'dentists',
-            'secratary'     => 'secretaries',
+            'secretary'     => 'secretaries',
             'inventory_employee'   => 'inventory_employees',
             'accountant'     => 'accountants',
         };

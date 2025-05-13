@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
+    /*
      * Run the migrations.
      */
     public function up(): void
@@ -29,13 +29,13 @@ return new class extends Migration
             $table->string('lab_logo')->nullable();
             $table->time('lab_from_hour');
             $table->time('lab_to_hour');
-            $table->dateTime('register_date');
+            $table->dateTime('register_date')->nullable();
             $table->boolean('subscription_is_valid_now')->default(0);
-            $table->boolean('register_accepted')->nullable()->default(null);
+            $table->boolean('register_accepted')->default(0);
         });
     }
 
-    /**
+    /*
      * Reverse the migrations.
      */
     public function down(): void

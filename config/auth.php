@@ -56,9 +56,9 @@ return [
             'driver' => 'jwt',
             'provider' => 'accountants',
         ],
-        'secratary' => [
+        'secretary' => [
             'driver' => 'jwt',
-            'provider' => 'secrataries',
+            'provider' => 'secretaries',
         ],
         'inventory_employee' => [
             'driver' => 'jwt',
@@ -104,7 +104,7 @@ return [
             'driver' => 'eloquent',
             'model' =>  App\Models\Accountant::class,
         ],
-        'secrataries' => [
+        'secretaries' => [
             'driver' => 'eloquent',
             'model' =>  App\Models\Secretary::class,
         ],

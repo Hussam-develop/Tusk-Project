@@ -15,6 +15,7 @@ class LabManager extends Authenticatable implements JWTSubject
         'first_name',
         'last_name',
         'password',
+        'phone',
         'email',
         'email_is_verified',
         'email_verified_at',
@@ -43,6 +44,14 @@ class LabManager extends Authenticatable implements JWTSubject
         'remember_token',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'lab_phone' => 'array'
+        ];
+    }
 
     public function accountRecords()
     {
@@ -100,15 +109,6 @@ class LabManager extends Authenticatable implements JWTSubject
         return $this->morphMany(Subscription::class, 'subscriptionable');
     }
 
-
-
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
 
     public function getJWTIdentifier()
     {

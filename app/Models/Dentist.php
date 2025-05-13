@@ -18,12 +18,11 @@ class Dentist extends Authenticatable implements JWTSubject
         'image_path',
         'phone', // phone clinic
         'address', //clinic address
-        'province',
         'email_is_verified',
         'email_verified_at',
         'verification_code',
         'register_accepted',
-        'register_date',
+        'clinic_register_date',
         'subscription_is_valid_now',
     ];
 

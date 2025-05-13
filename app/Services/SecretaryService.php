@@ -77,7 +77,7 @@ class SecretaryService
             $MailController = new MailController();
 
             if ($fromaddrepo) {
-                $MailController->send_verification_code('secratary', $data['email']);
+                $MailController->send_verification_code('secretary', $data['email']);
                 return $this->returnSuccessMessage(200, 'تم إضافة السكرتيرة بنجاح. ');
             }
         } catch (\Exception $e) {

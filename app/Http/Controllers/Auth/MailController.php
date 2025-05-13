@@ -27,7 +27,7 @@ class MailController extends Controller
             'dentist'     => "App\\Models\\Dentist",
             'accountant' => "App\\Models\\Accountant",
             'inventory_employee' => "App\\Models\\InventoryEmployee",
-            'secratary' => "App\\Models\\Secretary",
+            'secretary' => "App\\Models\\Secretary",
         };
     }
     public function send_welcome_mail($email, $modelName)

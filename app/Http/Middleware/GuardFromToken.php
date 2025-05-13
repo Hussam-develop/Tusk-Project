@@ -16,7 +16,7 @@ class GuardFromToken
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    protected array $guards =['admin','lab_manager','dentist','secratary','accountant','inventory_employee']; // List all guards using JWT
+    protected array $guards = ['admin', 'lab_manager', 'dentist', 'secretary', 'accountant', 'inventory_employee']; // List all guards using JWT
 
     /*
        How middleware work ?
@@ -35,8 +35,8 @@ class GuardFromToken
 
         foreach ($this->guards as $guard) {
             try {
-                Auth::shouldUse($guard);///Auth::user()==Dentist
-                $user =Auth::user();
+                Auth::shouldUse($guard); ///Auth::user()==Dentist
+                $user = Auth::user();
 
                 if ($user) {
                     return $next($request); // guard is now active

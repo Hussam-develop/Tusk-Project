@@ -17,7 +17,7 @@ class StageRequest extends FormRequest
     {
         return true;
 
-        //return in_array($this->input('guard'), ['secratary', 'inventory_employee', 'accountant']);
+        //return in_array($this->input('guard'), ['secretary', 'inventory_employee', 'accountant']);
     }
 
     /**
@@ -34,7 +34,7 @@ class StageRequest extends FormRequest
                 'email',
                 'exists:' . $this->getTableName($guard) . ',email'
             ],
-            'guard'      => ['required', 'in:secratary,inventory_employee,accountant'],
+            'guard'      => ['required', 'in:secretary,inventory_employee,accountant'],
             'verification_code' => ['required', 'integer'/*,"digits:6"*/]
         ];
         return $rules;
@@ -48,7 +48,7 @@ class StageRequest extends FormRequest
             'email.exists' => 'هذا الإيميل غير مسجل مسبقاً. الرجاء إدخال إيميل آخر',
 
             'guard.required'      => 'نوع المستخدم مطلوب',
-            'guard.in'            => " نوع المستخدم يجب أن يكون ضمن أحد القيم التالية : [secratary أو inventory_employee أو  accountant ]",
+            'guard.in'            => " نوع المستخدم يجب أن يكون ضمن أحد القيم التالية : [secretary أو inventory_employee أو  accountant ]",
 
             'verification_code.required' => 'لم يتم إدخال رمز التحقق',
             'verification_code.integer' => 'يجب أن يكون رمز التحقق مكون من أرقام فقط',
@@ -60,7 +60,7 @@ class StageRequest extends FormRequest
             'admin'     => 'admins',
             'lab_manager' => 'lab_managers',
             'dentist'     => 'dentists',
-            'secratary'     => 'secretaries',
+            'secretary'     => 'secretaries',
             'inventory_employee'   => 'inventory_employees',
             'accountant'     => 'accountants',
         };
