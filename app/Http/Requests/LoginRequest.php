@@ -24,26 +24,26 @@ class LoginRequest extends FormRequest
     {
 
         return [
-            'email'=> ['required','email',Rule::exists($this->getTableName($this->guard),'email')],
+            'email' => ['required', 'email', Rule::exists($this->getTableName($this->guard), 'email')],
             'password' => ['required', 'string', 'min:6'],
-            'guard'    => ['required', 'in:dentist,lab_manager,accountant'],
+            'guard'    => ['required', 'in:dentist,lab_manager,accountant,secratary,inventory_employee,admin'],
         ];
     }
 
     public function messages(): array
-{
-    return [
-        'email.required'    => 'Email is required.',
-        'email.email'       => 'Enter a valid email.',
-        'email.exists'      => 'This email does not exist in the selected '.$this->getTableName($this->guard).'user type.',
+    {
+        return [
+            'email.required'    => 'Email is required.',
+            'email.email'       => 'Enter a valid email.',
+            'email.exists'      => 'This email does not exist in the selected ' . $this->getTableName($this->guard) . 'user type.',
 
-        'password.required' => 'Password is required.',
-        'password.min'      => 'Password must be at least 6 characters.',
+            'password.required' => 'Password is required.',
+            'password.min'      => 'Password must be at least 6 characters.',
 
-        'guard.required'    => 'User type is required.',
-        'guard.in'          => 'Allowed user types: dentist, lab_manager, accountant, secratary, inventory_employee',
-    ];
-}
+            'guard.required'    => 'User type is required.',
+            'guard.in'          => 'Allowed user types: dentist, lab_manager, accountant, secratary, inventory_employee',
+        ];
+    }
 
 
 
@@ -52,7 +52,7 @@ class LoginRequest extends FormRequest
         return match ($guard) {
             'dentist'     => 'dentists',
             'lab_manager' => 'lab_managers',
-            'accountant'=>'accountants',
+            'accountant' => 'accountants',
         };
     }
 }

@@ -15,7 +15,9 @@ class StageRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return in_array($this->input('guard'), ['secratary', 'inventory_employee', 'accountant']);
+        return true;
+
+        //return in_array($this->input('guard'), ['secratary', 'inventory_employee', 'accountant']);
     }
 
     /**
@@ -32,7 +34,7 @@ class StageRequest extends FormRequest
                 'email',
                 'exists:' . $this->getTableName($guard) . ',email'
             ],
-            'guard'      => ['required', 'in:dentist,lab_manager'],
+            'guard'      => ['required', 'in:secratary,inventory_employee,accountant'],
             'verification_code' => ['required', 'integer'/*,"digits:6"*/]
         ];
         return $rules;

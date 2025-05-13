@@ -108,11 +108,13 @@ class MailController extends Controller
                     "is_staged" => true, //only for JWT CleanCode , if MVC : unComment the two lines below.
                     'password' => Hash::make($request->stage_password)
                 ]);
-                // $user->save();
-                // $user->update(["is_staged" => true]); //in other table in mvc Project
-                $user->save();
-                return $this->returnData($request->guard, $user, "تمّ توثيق الحساب  بنجاح ", 200);
+            } else {
+                return $this->returnErrorMessage(422, "رمز التحقق غير صحيح. الرجاء المحاولة مجدداً برمز آخر أو إعادة إرسال الرمز للإيميل مرة أخرى");
             }
+            // $user->save();
+            // $user->update(["is_staged" => true]); //in other table in mvc Project
+            $user->save();
+            return $this->returnData($request->guard, $user, "تمّ توثيق الحساب  بنجاح ", 200);
         } catch (Exception $e) {
             Log::error("Unable to stage_employee ," . $e->getMessage());
             return $this->returnErrorMessage(422, "رمز التحقق غير صحيح. الرجاء المحاولة مجدداً برمز آخر أو إعادة إرسال الرمز للإيميل مرة أخرى .");

@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DentistController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\MailController;
 
@@ -28,12 +29,12 @@ Route::group(
     function () {
         Route::get('/send-verification-code/{guard}/{email}', [MailController::class, 'send_verification_code']);
         Route::post('/check_verification_code', [MailController::class, 'check_verification_code']);
-
         // not needed I think (samae check_verification_code): Route::post('/verify-mail-code-after-register', [MailController::class, 'verify_email_code']);
         Route::post('/forget-password', [MailController::class, 'forget_password']);
     }
 );
-
+/// Stage Employees
+Route::post('auth/stage-employee', [MailController::class, 'stageEmployee']);
 
 
 //_________________________________________________________________admin routes
@@ -61,3 +62,24 @@ route::group(
     }
 );
 //_________________________________________________________________end admin routes
+
+
+//__________________________________________________________________dentist routes
+Route::group([
+    'middleware' => ['auth:dentist'],
+    'prefix' => 'dentist',
+    'as' => 'dentist'
+], function () {
+    //Secretaries Management :
+    Route::group([
+        'prefix' => 'secretaries',
+        'as' => 'secretaries'
+    ], function () {
+
+        Route::get('/', [DentistController::class, 'getSecretaries']);
+        Route::put('/update/{id}', [DentistController::class, 'updateSecretary']);
+        Route::delete('delete/{id}', [DentistController::class, 'deleteSecretary']);
+    });
+});
+
+//__________________________________________________________________end dentist routes

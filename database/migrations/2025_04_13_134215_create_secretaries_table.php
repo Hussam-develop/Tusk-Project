@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email')->unique();
+            $table->string('address')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('email_is_verified')->default(0);
             $table->boolean('is_staged')->default(0);
@@ -24,8 +25,8 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->string('phone');
-            $table->string('attendece_time');
-            $table->boolean('register_accepted')->default(false);
+            $table->string('attendence_time');
+            // $table->boolean('register_accepted')->default(false); not needed here
         });
     }
 

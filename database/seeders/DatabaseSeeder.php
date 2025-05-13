@@ -2,11 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\Admin;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\Dentist;
-use App\Models\LabManager;
 use App\Models\User;
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Admin;
+use App\Models\Dentist;
+use App\Models\Secretary;
+use App\Models\LabManager;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -29,7 +30,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
 
         ]);
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             Dentist::create([
                 'first_name' => "dentist" . $i,
                 'last_name' => "dentist" . $i,
@@ -50,7 +51,7 @@ class DatabaseSeeder extends Seeder
                 'subscription_is_valid_now' => 1,
             ]);
         }
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             LabManager::create([
                 'first_name' => "manager" . $i,
                 'last_name' => "manager" . $i,
@@ -81,6 +82,28 @@ class DatabaseSeeder extends Seeder
                 'lab_from_hour' => "08:00",
                 'lab_to_hour' => "05:00",
             ]);
+        }
+
+        $dentists = Dentist::all();
+        foreach ($dentists as $dentist) {
+            for ($i = 1; $i <= 2; $i++) {
+                Secretary::create([
+                    'dentist_id' => $dentist->id,
+                    'first_name' => "s$i",
+                    'last_name' => "k$i",
+                    'address' => "damascus",
+                    'is_staged' => false,
+                    'password' => Hash::make('password'),
+                    'attendence_time' => "day",
+                    'phone' => "0999999999",
+                    'email' => "s$i.$dentist->id@gmail.com",
+                    'remember_token' => "",
+                    'email_is_verified' => 1,
+                    'email_verified_at' => now(),
+                    'verification_code' => null,
+
+                ]);
+            }
         }
     }
 }
