@@ -2,11 +2,15 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use app\Traits\handleResponseTrait;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class LoginRequest extends FormRequest
 {
+    use handleResponseTrait;
     /*
      * Determine if the user is authorized to make this request.
      */
@@ -57,5 +61,13 @@ class LoginRequest extends FormRequest
             'secretary'     => 'secretaries',
             'inventory_employee' => 'inventory_employees',
         };
+    }
+    protected function failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors();
+
+        $response = $this->returnErrorMessage($errors->messages(), 422);
+
+        throw new HttpResponseException($response);
     }
 }

@@ -2,10 +2,14 @@
 
 namespace App\Http\Requests;
 
+use app\Traits\handleResponseTrait;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class registerRequest extends FormRequest
 {
+    use handleResponseTrait;
     /*
      * Determine if the user is authorized to make this request.
      */
@@ -45,14 +49,14 @@ class registerRequest extends FormRequest
             'lab_name'      => ['required', 'string', 'max:30'],
             'lab_type'      => ['required', 'string', 'max:20'],
             'lab_from_hour' => ['required', 'date_format:H:i'],
+            'lab_phone' => ['required', 'json'],
+            'lab_phone.*' => ['required', 'string', 'size:10', 'regex:/^[0-9]+$/', 'starts_with:09', 'unique:' . $this->getTableName($guard) . ',lab_phone'],
             'lab_to_hour'   => ['required', 'date_format:H:i', 'after:lab_from_hour'],
-            'lab_phone'     => ['required', 'size:2'],
             'lab_province'  => ['required', 'string', 'max:15'],
-            'lab_address'   => ['required', 'string', 'max:60'],
-
+            'lab_address'   => ['required', 'string', 'max:100'],
         ];
         $dentistRules = [
-            'phone'      => ['required', 'string', 'max:20'],
+            'phone'      => ['required', 'string', 'size:10', 'regex:/^[0-9]+$/', 'starts_with:09', 'unique:' . $this->getTableName($guard) . ',phone'],
             'address'    => ['required', 'string', 'min:10'],
         ];
 
@@ -74,21 +78,30 @@ class registerRequest extends FormRequest
             'password.regex'     => 'كلمة المرور يجب أن تحتوي على حرف كبير، حرف صغير، رقم، ورمز خاص.',
             'password.confirmed'  => 'تأكيد كلمة المرور غير مطابق.',
             'phone.required'      => 'رقم الهاتف مطلوب.',
+            'phone.*.size ' => ' يجب أن يكون رقم العيادة مكوّن من 10 أرقام حصراً ',
+            'phone.*.regix' => 'يجب أن يكون رقم العيادة مكون من أرقام فقط',
+            'phone.*.starts_with ' => ' يجب أن يبدأ رقم العيادة بـ 09 حصراً ',
+            'phone.*.unique' => 'هذا رقم العيادة مستخدم سابقاً. يجب إدخال رقم آخر',
             'guard.required'      => 'نوع المستخدم مطلوب.',
             'guard.in'            => 'يجب أن يكون نوع المستخدم طبيب أسنان أو مدير مخبر.',
             'address.required'       => 'عنوان العيادة مطلوب.',
             //'lab_register_date.required' => 'تاريخ تسجيل المخبر مطلوب.',
             // 'lab_register_date.date'     => 'يجب أن يكون تاريخ تسجيل المخبر تاريخًا صالحًا.',
             //'lab_logo.required'      => 'شعار المخبر مطلوب.',
-            'lab_name.required'      => 'اسم المختبر مطلوب.',
-            'lab_province.required'  => 'المحافظة التي يقع فيها المختبر مطلوبة.',
-            'lab_address.required'   => 'عنوان المختبر مطلوب.',
-            'lab_phone.required'     => 'هاتف المختبر مطلوب.',
-            'lab_type.required'      => 'نوع المختبر مطلوب.',
-            'lab_from_hour.required' => 'ساعة افتتاح المختبر مطلوبة.',
-            'lab_to_hour.required'   => 'ساعة إغلاق المختبر مطلوبة.',
+            'lab_name.required'      => 'اسم المخبر مطلوب.',
+            'lab_province.required'  => 'المحافظة التي يقع فيها المخبر مطلوبة.',
+            'lab_address.required'   => 'عنوان المخبر مطلوب.',
+            'lab_phone.*.required'     => 'هاتف المخبر مطلوب.',
+            'lab_phone.*.size ' => ' يجب أن يكون رقم مخبر التعويضات مكوّن من 10 أرقام حصراً ',
+            'lab_phone.*.regix' => 'يجب أن يكون رقم مخبر التعويضات مكون من أرقام فقط',
+            'lab_phone.*.starts_with ' => ' يجب أن يبدأ رقم مخبر التعويضات بـ 09 حصراً ',
+            'lab_phone.*.unique' => 'هذا رقم مخبر التعويضات مستخدم سابقاً. يجب إدخال رقم آخر',
+            'lab_type.required'      => 'نوع المخبر مطلوب.',
+            'lab_from_hour.required' => 'ساعة افتتاح المخبر مطلوبة.',
+            'lab_to_hour.required'   => 'ساعة إغلاق المخبر مطلوبة.',
             'lab_to_hour.date_format' => 'ساعة الإغلاق يجب أن تكون بصيغة (ساعة:دقيقة) مثل 17:00.',
             'lab_to_hour.after' => 'ساعة الإغلاق يجب أن تكون بعد ساعة الافتتاح.',
+            'lab_address.max' => 'العنوان يجب ألا يتجاوز 100 حرف ( بما في ذلك المسافات )',
 
         ];
     }
@@ -99,5 +112,13 @@ class registerRequest extends FormRequest
             'dentist'     => 'dentists',
             'lab_manager' => 'lab_managers',
         };
+    }
+    protected function failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors();
+
+        $response = $this->returnErrorMessage($errors->messages(), 422);
+
+        throw new HttpResponseException($response);
     }
 }

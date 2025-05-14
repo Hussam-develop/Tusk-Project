@@ -31,7 +31,7 @@ return new class extends Migration
             $table->time('lab_to_hour');
             $table->dateTime('register_date')->nullable();
             $table->boolean('subscription_is_valid_now')->default(0);
-            $table->boolean('register_accepted')->default(0);
+            $table->boolean('register_accepted')->nullable()->default(null);
         });
     }
 

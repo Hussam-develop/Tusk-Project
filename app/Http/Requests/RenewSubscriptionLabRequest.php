@@ -34,8 +34,8 @@ class RenewSubscriptionLabRequest extends FormRequest
     public function messages()
     {
         return [
-            'lab_id.required' => 'يجب تقديم معرف المختبر.',
-            'lab_id.exists' => 'معرف المختبر المدخل غير موجود.',
+            'lab_id.required' => 'يجب تقديم معرف المخبر.',
+            'lab_id.exists' => 'معرف المخبر المدخل غير موجود.',
             'months.required' => 'يجب تقديم عدد الشهور.',
             'months.integer' => 'يجب أن يكون عدد الشهور عدد صحيح.',
             'months.min' => 'يجب أن يكون عدد الشهور على الأقل 1.',
