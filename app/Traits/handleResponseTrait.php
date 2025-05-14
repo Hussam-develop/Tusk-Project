@@ -2,10 +2,10 @@
 
 namespace app\Traits;
 
-Trait handleResponseTrait
+trait handleResponseTrait
 {
 
-    public function returnErrorMessage($errorMessage,$errorCode)
+    public function returnErrorMessage($errorMessage, $errorCode)
     {
         return response()->json([
             'status' => false,

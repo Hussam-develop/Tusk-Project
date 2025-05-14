@@ -40,6 +40,7 @@ Route::post('auth/stage-employee', [MailController::class, 'stageEmployee']);
 //_________________________________________________________________admin routes
 route::group(
     [
+        'middleware' => ['auth:admin'],
         'prefix' => 'admin',
         // 'middleware' => ['auth.guardFromToken', 'auth.MultiGuard'],
         // 'middleware' => ['auth.admin'],

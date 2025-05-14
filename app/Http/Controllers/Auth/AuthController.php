@@ -32,6 +32,7 @@ class AuthController extends Controller
             'status' => 'success',
             'user'   => $data['user'],
             'token'  => $data['token'],
+            'success_message' => "تم إنشاء حسابك وإرسال كود تحقق إلى إيميلك بنجاح . "
         ], 201);
     }
 
@@ -51,7 +52,7 @@ class AuthController extends Controller
         $reponseData['access_token'] = $token;
         $reponseData['expires_at'] = JWTAuth::factory()->getTTL() * 60;
 
-        return $this->returnData('data', $reponseData, 'Login Successfully', 200);
+        return $this->returnData('data', $reponseData, 'تم تسجيل الدخول بنجاح', 200);
     }
 
     ///////////////Logout with multi guard

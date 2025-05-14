@@ -73,7 +73,7 @@ class MailController extends Controller
                 $user->email_is_verified = true;
                 $user->email_verified_at = now();
                 $user->save();
-                return $this->returnSuccessMessage(200, "رمز التحقق من الإيميل صحيح");
+                return $this->returnSuccessMessage(200, "رمز التحقق من الإيميل صحيح .");
             }
             return $this->returnErrorMessage("رمز التحقق غير مطابق. الرجاء إعادة كتابة الرمز أو طلب إعادة إرساله للإيميل", "Error", 422);
         } catch (Exception $e) {

@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Accountant;
+use App\Models\InventoryEmployee;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Admin;
@@ -26,7 +28,7 @@ class DatabaseSeeder extends Seeder
             'phone' => "0987070814",
             // 'type' => "admin",
             // 'register_accepted' => true,
-            'email' => "a@gmail.com",
+            'email' => "admin@gmail.com",
             'password' => Hash::make('password'),
 
         ]);
@@ -100,6 +102,44 @@ class DatabaseSeeder extends Seeder
                     'remember_token' => "",
                     'email_is_verified' => 1,
                     'email_verified_at' => now(),
+                    'verification_code' => null,
+
+                ]);
+            }
+        }
+        $labManager = LabManager::all();
+        foreach ($labManager as $lab_manager) {
+            for ($i = 1; $i <= 2; $i++) {
+                Accountant::create([
+                    'lab_manager_id' => $lab_manager->id,
+                    'first_name' => "المحاسب $i",
+                    'last_name' => "الشاطر",
+                    // 'address' => "damascus",
+                    'is_staged' => false,
+                    'password' => Hash::make('password'),
+                    'phone' => "0999999999",
+                    'email' => "accountant$i.$lab_manager->id@gmail.com",
+                    'remember_token' => "",
+                    'email_is_verified' => 0,
+                    'email_verified_at' => null,
+                    'verification_code' => null,
+
+                ]);
+            }
+
+            for ($i = 1; $i <= 2; $i++) {
+                InventoryEmployee::create([
+                    'lab_manager_id' => $lab_manager->id,
+                    'first_name' => "موظف المخزون $i",
+                    'last_name' => "الشاطر",
+                    // 'address' => "damascus",
+                    'is_staged' => false,
+                    'password' => Hash::make('password'),
+                    'phone' => "0999999999",
+                    'email' => "inventory.employee$i.$lab_manager->id@gmail.com",
+                    'remember_token' => "",
+                    'email_is_verified' => 0,
+                    'email_verified_at' => null,
                     'verification_code' => null,
 
                 ]);

@@ -9,6 +9,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class Accountant extends Authenticatable implements JWTSubject
 {
     protected $table = 'accountants';
+    public $timestamps = false;
+
     protected $fillable = [
         'lab_manager_id',
 
