@@ -20,7 +20,6 @@ return new class extends Migration
             $table->rememberToken();
             $table->integer('phone');
             $table->string('address');
-            $table->string('province');
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('email_is_verified')->default(0);
             $table->string('verification_code')->nullable();

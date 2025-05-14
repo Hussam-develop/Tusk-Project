@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
                 'address' => "سوق الحميدية", //clinic address
                 'image_path' => 'image_path',
                 'register_accepted' => true,
-                'province' => "Damascus",
+
                 // 'remember_token' => '',
                 'register_date' => now(),
                 'subscription_is_valid_now' => 1,
