@@ -15,7 +15,7 @@ class MedicalCase extends Model
         'patient_id',
 
         'age',
-        'gender',
+
         'need_trial',
         'repeat',
         'shade',

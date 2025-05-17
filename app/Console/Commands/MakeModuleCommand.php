@@ -23,6 +23,9 @@ class MakeModuleCommand extends Command
             Artisan::call("make:model {$name} -m");
             $this->warn("1. ");
             $this->info("Model {$name} and Migration {$name} created successfully!");
+        } else {
+            $this->warn("1. ");
+            $this->warn("Model {$name} and Migration {$name} not created in this command!");
         }
 
         //make Repositories and Services Folders in app folder
@@ -53,14 +56,19 @@ class MakeModuleCommand extends Command
         $this->warn("3. ");
         $this->info("Request {$name} created successfully!");
 
+        // Generate Resource
+        Artisan::call("make:resource {$name}Resource");
+        $this->warn("4. ");
+        $this->info("Resource {$name} created successfully!");
+
         // Generate Seeder
         Artisan::call("make:seeder {$name}Seeder");
-        $this->warn("4. ");
+        $this->warn("5. ");
         $this->info("Seeder {$name} created successfully!");
 
         // Generate Factory
         Artisan::call("make:factory {$name}Factory");
-        $this->warn("5. ");
+        $this->warn("6. ");
         $this->info("Factory {$name} created successfully!");
 
         // Generate Route in api.php
@@ -82,7 +90,7 @@ class MakeModuleCommand extends Command
 
             // Append the route code
             File::append($filePath, PHP_EOL . $routeCode);
-            $this->warn("6. ");
+            $this->warn("7. ");
             $this->info("Route for $name added successfully to api.php");
         }
 
@@ -152,7 +160,7 @@ class MakeModuleCommand extends Command
         PHP;
 
         File::put($path, $stub);
-        $this->warn("7. ");
+        $this->warn("8. ");
         $this->info("Repository {$name} created successfully!");
     }
 
@@ -219,7 +227,7 @@ class MakeModuleCommand extends Command
         PHP;
 
         File::put($path, $stub);
-        $this->warn("8. ");
+        $this->warn("9. ");
         $this->info("Service {$name} created successfully!");
     }
 }
