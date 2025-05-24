@@ -38,4 +38,5 @@ class SecretaryRepository
 
         return Secretary::create($data);
     }
+
 }

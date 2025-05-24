@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class DentistLabManager extends Pivot
 {
+    protected $table = "dentist_labmanagers";
 
     protected $fillable = [
 

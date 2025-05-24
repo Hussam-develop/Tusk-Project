@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class AccountRecord extends Model
 {
-    
+
     protected $fillable = [
 
         'dentist_id',
@@ -30,7 +30,7 @@ class AccountRecord extends Model
         // 'dentist',
         // 'labManager',
         // 'creator',
-        'bill'
+        //'bill'
 
     ];
 
@@ -44,7 +44,7 @@ class AccountRecord extends Model
     }
     public function bill()
     {
-        return $this->hasOne(Bill::class);
+        return $this->hasOne(Bill::class,'bill_id');
     }
 
     // Morph :
