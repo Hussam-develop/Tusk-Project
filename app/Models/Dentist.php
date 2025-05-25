@@ -71,6 +71,11 @@ class Dentist extends Authenticatable implements JWTSubject
         return $this->hasMany(MedicalCase::class);
     }
 
+    public function treatments()
+    {
+        return $this->hasMany(Treatment::class);
+    }
+
     //Morph
     public function patientPayments()
     {

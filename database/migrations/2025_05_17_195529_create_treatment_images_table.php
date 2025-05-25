@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('appointment_images', function (Blueprint $table) {
+        Schema::create('treatment_images', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('appointment_id')->constrained()->onDelete('cascade');
+            $table->foreignId('treatment_id')->constrained("treatments")->onDelete('cascade');
+            // $table->unsignedBigInteger('treatment_id')->nullable();
+            // $table->foreign('treatment_id')->references('id')->on('treatments')->onDelete('cascade');
+
+
             $table->string('name');
             $table->boolean('is_diagram')->default(0);
-
         });
     }
 

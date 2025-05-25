@@ -6,8 +6,9 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DentistController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\MailController;
-
-
+use App\Http\Controllers\MedicalCaseController;
+use App\Http\Controllers\TreatmentController;
+use App\Models\MedicalCase;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
@@ -71,7 +72,9 @@ Route::group([
     'prefix' => 'dentist',
     'as' => 'dentist'
 ], function () {
+
     //Secretaries Management :
+
     Route::group([
         'prefix' => 'secretaries',
         'as' => 'secretaries'
@@ -82,6 +85,44 @@ Route::group([
         Route::delete('delete/{id}', [DentistController::class, 'deleteSecretary']);
         Route::post('addsecretary', [DentistController::class, 'addSecretary']);
     });
+
+    // Treatments
+
+    Route::group([
+        'prefix' => 'treatments',
+        'as' => 'treatments'
+    ], function () {
+        Route::get("/show-patient-treatments/{patient_id}", [TreatmentController::class, 'show_patient_treatments']);
+        Route::get("/show-treatment-details/{treatment_id}", [TreatmentController::class, 'show_treatment_details']);
+
+        Route::post("/add", [TreatmentController::class, 'add_treatment']);
+        Route::put("/update/{treatment_id}", [TreatmentController::class, 'update_treatment']);
+
+        Route::get('/download-treatment-image/{file_id}', [TreatmentController::class, 'download_treatment_image']);
+        Route::post('/add-treatment-images/{treatment_id}', [TreatmentController::class, 'add_treatment_image']);
+    });
+
+    // MedicalCases
+
+    Route::group([
+        'prefix' => 'medical-cases',
+        'as' => 'medical-cases'
+    ], function () {
+        Route::get("/get-labs-by-labtype/{lab_type}", [MedicalCaseController::class, 'get_labs_by_labtype']);
+        Route::get('/show-lab-medical-cases/{lab_id}', [MedicalCaseController::class, 'show_lab_cases_as_doctor']);
+        Route::get('/get-medical-case-details/{medical_case_id}', [MedicalCaseController::class, 'get_medical_case_details']);
+
+        Route::post("/add-medical-case-to-lab", [MedicalCaseController::class, 'add_medical_case_to_lab']);
+        Route::post("/update/{case_id}", [MedicalCaseController::class, 'update_case']);
+        Route::post("/delete/{case_id}", [MedicalCaseController::class, 'delete_case']);
+
+        Route::post('/request-cancellation/{medical_case_id}', [MedicalCaseController::class, 'delete_request']);
+        Route::post('/confirm-delivery/{medical_case_id}', [MedicalCaseController::class, 'confirm_delivery']);
+
+        Route::post('/add-case-images/{case_id}', [MedicalCaseController::class, 'add_case_images']);
+        Route::get('/download-case-image/{case_id}', [MedicalCaseController::class, 'download_medical_case_image']);
+    });
 });
+
 
 //__________________________________________________________________end dentist routes

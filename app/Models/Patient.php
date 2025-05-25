@@ -11,11 +11,10 @@ class Patient extends Model
 
         'dentist_id',
 
-        'first_name',
-        'last_name',
+        'full_name',
         'phone',
         'birthday',
-        'current _balance',
+        'current_balance',
         'is_smoker',
         'address',
         'gender',
@@ -33,28 +32,22 @@ class Patient extends Model
         // 'illnesses',
         // 'patientPayments',
     ];
-    public function appointments()
-    {
-        return $this->hasMany(Appointment::class);
-    }
+
     public function medicalCases()
     {
         return $this->hasMany(MedicalCase::class);
-    }
-    public function medicines()
-    {
-        return $this->hasMany(Medicine::class);
     }
     public function dentist()
     {
         return $this->belongsTo(Dentist::class);
     }
-    public function illnesses()
-    {
-        return $this->belongsToMany(Illness::class, "illness_patients", 'patient_id', 'illness_id');
-    }
+
     public function patientPayments()
     {
         return $this->hasMany(PatientPayment::class);
+    }
+    public function treatments()
+    {
+        return $this->hasMany(Treatment::class);
     }
 }

@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AppointmentImage extends Model
+class TreatmentImage extends Model
 {
-    public $timestamps=false;
+    public $timestamps = false;
 
     protected $fillable = [
 
-        'appointment_id',
+        'treatment_id',
 
         'name',
         'is_diagram',
@@ -20,12 +20,12 @@ class AppointmentImage extends Model
 
     ];
     protected $with = [
-        // 'appointment'
+        // 'treatment'
 
     ];
 
-    public function appointment()
+    public function treatment()
     {
-        return $this->belongsTo(Appointment::class);
+        return $this->belongsTo(Treatment::class);
     }
 }

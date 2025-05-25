@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('midical_case_id')->constrained('medical_cases')->onDelete('cascade');
+            $table->foreignId('medical_case_id')->constrained('medical_cases')->onDelete('cascade');
             $table->foreignId('dentist_id')->constrained('dentists')->onDelete('cascade');
             $table->foreignId('lab_manager_id')->constrained()->onDelete('cascade');
             $table->string('comment');
