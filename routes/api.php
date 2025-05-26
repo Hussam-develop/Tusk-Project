@@ -1,14 +1,15 @@
 <?php
 
+use App\Models\MedicalCase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DentistController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\MailController;
-use App\Http\Controllers\MedicalCaseController;
 use App\Http\Controllers\TreatmentController;
-use App\Models\MedicalCase;
+use App\Http\Controllers\MedicalCaseController;
+use App\Http\Controllers\OperatingPaymentController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
@@ -121,6 +122,18 @@ Route::group([
 
         Route::post('/add-case-images/{case_id}', [MedicalCaseController::class, 'add_case_images']);
         Route::get('/download-case-image/{case_id}', [MedicalCaseController::class, 'download_medical_case_image']);
+    });
+
+//
+
+    // Operating Payments
+
+    Route::group([
+        'prefix' => 'operating-payments',
+        'as' => 'operating-payments'
+    ], function () {
+        Route::get("/get-all", [OperatingPaymentController::class, 'get_operating_payments']);
+        Route::post("/add", [OperatingPaymentController::class, 'add_operating_payments']);
     });
 });
 

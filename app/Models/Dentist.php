@@ -102,6 +102,10 @@ class Dentist extends Authenticatable implements JWTSubject
     {
         return $this->morphMany(Subscription::class, 'subscriptionable');
     }
+    public function operatingPayment()
+    {
+        return $this->morphMany(OperatingPayment::class, name: 'creatorable');
+    }
 
 
     // jwt integration
