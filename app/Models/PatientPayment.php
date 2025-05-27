@@ -7,19 +7,17 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class PatientPayment extends Model
 {
-
+    public $timestamps = false;
     protected $fillable = [
 
         'patient_id',
+        'dentist_id',
 
         'creatorable_id', // Dentist Or Secretary
         'creatorable_type',
 
         'payment_date',
         'value',
-
-        'created_at',
-        'updated_at'
 
     ];
     protected $with = [

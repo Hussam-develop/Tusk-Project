@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\MailController;
 use App\Http\Controllers\TreatmentController;
 use App\Http\Controllers\MedicalCaseController;
 use App\Http\Controllers\OperatingPaymentController;
+use App\Http\Controllers\PatientPaymentController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
@@ -124,7 +125,7 @@ Route::group([
         Route::get('/download-case-image/{case_id}', [MedicalCaseController::class, 'download_medical_case_image']);
     });
 
-//
+    //
 
     // Operating Payments
 
@@ -134,6 +135,17 @@ Route::group([
     ], function () {
         Route::get("/get-all", [OperatingPaymentController::class, 'get_operating_payments']);
         Route::post("/add", [OperatingPaymentController::class, 'add_operating_payments']);
+    });
+
+    // Patient Payments
+
+    Route::group([
+        'prefix' => 'patients-payments',
+        'as' => 'patients-payments'
+    ], function () {
+        Route::get("/get-all-ordered", [PatientPaymentController::class, 'get_patients_payments_ordered']);
+        Route::get("/get-history/{patient_id}", [PatientPaymentController::class, 'get_patient_payments']);
+        Route::post("/add", [PatientPaymentController::class, 'add_patient_payment']);
     });
 });
 

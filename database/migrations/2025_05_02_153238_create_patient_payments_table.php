@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('patient_payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('patient_id')->constrained()->onDelete('cascade');
+            $table->foreignId('dentist_id')->constrained("dentists")->onDelete('cascade');
             $table->morphs('creatorable');
             $table->date('payment_date');
             $table->double('value');
-            $table->timestamps();
+            // $table->timestamps();
         });
     }
 

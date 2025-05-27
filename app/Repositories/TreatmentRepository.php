@@ -24,6 +24,15 @@ class TreatmentRepository
             $patient_treatments
         );
     }
+    public function show_patient_treatments_non_paid($dentist_id, $patient_id)
+    {
+        $patient_treatments_non_paid = Treatment::where('dentist_id', $dentist_id)
+            ->where('patient_id', $patient_id)
+            ->where('is_paid', 0)
+            ->get();
+        return
+            $patient_treatments_non_paid;
+    }
 
     public function add_treatment($request)
     {
