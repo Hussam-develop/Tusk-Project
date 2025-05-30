@@ -3,14 +3,15 @@
 use App\Models\MedicalCase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BillController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DentistController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\MailController;
 use App\Http\Controllers\TreatmentController;
 use App\Http\Controllers\MedicalCaseController;
-use App\Http\Controllers\OperatingPaymentController;
 use App\Http\Controllers\PatientPaymentController;
+use App\Http\Controllers\OperatingPaymentController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
@@ -146,6 +147,17 @@ Route::group([
         Route::get("/get-all-ordered", [PatientPaymentController::class, 'get_patients_payments_ordered']);
         Route::get("/get-history/{patient_id}", [PatientPaymentController::class, 'get_patient_payments']);
         Route::post("/add", [PatientPaymentController::class, 'add_patient_payment']);
+    });
+
+    // Bills
+
+    Route::group([
+        'prefix' => 'bills',
+        'as' => 'bills'
+    ], function () {
+
+        Route::get('/show-lab-bills-descending/{lab_id}', [BillController::class, 'show_lab_bills_descending']);
+        Route::get('/show-bill-details-with-cases/{bill_id}', [BillController::class, 'show_bill_details_with_cases_as_dentist']);
     });
 });
 

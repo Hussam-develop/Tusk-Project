@@ -20,7 +20,7 @@ class Item extends Model
         'standard_quantity',
         'minimum_quantity',
         'unit',
-        'is_static ',
+        'is_static',
 
         'created_at',
         'updated_at'
