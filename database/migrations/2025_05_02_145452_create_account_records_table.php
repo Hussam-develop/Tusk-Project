@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('dentist_id')->constrained()->onDelete('cascade');
             $table->foreignId('lab_manager_id')->constrained()->onDelete('cascade');
-            $table->foreignId('bill_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('bill_id')->nullable()->constrained("bills")->onDelete('cascade');
             $table->morphs('creatorable');
             $table->double('signed_value');
             $table->string('note')->nullable();

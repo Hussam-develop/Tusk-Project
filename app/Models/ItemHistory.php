@@ -16,7 +16,7 @@ class ItemHistory extends Model
         // 'date', not needed now
         // 'is_static', // Not needed here
         'total_price',
-        'last_buying_date',
+        // 'last_buying_date',
 
 
         'created_at',

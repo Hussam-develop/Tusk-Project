@@ -34,7 +34,7 @@ class Bill extends Model
     ];
     public function accountRecord()
     {
-        return $this->belongsTo(AccountRecord::class);
+        return $this->belongsTo(AccountRecord::class, 'bill_id');
     }
     public function dentist()
     {

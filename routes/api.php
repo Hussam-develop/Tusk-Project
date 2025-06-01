@@ -161,5 +161,36 @@ Route::group([
     });
 });
 
-
 //__________________________________________________________________end dentist routes
+
+
+//__________________________________________________________________المخزون
+// راجع أن Middleware متعرف في الـ Kernel ويدعم اختيار Guard تلقائيًا
+Route::middleware(['auth.guardFromToken'])->group(
+    function () {
+        Route::get('/categories', [DentistController::class, 'getcategories']);
+        Route::get('/subcategories/{categoryId}', [DentistController::class, 'showSubcategories']);
+        Route::post('addcategory', [DentistController::class, 'addcategory']);
+        Route::get('/items/{subcategoryId}', [DentistController::class, 'showitems']);
+        Route::delete('deletecategory/{id}', [DentistController::class, 'deletecategory']);
+        Route::put('/updateCategory/{id}', [DentistController::class, 'updateCategory']);
+        Route::delete('deleteSubcategory/{id}', [DentistController::class, 'deleteSubcategory']);
+        Route::post('addsubcategory/{id}', [DentistController::class, 'addsubcategory']);
+        Route::put('/updateSubCategory/{id}', [DentistController::class, 'updateSubCategory']);
+        Route::post('additem/{id}', [DentistController::class, 'additem']);
+        Route::delete('deleteitem/{id}', [DentistController::class, 'deleteitem']);
+        Route::post('/updateitem/{id}', [DentistController::class, 'updateitem']);
+        Route::post('additemhistory/{id}', [DentistController::class, 'additemhistory']);
+        Route::get('/itemhistories/{itemid}', [DentistController::class, 'itemhistories']);
+        Route::get('/show_labs_dentist_injoied', [DentistController::class, 'show_labs_dentist_injoied']);
+        Route::get('/show_account_of_dentist_in_lab/{id}', [DentistController::class, 'show_account_of_dentist_in_lab']);
+        Route::get('/show_all_labs_dentist_not_injoied', [DentistController::class, 'show_all_labs']);
+        Route::get('/show_lab_not_injoied_details/{id}', [DentistController::class, 'show_lab_not_injoied_details']);
+        Route::get('/submit_join_request_to_lab/{id}', [DentistController::class, 'submit_join_request_to_lab']);
+        Route::post('/filterd_labs', [DentistController::class, 'filter_not_join_labs']);
+        //_____________________________________________________________________________________نهاية المخزون
+
+
+
+    }
+);
