@@ -2,13 +2,15 @@
 
 namespace App\Repositories;
 
-use App\Models\LabManager;
+use App\Models\Dentist;
+use App\Models\Patient;
 use App\Models\Treatment;
+use App\Models\LabManager;
 use App\Models\TreatmentImage;
+use Illuminate\Support\Facades\DB;
 use app\Traits\handleResponseTrait;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\TreatmentResource;
-use App\Models\Patient;
 
 class TreatmentRepository
 {
@@ -128,6 +130,42 @@ class TreatmentRepository
             return $this->returnErrorMessage("لا توجد مخابر من النوع $lab_type ",  200);
         }
         return $this->returnData("labs", $labs, "المخابر من النوع $lab_type", 200);
+    }
+
+    //////////////////////////////////////////////////////// Statistics
+    public function treatments_statistics($user_id, $type)
+    {
+
+        if ($type != "dentist") {
+            return 'ليس طبيب';
+        }
+
+        $dentist = Dentist::where('id', $user_id)->first();
+        $treatments = $dentist->treatments;
+        if ($treatments->isEmpty()) {
+            return 'ليس لديك معالجات';
+        }
+
+
+
+        // استعلام يستخدم نموذج Treatment
+        $results = Treatment::select(
+            DB::raw('MONTH(date) as month'),    // استخراج رقم الشهر من التاريخ
+            'type',                              // نوع العلاج
+            DB::raw('COUNT(*) as total')         // حساب العدد
+        )
+            ->groupBy('month', 'type')              // التجميع حسب الشهر والنوع
+            ->orderBy('month')                      // ترتيب النتائج حسب الشهر
+            ->get();
+
+        // تنظيم النتائج في مصفوفة مرتبة
+        $formattedResults = [];
+
+        foreach ($results as $result) {
+            $formattedResults[$result->month][$result->type] = $result->total;
+        }
+        // dd($formattedResults);
+        return $formattedResults;
     }
 
     ///////////////////////////////////////////////////////

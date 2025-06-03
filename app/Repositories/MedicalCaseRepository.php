@@ -16,7 +16,8 @@ class MedicalCaseRepository
     use handleResponseTrait;
     public function get_labs_by_labtype($lab_type)
     {
-        $labs = LabManager::where("lab_type", $lab_type)->get("lab_name");
+        // $labs = LabManager::where("lab_type", $lab_type)->get("lab_name");
+        $labs = LabManager::where("lab_type", "like", "%{$lab_type}%")->get("lab_name");
         if ($labs->isEmpty()) {
             return $this->returnErrorMessage("لا توجد مخابر من النوع $lab_type ",  200);
         }

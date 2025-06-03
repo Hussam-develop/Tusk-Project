@@ -2,19 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\addSecretary;
-use App\Http\Requests\addSecretaryRequest;
-use App\Http\Requests\updatesecretaryequest;
-use App\Services\SecretaryService;
 use App\Http\Requests\addCategoryRequest;
 use App\Http\Requests\addItemRequest;
+use App\Http\Requests\add_nonrepeated_itemhistory;
+use App\Http\Requests\addSecretary;
+use App\Http\Requests\addSecretaryRequest;
 use App\Http\Requests\ItemhistoryRequest;
+use App\Http\Requests\updatesecretaryequest;
 use App\Services\CategoryService;
 use App\Services\itemhistoryService;
 use App\Services\ItemService;
-use App\Services\SubCategoryService;
 use App\Services\LabmangerService;
+use App\Services\SecretaryService;
+use App\Services\SubCategoryService;
+use App\Services\TreatmentService;
+use App\Services\OperatingPaymentService;
+use App\Services\AccountRecordService;
+
+
+
 use Illuminate\Http\Request;
+use App\Services\PaitentService;
+
 
 class DentistController extends Controller
 {
@@ -24,8 +33,11 @@ class DentistController extends Controller
     protected $itemService;
     protected $ItemhistoryService;
     protected $LabmangerService;
-
-    public function __construct(SecretaryService $secretaryService, CategoryService $categoryService, SubCategoryService $subCategoryService, ItemService $ItemService, itemhistoryService $ItemhistoryService, LabmangerService $LabmangerService)
+    protected $PaitentService;
+    protected $TreatmentService;
+    protected $OperatingPaymentService;
+    protected $AccountRecordService;
+    public function __construct(SecretaryService $secretaryService, CategoryService $categoryService, SubCategoryService $subCategoryService, ItemService $ItemService, itemhistoryService $ItemhistoryService, LabmangerService $LabmangerService, PaitentService $PaitentService, TreatmentService $TreatmentService, OperatingPaymentService $OperatingPaymentService, AccountRecordService $AccountRecordService)
     {
         $this->secretaryService = $secretaryService;
         $this->categoryService = $categoryService;
@@ -33,6 +45,10 @@ class DentistController extends Controller
         $this->itemService = $ItemService;
         $this->ItemhistoryService = $ItemhistoryService;
         $this->LabmangerService = $LabmangerService;
+        $this->PaitentService = $PaitentService;
+        $this->TreatmentService = $TreatmentService;
+        $this->OperatingPaymentService = $OperatingPaymentService;
+        $this->AccountRecordService = $AccountRecordService;
     }
 
     public function getSecretaries()
@@ -134,7 +150,7 @@ class DentistController extends Controller
         $show_account_of_dentist_in_lab = $this->LabmangerService->show_account_of_dentist_in_lab($lab_id);
         return $show_account_of_dentist_in_lab;
     }
-    public function show_all_labs(): mixed
+    public function show_all_labs()
     {
         return $this->LabmangerService->show_all_labs();
     }
@@ -149,5 +165,43 @@ class DentistController extends Controller
     public function filter_not_join_labs(Request $request)
     {
         return $this->LabmangerService->filter_not_join_labs($request->province, $request->name);
+    }
+    public function sub_categories_statistics()
+    {
+        return $this->subCategoryService->sub_categories_statistics();
+    }
+    public function paitents_statistics()
+    {
+        return $this->PaitentService->paitents_statistics();
+    }
+    public function treatments_statistics()
+    {
+        return $this->TreatmentService->treatments_statistics();
+    }
+    public function Operating_Payment_statistics()
+    {
+        return $this->OperatingPaymentService->Operating_Payment_statistics();
+    }
+    public function doctor_gains_statistics()
+    {
+        return $this->OperatingPaymentService->doctor_gains_statistics();
+    }
+    public function Repeated_item_histories()
+    {
+        return $this->ItemhistoryService->Repeated_item_histories();
+    }
+    public function Non_Repeated_item_histories()
+    {
+        return $this->ItemhistoryService->Non_Repeated_item_histories();
+    }
+
+    public function add_nonrepeated_itemhistory(add_nonrepeated_itemhistory $request)
+    {
+        $data = $request->validated();
+        return $this->ItemhistoryService->add_nonrepeated_itemhistory($data);
+    }
+    public function Account_records_of_lab($lab_id)
+    {
+        return $this->AccountRecordService->Account_records_of_lab($lab_id);
     }
 }

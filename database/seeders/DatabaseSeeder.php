@@ -2,16 +2,25 @@
 
 namespace Database\Seeders;
 
-use App\Models\Accountant;
-use App\Models\InventoryEmployee;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Admin;
 use App\Models\Dentist;
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Secretary;
+use App\Models\Accountant;
 use App\Models\LabManager;
 use Illuminate\Database\Seeder;
+use Database\Seeders\BillSeeder;
+use Database\Seeders\itemSeeder;
+use App\Models\InventoryEmployee;
+use Database\Seeders\PatientSeeder;
+use Database\Seeders\CategorySeeder;
 use Illuminate\Support\Facades\Hash;
+use Database\Seeders\TreatmentSeeder;
+use Database\Seeders\itemhistoryseeder;
+use Database\Seeders\SubCategorySeeder;
+use Database\Seeders\OperatingPaymentSeeder;
+use Database\Seeders\DentistLabManagerSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -145,5 +154,18 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
+
+        // $this->call([
+        //     DentistLabManagerSeeder::class,
+        //     itemhistoryseeder::class,
+        //     OperatingPaymentSeeder::class,
+        //     PatientSeeder::class,
+        //     TreatmentSeeder::class,
+        //     accountrecord_seeder::class,
+        //     BillSeeder::class,
+        //     CategorySeeder::class,
+        //     SubCategorySeeder::class,
+        //     itemSeeder::class,
+        // ]);
     }
 }

@@ -77,4 +77,27 @@ class SubCategoryService
 
         return $this->returnErrorMessage(200, ' لم يتم تعديل  الصنف الفرعي لانك غير مخول  ', 404);
     }
+    public function sub_categories_statistics()
+    {
+        $user = auth()->user(); // المستخدم الحالي بعد تحديد Guard بواسطة Middleware
+        $type = $user->getMorphClass();
+        $result1 = $this->subCategoryRepository->all_total_prices_fo_all_subcategories($user->id, $type);
+        if ($result1 == 'ليس طبيب') {
+            return $this->returnErrorMessage('حدث خطأ  انت لست طبيب  ', 500);
+        }
+        if ($result1 == 'ليس لديك كميات مواد') {
+            return $this->returnErrorMessage('ليس لديك كميات مواد', 500);
+        }
+        $result2 = $this->subCategoryRepository->sub_categories_and_total_prices($user->id, $type);
+        foreach ($result2 as &$item) {
+            if ($result1 != 0) {
+                $item['percentage'] = number_format(($item['total_price_last_month'] * 100) / $result1, 2);
+            } else {
+                $item['percentage'] = 0; // لتجنب القسمة على صفر
+            }
+        }
+
+        // return $result2; // أو بأي طريقة تريد إرجاعها بعد إضافة النسب
+        return $this->returnData("statistics of subcategories", $result2, "احصائيات الفئات الفرعية", 200);
+    }
 }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class OperatingPayment extends Model
 {
-    protected $fillable = [
+    protected $fillable = [     //
         'creatorable_id',
         'creatorable_type',
 

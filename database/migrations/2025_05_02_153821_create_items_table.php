@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
-            $table->foreignId('subcategory_id')->constrained('sub_categories')->onDelete('cascade');
+            $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('cascade');
+            $table->foreignId('subcategory_id')->nullable()->constrained('sub_categories')->onDelete('cascade');
             $table->morphs('creatorable');
             $table->string('name');
-            $table->unsignedBigInteger('quantity');
-            $table->unsignedBigInteger('standard_quantity')->default(0);
-            $table->unsignedBigInteger('minimum_quantity');
+            $table->unsignedBigInteger('quantity')->nullable();
+            $table->unsignedBigInteger('standard_quantity')->default(0)->nullable();
+            $table->unsignedBigInteger('minimum_quantity')->nullable();
             $table->boolean('is_static')->default(false);
-            $table->string('unit',50);
+            $table->string('unit', 50)->nullable();
             $table->timestamps();
         });
     }

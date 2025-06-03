@@ -83,6 +83,22 @@ class TreatmentService
     }
 
     /////////////////////////////////////////////////////////////////
+    public function treatments_statistics()
+    {
+        $user = auth()->user(); // المستخدم الحالي بعد تحديد Guard بواسطة Middleware
+        $type = $user->getMorphClass();
+        $result = $this->repository->treatments_statistics($user->id, $type);
+        // return $result;
+        if ($result == 'ليس طبيب') {
+            return $this->returnErrorMessage('حدث خطأ  انت لست طبيب  ', 500);
+        }
+
+        if ($result == 'ليس لديك معالجات') {
+            return $this->returnErrorMessage('ليس لديك معالجات', 500);
+        }
+        return $this->returnData("treatments_statistics", $result, " احصائيات المعالجات ", 200);
+    }
+    /////////////////////////////////////////////////////////////////
     public function getAll()
     {
         return $this->repository->getAll();

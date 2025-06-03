@@ -71,7 +71,7 @@ route::group(
 
 //__________________________________________________________________dentist routes
 Route::group([
-    'middleware' => ['auth:dentist'],
+    'middleware' => ['auth:dentist'/*, 'auth.guardFromToken'*/],
     'prefix' => 'dentist',
     'as' => 'dentist'
 ], function () {
@@ -126,18 +126,6 @@ Route::group([
         Route::get('/download-case-image/{case_id}', [MedicalCaseController::class, 'download_medical_case_image']);
     });
 
-    //
-
-    // Operating Payments
-
-    Route::group([
-        'prefix' => 'operating-payments',
-        'as' => 'operating-payments'
-    ], function () {
-        Route::get("/get-all", [OperatingPaymentController::class, 'get_operating_payments']);
-        Route::post("/add", [OperatingPaymentController::class, 'add_operating_payments']);
-    });
-
     // Patient Payments
 
     Route::group([
@@ -159,38 +147,97 @@ Route::group([
         Route::get('/show-lab-bills-descending/{lab_id}', [BillController::class, 'show_lab_bills_descending']);
         Route::get('/show-bill-details-with-cases/{bill_id}', [BillController::class, 'show_bill_details_with_cases_as_dentist']);
     });
-});
 
-//__________________________________________________________________end dentist routes
+    //_____________________________________________________________________________________الاحصائيات Statistics
 
+    Route::group([
+        // 'middleware' => [],
+        'prefix' => 'statistics',
+        'as' => 'statistics'
+    ], function () {
 
-//__________________________________________________________________المخزون
-// راجع أن Middleware متعرف في الـ Kernel ويدعم اختيار Guard تلقائيًا
-Route::middleware(['auth.guardFromToken'])->group(
-    function () {
-        Route::get('/categories', [DentistController::class, 'getcategories']);
-        Route::get('/subcategories/{categoryId}', [DentistController::class, 'showSubcategories']);
-        Route::post('addcategory', [DentistController::class, 'addcategory']);
-        Route::get('/items/{subcategoryId}', [DentistController::class, 'showitems']);
-        Route::delete('deletecategory/{id}', [DentistController::class, 'deletecategory']);
-        Route::put('/updateCategory/{id}', [DentistController::class, 'updateCategory']);
-        Route::delete('deleteSubcategory/{id}', [DentistController::class, 'deleteSubcategory']);
-        Route::post('addsubcategory/{id}', [DentistController::class, 'addsubcategory']);
-        Route::put('/updateSubCategory/{id}', [DentistController::class, 'updateSubCategory']);
-        Route::post('additem/{id}', [DentistController::class, 'additem']);
-        Route::delete('deleteitem/{id}', [DentistController::class, 'deleteitem']);
-        Route::post('/updateitem/{id}', [DentistController::class, 'updateitem']);
-        Route::post('additemhistory/{id}', [DentistController::class, 'additemhistory']);
-        Route::get('/itemhistories/{itemid}', [DentistController::class, 'itemhistories']);
+        Route::get('/sub_categories_statistics', [DentistController::class, 'sub_categories_statistics']);
+        Route::get('/paitents_statistics', [DentistController::class, 'paitents_statistics']);
+        Route::get('/treatments_statistics', [DentistController::class, 'treatments_statistics']);
+        Route::get('/Operating_Payment_statistics', [DentistController::class, 'Operating_Payment_statistics']);
+        Route::get('/doctor_gains_statistics', [DentistController::class, 'doctor_gains_statistics']);
+    });
+    //_____________________________________________________________________________________نهاية الاحصائيات End of Statistics
+
+    //_____________________________________________________________________________________مخابر الطبيب Labs Routes For Doctor
+    Route::group([
+        // 'middleware' => ['auth.guardFromToken', 'auth:dentist'],
+        'prefix' => 'labs',
+        'as' => 'labs'
+    ], function () {
+
+        Route::get('/show_labs_dentist_injoied', [DentistController::class, 'show_labs_dentist_injoied']);
+        Route::get('/Account_records_of_lab/{id}', [DentistController::class, 'Account_records_of_lab']);
+        Route::get('/show_account_of_dentist_in_lab/{id}', [DentistController::class, 'show_account_of_dentist_in_lab']);
+        Route::get('/show_all_labs_dentist_not_injoied', [DentistController::class, 'show_all_labs']);
+        Route::get('/show_lab_not_injoied_details/{id}', [DentistController::class, 'show_lab_not_injoied_details']);
+        Route::get('/submit_join_request_to_lab/{id}', [DentistController::class, 'submit_join_request_to_lab']);
+        Route::post('/filtered_labs', [DentistController::class, 'filter_not_join_labs']);
+    });
+    //_____________________________________________________________________________________ نهاية مخابر الطبيب End of Labs Routes For Doctor
+
+    //_____________________________________________________________________________________مخابر الطبيب Labs Routes For Doctor
+    Route::group([
+        // 'middleware' => ['auth.guardFromToken', 'auth:dentist'],
+        'prefix' => 'labs',
+        'as' => 'labs'
+    ], function () {
+
         Route::get('/show_labs_dentist_injoied', [DentistController::class, 'show_labs_dentist_injoied']);
         Route::get('/show_account_of_dentist_in_lab/{id}', [DentistController::class, 'show_account_of_dentist_in_lab']);
         Route::get('/show_all_labs_dentist_not_injoied', [DentistController::class, 'show_all_labs']);
         Route::get('/show_lab_not_injoied_details/{id}', [DentistController::class, 'show_lab_not_injoied_details']);
         Route::get('/submit_join_request_to_lab/{id}', [DentistController::class, 'submit_join_request_to_lab']);
         Route::post('/filterd_labs', [DentistController::class, 'filter_not_join_labs']);
-        //_____________________________________________________________________________________نهاية المخزون
+    });
+    //_____________________________________________________________________________________ نهاية مخابر الطبيب End of Labs Routes For Doctor
+
+});
+
+//__________________________________________________________________end dentist routes
 
 
+//__________________________________________________________________المخزون inventory
+Route::group([
+    'middleware' => ['auth.guardFromToken', 'auth:dentist,lab_manager,inventory_employee'],
+    'prefix' => 'inventory',
+    'as' => 'inventory'
+], function () {
 
-    }
-);
+    Route::get('/categories', [DentistController::class, 'getcategories']);
+    Route::get('/subcategories/{categoryId}', [DentistController::class, 'showSubcategories']);
+    Route::post('addcategory', [DentistController::class, 'addcategory']);
+    Route::get('/items/{subcategoryId}', [DentistController::class, 'showitems']);
+    Route::delete('deletecategory/{id}', [DentistController::class, 'deletecategory']);
+    Route::put('/updateCategory/{id}', [DentistController::class, 'updateCategory']);
+    Route::delete('deleteSubcategory/{id}', [DentistController::class, 'deleteSubcategory']);
+    Route::post('addsubcategory/{id}', [DentistController::class, 'addsubcategory']);
+    Route::put('/updateSubCategory/{id}', [DentistController::class, 'updateSubCategory']);
+    Route::post('additem/{id}', [DentistController::class, 'additem']);
+    Route::delete('deleteitem/{id}', [DentistController::class, 'deleteitem']);
+    Route::post('/updateitem/{id}', [DentistController::class, 'updateitem']);
+    Route::post('additemhistory/{id}', [DentistController::class, 'additemhistory']);
+    Route::get('/itemhistories/{itemid}', [DentistController::class, 'itemhistories']);
+    Route::get('/Repeated_item_histories', [DentistController::class, 'Repeated_item_histories']);
+    Route::get('/Non_Repeated_item_histories', [DentistController::class, 'Non_Repeated_item_histories']);
+    Route::post('/add_nonrepeated_itemhistory', [DentistController::class, 'add_nonrepeated_itemhistory']);
+});
+//_____________________________________________________________________________________نهاية المخزون end inventory
+
+//__________________________________________________________________ Operating Payments المصاريف التشغيلية
+
+Route::group([
+    'middleware' => ['auth.guardFromToken', 'auth:dentist,lab_manager,accountant'],
+    'prefix' => 'operating-payments',
+    'as' => 'operating-payments'
+], function () {
+    Route::get("/get-all", [OperatingPaymentController::class, 'get_operating_payments']);
+    Route::post("/add", [OperatingPaymentController::class, 'add_operating_payments']);
+});
+
+//_____________________________________________________________________________________ end of Operating Payments نهاية المصاريف التشغيلية
