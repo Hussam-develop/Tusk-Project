@@ -2,12 +2,14 @@
 
 namespace App\Services;
 
-use App\Http\Controllers\Auth\MailController;
-
+use App\Models\Patient;
+use App\Models\PatientImage;
 use app\Traits\handleResponseTrait;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Repositories\PatientRepository;
+use Illuminate\Support\Facades\Response;
+use App\Http\Controllers\Auth\MailController;
 
 
 
@@ -68,5 +70,42 @@ class PatientService
     {
         $updatedData = $this->patientRepository->update($id, $request);
         return $updatedData;
+    }
+
+    public function  download_patient_image($file_id)
+    {
+        $file = PatientImage::find($file_id);
+        if ($file) {
+            $file_path = public_path('project-files/patients-images/' . $file->name);
+            return Response::download($file_path, $file->name);
+        } else
+            return $this->returnErrorMessage("الصورة غير موجودة", 404);
+    }
+
+    public function  add_patient_image($patient_id, $request)
+    {
+        $patient = Patient::find($patient_id);
+        $files = $request->file('images');
+
+        if ($files !== null) {
+
+            foreach ($files as $file) {
+
+                $filename =  $file->getClientOriginalName();
+
+                $file_name_existed = PatientImage::where('name', $filename)->exists();
+                if ($file_name_existed) {
+                    return $this->returnErrorMessage("أعد تسمية الصورة  " . $filename . " رجاءً وحاول مجدداً",  422);
+                }
+
+                $image = PatientImage::create([
+                    'name' => $filename,
+                    'patient_id' => $patient->id
+                ]);
+
+                $file->move(public_path("project-files/patients-images"), $filename);
+            }
+        }
+        return $this->returnSuccessMessage(200, "تم إضافة الصور بنجاح");
     }
 }

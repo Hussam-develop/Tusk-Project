@@ -49,4 +49,9 @@ class Patient extends Model
     {
         return $this->hasMany(Treatment::class);
     }
+
+    public function images()
+    {
+        return $this->hasMany(PatientImage::class);
+    }
 }

@@ -4,25 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TreatmentImage extends Model
+class PatientImage extends Model
 {
     public $timestamps = false;
 
     protected $fillable = [
 
-        'treatment_id',
+        'patient_id',
 
         'name',
-        'is_diagram',
 
     ];
     protected $with = [
-        // 'treatment'
+        // 'patient'
 
     ];
 
-    public function treatment()
+    public function patient()
     {
-        return $this->belongsTo(Treatment::class);
+        return $this->belongsTo(Patient::class);
     }
 }

@@ -81,4 +81,17 @@ class PatientController extends Controller
             Log::error("error in update patient", $e->getMessage());
         }
     }
+
+    public function download_patient_image($file_id)
+    {
+        $data = $this->patientService->download_patient_image($file_id);
+
+        return $data;
+    }
+    public function add_patient_image($patient_id, Request $request)
+    {
+        $data = $this->patientService->add_patient_image($patient_id, $request);
+
+        return $data;
+    }
 }

@@ -129,7 +129,7 @@ class PatientRepository
 
     public function show($patientId)
     {
-        return $patient = $this->find($patientId);
+        return $patient = $this->find($patientId)->load("images");
     }
 
     public function delete($patientId)

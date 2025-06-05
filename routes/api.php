@@ -214,6 +214,9 @@ Route::group([
 
         Route::post('/update-patient/{id}', [PatientController::class, 'updatePatient']);
         Route::delete('/delete-patient/{id}', [PatientController::class, 'deletePatient']);
+
+        Route::get('/download-patient-image/{file_id}', [PatientController::class, 'download_patient_image']);
+        Route::post('/add-patient-images/{patient_id}', [PatientController::class, 'add_patient_image']);
     });
 });
 
