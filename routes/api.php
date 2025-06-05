@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DoctorTimeController;
 use App\Models\MedicalCase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -90,6 +91,9 @@ Route::group([
         Route::delete('delete/{id}', [DentistController::class, 'deleteSecretary']);
         Route::post('addsecretary', [DentistController::class, 'addSecretary']);
     });
+
+    Route::get('show-times', [DoctorTimeController::class, 'getDoctorTimes']);
+    Route::post('update-times', [DoctorTimeController::class, 'updateDoctorTimes']);
 
     // Treatments
 
@@ -262,3 +266,12 @@ Route::group([
 });
 
 //_____________________________________________________________________________________ end of Operating Payments نهاية المصاريف التشغيلية
+
+Route::group([
+    'middleware' => ['auth:sanctum'],
+    'prefix' => 'doctorTime',
+    'as' => 'doctorTime'
+], function () {
+    Route::get("/doctorTime", [DoctorTimeController::class, 'index']);
+    Route::post("/doctorTime", [DoctorTimeController::class, 'store']);
+});
