@@ -10,36 +10,31 @@ class Appointment extends Model
 
     protected $fillable = [
 
-        'patient_id',
-
-        'creatorable_id', // Dentist or Secretary
-        'creatorable_type',
-
-        'from',
-        'to',
-        'title',
-        'details',
+        'dentist_id',
+        'patient_name',
+        'patient_phone',
         'date',
-        'cost',
-        'is_paid',
-
+        'time_from',
+        'time_to',
+        'creatorable_id',
+        'creatorable_type',
         'created_at',
         'updated_at'
 
     ];
     protected $with = [
-        'images'
+        // 'images'
         // 'patient',
         // 'creatorable'
     ];
-    public function images()
-    {
-        return $this->hasMany(AppointmentImage::class);
-    }
-    public function patient()
-    {
-        return $this->belongsTo(Patient::class);
-    }
+    // public function images()
+    // {
+    //     return $this->hasMany(AppointmentImage::class);
+    // }
+    // public function patient()
+    // {
+    //     return $this->belongsTo(Patient::class);
+    // }
 
     // Morph :
     public function creatorable(): MorphTo // Morph with : 1.Dentist 2.Secretary

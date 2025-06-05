@@ -19,8 +19,10 @@ return new class extends Migration
             $table->char('phone', 14);
             $table->date('birthday');
             $table->double('current_balance')->nullable();
-            $table->boolean('is_smoker');
-            $table->enum('gender', ['male', 'female']);
+            $table->boolean('is_smoker')->default(0); // 0 is not smoker
+            $table->enum('gender', ['ذكر', 'أنثى']);
+            $table->string('medicine_name')->nullable();
+            $table->string('illness_name')->nullable();
             $table->timestamps();
         });
     }

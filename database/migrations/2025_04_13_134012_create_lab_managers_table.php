@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('lab_managers', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->string('full_name');
             $table->string('email')->unique();
             $table->string('password');
             $table->timestamp('email_verified_at')->nullable();
@@ -27,8 +26,8 @@ return new class extends Migration
             $table->string('lab_province');
             $table->json('lab_phone');
             $table->string('lab_logo')->nullable();
-            $table->time('lab_from_hour');
-            $table->time('lab_to_hour');
+            $table->time('work_from_hour');
+            $table->time('work_to_hour');
             $table->dateTime('register_date')->nullable();
             $table->boolean('subscription_is_valid_now')->default(0);
             $table->boolean('register_accepted')->nullable()->default(null);

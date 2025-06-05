@@ -47,6 +47,8 @@ class DatabaseSeeder extends Seeder
                 'last_name' => "dentist" . $i,
                 'phone' => "0987070814",
                 'email' => "dentist$i" . "@gmail.com",
+                'work_from_hour' => "09:00",
+                'work_to_hour' => "20:00",
                 // 'type' => "admin",
                 // 'register_accepted' => true,
                 'email_is_verified' => true,
@@ -64,8 +66,7 @@ class DatabaseSeeder extends Seeder
         }
         for ($i = 1; $i <= 5; $i++) {
             LabManager::create([
-                'first_name' => "manager" . $i,
-                'last_name' => "manager" . $i,
+                'full_name' => "manager" . $i,
                 // 'type' => "admin",
                 // 'register_accepted' => true,
                 'email' => "manager$i" . "@gmail.com",
@@ -90,8 +91,8 @@ class DatabaseSeeder extends Seeder
                 'subscription_is_valid_now' => 1,
                 'lab_logo' => "logo_path",
                 'lab_type' => "teeth",
-                'lab_from_hour' => "08:00",
-                'lab_to_hour' => "05:00",
+                'work_from_hour' => "09:00",
+                'work_to_hour' => "20:00",
             ]);
         }
 

@@ -28,10 +28,12 @@ class registerRequest extends FormRequest
         $guard = $this->input('guard');
 
         $commonRules = [
-            'first_name' => ['required', 'string', 'min:3', 'max:15'],
-            'last_name'  => ['required', 'string', 'min:3', 'max:255'],
             'email'      => ['required', 'email', 'unique:' . $this->getTableName($guard) . ',email'],
             'guard'      => ['required', 'in:dentist,lab_manager'],
+            'work_from_hour' => ['required', 'date_format:H:i'],
+            'work_to_hour'   => ['required', 'date_format:H:i', 'after:work_from_hour'],
+
+
             'password'   => [
                 'required',
                 'string',
@@ -46,16 +48,16 @@ class registerRequest extends FormRequest
         ];
 
         $labManagerRules = [
-            'lab_name'      => ['required', 'string', 'max:30'],
-            'lab_type'      => ['required', 'string', 'max:20'],
-            'lab_from_hour' => ['required', 'date_format:H:i'],
-            'lab_phone' => ['required', 'json'],
-            'lab_phone.*' => ['required', 'string', 'size:10', 'regex:/^[0-9]+$/', 'starts_with:09', 'unique:' . $this->getTableName($guard) . ',lab_phone'],
-            'lab_to_hour'   => ['required', 'date_format:H:i', 'after:lab_from_hour'],
-            'lab_province'  => ['required', 'string', 'max:15'],
-            'lab_address'   => ['required', 'string', 'max:100'],
+            'full_name'       => ['required', 'string', 'min:3', 'max:15'],
+            'lab_name'        => ['required', 'string', 'max:30'],
+            'lab_type'        => ['required', 'string', 'max:20'],
+            'lab_phone.*'     => ['required', 'string', 'size:10', 'regex:/^[0-9]+$/', 'unique:' . $this->getTableName($guard) . ',lab_phone'],
+            'lab_province'    => ['required', 'string', 'max:15'],
+            'lab_address'     => ['required', 'string', 'max:100'],
         ];
         $dentistRules = [
+            'first_name' => ['required', 'string', 'min:3', 'max:15'],
+            'last_name'  => ['required', 'string', 'min:3', 'max:30'],
             'phone'      => ['required', 'string', 'size:10', 'regex:/^[0-9]+$/', 'starts_with:09', 'unique:' . $this->getTableName($guard) . ',phone'],
             'address'    => ['required', 'string', 'min:10'],
         ];
@@ -97,10 +99,10 @@ class registerRequest extends FormRequest
             'lab_phone.*.starts_with ' => ' يجب أن يبدأ رقم مخبر التعويضات بـ 09 حصراً ',
             'lab_phone.*.unique' => 'هذا رقم مخبر التعويضات مستخدم سابقاً. يجب إدخال رقم آخر',
             'lab_type.required'      => 'نوع المخبر مطلوب.',
-            'lab_from_hour.required' => 'ساعة افتتاح المخبر مطلوبة.',
-            'lab_to_hour.required'   => 'ساعة إغلاق المخبر مطلوبة.',
-            'lab_to_hour.date_format' => 'ساعة الإغلاق يجب أن تكون بصيغة (ساعة:دقيقة) مثل 17:00.',
-            'lab_to_hour.after' => 'ساعة الإغلاق يجب أن تكون بعد ساعة الافتتاح.',
+            'work_from_hour.required' => 'ساعة افتتاح المخبر مطلوبة.',
+            'work_to_hour.required'   => 'ساعة إغلاق المخبر مطلوبة.',
+            'work_to_hour.date_format' => 'ساعة الإغلاق يجب أن تكون بصيغة (ساعة:دقيقة) مثل 17:00.',
+            'work_to_hour.after' => 'ساعة الإغلاق يجب أن تكون بعد ساعة الافتتاح.',
             'lab_address.max' => 'العنوان يجب ألا يتجاوز 100 حرف ( بما في ذلك المسافات )',
 
         ];

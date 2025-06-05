@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -12,8 +13,7 @@ class LabManager extends Authenticatable implements JWTSubject
     public $timestamps = false;
 
     protected $fillable = [
-        'first_name',
-        'last_name',
+        'full_name',
         'password',
         'phone',
         'email',
@@ -33,8 +33,8 @@ class LabManager extends Authenticatable implements JWTSubject
         'subscription_is_valid_now',
         'lab_logo',
         'lab_type',
-        'lab_from_hour',
-        'lab_to_hour',
+        'work_from_hour',
+        'work_to_hour',
 
 
     ];
@@ -53,6 +53,18 @@ class LabManager extends Authenticatable implements JWTSubject
         ];
     }
 
+    public function scopeSubscriptionIsValidNow(Builder $builder)
+    {
+        $builder->where('register_accepted', 1)
+            ->where('subscription_is_valid_now', 1)
+            ->where('email_is_verified', 1);
+    }
+    public function scopeSubscription_NOT_ValidNow(Builder $builder)
+    {
+        $builder->where('register_accepted', 1)
+            ->where('subscription_is_valid_now', 0)
+            ->where('email_is_verified', 1);
+    }
     public function accountRecords()
     {
         return $this->hasMany(AccountRecord::class);

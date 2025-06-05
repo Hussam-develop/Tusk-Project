@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -16,6 +17,10 @@ class Dentist extends Authenticatable implements JWTSubject
         'email',
         'password',
         'image_path',
+
+        'work_from_hour',
+        'work_to_hour',
+
         'phone', // phone clinic
         'address', //clinic address
         'email_is_verified',
@@ -38,6 +43,18 @@ class Dentist extends Authenticatable implements JWTSubject
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function scopeSubscriptionIsValidNow(Builder $builder)
+    {
+        $builder->where('register_accepted', 1)
+            ->where('subscription_is_valid_now', 1)
+            ->where('email_is_verified', 1);
+    }
+    public function scopeSubscription_NOT_ValidNow(Builder $builder)
+    {
+        $builder->where('register_accepted', 1)
+            ->where('subscription_is_valid_now', 0)
+            ->where('email_is_verified', 1);
     }
 
     /// relations

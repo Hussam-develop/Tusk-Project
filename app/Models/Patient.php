@@ -10,7 +10,6 @@ class Patient extends Model
     protected $fillable = [
 
         'dentist_id',
-
         'full_name',
         'phone',
         'birthday',
@@ -18,8 +17,8 @@ class Patient extends Model
         'is_smoker',
         'address',
         'gender',
-
-
+        'medicine_name',
+        'illness_name',
         'created_at',
         'updated_at'
 

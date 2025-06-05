@@ -13,16 +13,12 @@ class AdminRepository
 {
     public function getActiveLabs($perPage)
     {
-        return LabManager::where('register_accepted', 1)
-            ->where('subscription_is_valid_now', 1)
-            ->where('email_is_verified', 1)
+        return LabManager::subscriptionIsValidNow()
             ->paginate($perPage, ['id', 'lab_name', 'lab_phone', 'lab_address', 'register_date']);
     }
     public function getActiveClinics($perPage)
     {
-        $dentists = Dentist::where('register_accepted', 1)
-            ->where('subscription_is_valid_now', 1)
-            ->where('email_is_verified', 1)
+        $dentists = Dentist::subscriptionIsValidNow()
             ->paginate($perPage, ['id', 'first_name', 'last_name', 'phone', 'address', 'register_date']);
 
         return $dentists->map(function ($dentist) {
@@ -34,10 +30,7 @@ class AdminRepository
 
     public function filterLabs($labName = null, $registerDate = null, $perPage = 10)
     {
-        $query = LabManager::where('register_accepted', 1)
-            ->where('subscription_is_valid_now', 1)
-            ->where('email_is_verified', 1);
-
+        $query = LabManager::subscriptionIsValidNow();
         if ($labName) {
             $query->whereRaw('SOUNDEX(lab_name) = SOUNDEX(?)', [$labName]);
         }
@@ -53,10 +46,7 @@ class AdminRepository
 
     public function filterclinics($clinic_name = null, $register_date = null, $perPage = 10)
     {
-        $query = Dentist::where('register_accepted', 1)
-            ->where('subscription_is_valid_now', 1)
-            ->where('email_is_verified', 1);
-
+        $query = Dentist::subscriptionIsValidNow();
         if ($clinic_name) {
             $query->where(function ($query) use ($clinic_name) {
                 $query->whereRaw('SOUNDEX(first_name) = SOUNDEX(?)', [$clinic_name])
@@ -81,16 +71,12 @@ class AdminRepository
 
     public function getLabsWithNullSubscription($perPage)
     {
-        return LabManager::where('register_accepted', 1)
-            ->where('email_is_verified', 1)
-            ->where('subscription_is_valid_now', 0)
+        return LabManager::subscription_NOT_ValidNow()
             ->paginate($perPage, ['id', 'lab_name', 'lab_phone', 'lab_address', 'register_date']);
     }
     public function getClinicsWithNullSubscription($perPage)
     {
-        $dentists = Dentist::where('register_accepted', 1)
-            ->where('email_is_verified', 1)
-            ->where('subscription_is_valid_now', 0)
+        $dentists = Dentist::subscription_NOT_ValidNow()
             ->paginate($perPage, ['id', 'first_name', 'last_name', 'phone', 'address', 'register_date']);
         return $dentists->map(function ($dentist) {
             $dentist->full_name = $dentist->first_name . ' ' . $dentist->last_name;

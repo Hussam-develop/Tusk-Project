@@ -6,9 +6,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DentistController;
+use App\Http\Controllers\PatientController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\MailController;
 use App\Http\Controllers\TreatmentController;
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\MedicalCaseController;
 use App\Http\Controllers\PatientPaymentController;
 use App\Http\Controllers\OperatingPaymentController;
@@ -197,6 +199,22 @@ Route::group([
     });
     //_____________________________________________________________________________________ نهاية مخابر الطبيب End of Labs Routes For Doctor
 
+    //patients routes :
+    Route::group([
+        'prefix' => 'patients',
+    ], function () {
+
+        Route::get('/', [PatientController::class, 'AllPatients']);
+        Route::get('/show-patient/{patientId}', [PatientController::class, 'showPatient']);
+        Route::post('/add-patient', [PatientController::class, 'storePatient']);
+        /// appointments routes
+        Route::get('/appointments/get-avilable-slots', [AppointmentController::class, 'getAvilableSlots']);
+        Route::post('/appointments/book-an-appointment', [AppointmentController::class, 'bookAnAppointment']);
+        Route::get('/appointments/get-booked-appointments', [AppointmentController::class, 'getBookedAppointments']);
+
+        Route::post('/update-patient/{id}', [PatientController::class, 'updatePatient']);
+        Route::delete('/delete-patient/{id}', [PatientController::class, 'deletePatient']);
+    });
 });
 
 //__________________________________________________________________end dentist routes

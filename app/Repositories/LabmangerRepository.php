@@ -67,8 +67,8 @@ class LabmangerRepository
                 // عرض التفاصيل مع الاسم المدمج
                 return [
                     'full_name' => $full_name,
-                    'lab_from_hour' => $lab->lab_from_hour,
-                    'lab_to_hour' => $lab->lab_to_hour,
+                    'work_from_hour' => $lab->work_from_hour,
+                    'work_to_hour' => $lab->work_to_hour,
                     'lab_phone' => $lab->lab_phone,
                     'lab_name' => $lab->lab_name,
                     'lab_address' => $lab->lab_address,

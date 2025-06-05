@@ -22,7 +22,7 @@ use App\Services\AccountRecordService;
 
 
 use Illuminate\Http\Request;
-use App\Services\PaitentService;
+use App\Services\PatientService;
 
 
 class DentistController extends Controller
@@ -33,11 +33,11 @@ class DentistController extends Controller
     protected $itemService;
     protected $ItemhistoryService;
     protected $LabmangerService;
-    protected $PaitentService;
+    protected $PatientService;
     protected $TreatmentService;
     protected $OperatingPaymentService;
     protected $AccountRecordService;
-    public function __construct(SecretaryService $secretaryService, CategoryService $categoryService, SubCategoryService $subCategoryService, ItemService $ItemService, itemhistoryService $ItemhistoryService, LabmangerService $LabmangerService, PaitentService $PaitentService, TreatmentService $TreatmentService, OperatingPaymentService $OperatingPaymentService, AccountRecordService $AccountRecordService)
+    public function __construct(SecretaryService $secretaryService, CategoryService $categoryService, SubCategoryService $subCategoryService, ItemService $ItemService, itemhistoryService $ItemhistoryService, LabmangerService $LabmangerService, PatientService $PatientService, TreatmentService $TreatmentService, OperatingPaymentService $OperatingPaymentService, AccountRecordService $AccountRecordService)
     {
         $this->secretaryService = $secretaryService;
         $this->categoryService = $categoryService;
@@ -45,7 +45,7 @@ class DentistController extends Controller
         $this->itemService = $ItemService;
         $this->ItemhistoryService = $ItemhistoryService;
         $this->LabmangerService = $LabmangerService;
-        $this->PaitentService = $PaitentService;
+        $this->PatientService = $PatientService;
         $this->TreatmentService = $TreatmentService;
         $this->OperatingPaymentService = $OperatingPaymentService;
         $this->AccountRecordService = $AccountRecordService;
@@ -172,7 +172,7 @@ class DentistController extends Controller
     }
     public function paitents_statistics()
     {
-        return $this->PaitentService->paitents_statistics();
+        return $this->PatientService->paitents_statistics();
     }
     public function treatments_statistics()
     {
