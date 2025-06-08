@@ -2,10 +2,15 @@
 
 namespace App\Http\Requests;
 
+use app\Traits\handleResponseTrait;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StorePatientRequest extends FormRequest
 {
+    use handleResponseTrait;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -22,8 +27,8 @@ class StorePatientRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'full_name'       => ['required', 'string', 'max:30'],
-            'phone'            => ['required', 'string', 'regex:/^[0-9+\-\s]{7,20}$/'],
+            'full_name'       => ['required', 'string', 'max:30', 'unique:patients,full_name'],
+            'phone'            => ['required', 'string', 'regex:/^[0-9+\-\s]{7,20}$/', 'unique:patients,phone'],
             'birthday'         => ['required', 'date', 'before:today'],
             'is_smoker'        => ['required', 'boolean'],
             'address'          => ['required', 'string', 'max:100'],
@@ -38,7 +43,9 @@ class StorePatientRequest extends FormRequest
     {
         return [
             'full_name.required'      => 'الاسم الكامل مطلوب.',
+            'full_name.unique'      => 'الاسم موجود مسبقاً يرجى إدخال اسم آخر.',
             'phone.required'           => 'رقم الهاتف مطلوب.',
+            'phone.unique'      => 'الرقم موجود مسبقاً يرجى إدخال رقم آخر.',
             'phone.regex'              => 'يرجى إدخال رقم هاتف صحيح.',
             'birthday.required'        => 'تاريخ الميلاد مطلوب.',
             'birthday.date'            => 'يجب أن يكون تاريخ الميلاد تاريخًا صالحًا.',
@@ -54,5 +61,13 @@ class StorePatientRequest extends FormRequest
             'address.string'      => ' العنوان يجب أن يكون نصًا.',
             'address.max'      => 'العنوان  يجب أن يكون اقل من 100 حرف.',
         ];
+    }
+    protected function failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors();
+
+        $response = $this->returnErrorMessage($errors->messages(), 422);
+
+        throw new HttpResponseException($response);
     }
 }

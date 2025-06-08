@@ -8,6 +8,7 @@ use App\Models\Dentist;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Secretary;
 use App\Models\Accountant;
+use App\Models\DoctorTime;
 use App\Models\LabManager;
 use Illuminate\Database\Seeder;
 use Database\Seeders\BillSeeder;
@@ -47,8 +48,10 @@ class DatabaseSeeder extends Seeder
                 'last_name' => "dentist" . $i,
                 'phone' => "0987070814",
                 'email' => "dentist$i" . "@gmail.com",
-                'work_from_hour' => "09:00",
-                'work_to_hour' => "20:00",
+
+                // 'work_from_hour' => "09:00",
+                // 'work_to_hour' => "20:00",
+
                 // 'type' => "admin",
                 // 'register_accepted' => true,
                 'email_is_verified' => true,
@@ -63,6 +66,23 @@ class DatabaseSeeder extends Seeder
                 'register_date' => now(),
                 'subscription_is_valid_now' => 1,
             ]);
+        }
+        $days = ["السبت", "الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة"];
+
+        for ($i = 1; $i <= 5; $i++) {
+            foreach ($days as $day) {
+                DoctorTime::create([
+                    "dentist_id" => $i,
+                    "day" => $day,
+                    "start_time" => "08:00",
+                    "end_time" => "18:00",
+                    "start_rest" => "13:00",
+                    "end_rest" => "15:00",
+                    "created_at" => now(),
+                    "updated_at" => now()
+
+                ]);
+            }
         }
         for ($i = 1; $i <= 5; $i++) {
             LabManager::create([

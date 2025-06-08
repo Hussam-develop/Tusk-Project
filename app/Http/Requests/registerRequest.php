@@ -30,8 +30,6 @@ class registerRequest extends FormRequest
         $commonRules = [
             'email'      => ['required', 'email', 'unique:' . $this->getTableName($guard) . ',email'],
             'guard'      => ['required', 'in:dentist,lab_manager'],
-            'work_from_hour' => ['required', 'date_format:H:i'],
-            'work_to_hour'   => ['required', 'date_format:H:i', 'after:work_from_hour'],
 
 
             'password'   => [
@@ -54,6 +52,10 @@ class registerRequest extends FormRequest
             'lab_phone.*'     => ['required', 'string', 'size:10', 'regex:/^[0-9]+$/', 'unique:' . $this->getTableName($guard) . ',lab_phone'],
             'lab_province'    => ['required', 'string', 'max:15'],
             'lab_address'     => ['required', 'string', 'max:100'],
+
+            'work_from_hour' => ['required', 'date_format:H:i'],
+            'work_to_hour'   => ['required', 'date_format:H:i', 'after:work_from_hour'],
+
         ];
         $dentistRules = [
             'first_name' => ['required', 'string', 'min:3', 'max:15'],
@@ -80,10 +82,11 @@ class registerRequest extends FormRequest
             'password.regex'     => 'كلمة المرور يجب أن تحتوي على حرف كبير، حرف صغير، رقم، ورمز خاص.',
             'password.confirmed'  => 'تأكيد كلمة المرور غير مطابق.',
             'phone.required'      => 'رقم الهاتف مطلوب.',
-            'phone.*.size ' => ' يجب أن يكون رقم العيادة مكوّن من 10 أرقام حصراً ',
+            'phone.*.size' => ' يجب أن يكون رقم العيادة مكوّن من 10 أرقام حصراً ',
             'phone.*.regix' => 'يجب أن يكون رقم العيادة مكون من أرقام فقط',
-            'phone.*.starts_with ' => ' يجب أن يبدأ رقم العيادة بـ 09 حصراً ',
-            'phone.*.unique' => 'هذا رقم العيادة مستخدم سابقاً. يجب إدخال رقم آخر',
+            'phone.*.starts_with' => ' يجب أن يبدأ رقم العيادة بـ 09 حصراً ',
+            'phone.unique' => 'هذا رقم العيادة مستخدم سابقاً. يجب إدخال رقم آخر',
+
             'guard.required'      => 'نوع المستخدم مطلوب.',
             'guard.in'            => 'يجب أن يكون نوع المستخدم طبيب أسنان أو مدير مخبر.',
             'address.required'       => 'عنوان العيادة مطلوب.',
@@ -94,9 +97,9 @@ class registerRequest extends FormRequest
             'lab_province.required'  => 'المحافظة التي يقع فيها المخبر مطلوبة.',
             'lab_address.required'   => 'عنوان المخبر مطلوب.',
             'lab_phone.*.required'     => 'هاتف المخبر مطلوب.',
-            'lab_phone.*.size ' => ' يجب أن يكون رقم مخبر التعويضات مكوّن من 10 أرقام حصراً ',
+            'lab_phone.*.size' => ' يجب أن يكون رقم مخبر التعويضات مكوّن من 10 أرقام حصراً ',
             'lab_phone.*.regix' => 'يجب أن يكون رقم مخبر التعويضات مكون من أرقام فقط',
-            'lab_phone.*.starts_with ' => ' يجب أن يبدأ رقم مخبر التعويضات بـ 09 حصراً ',
+            'lab_phone.*.starts_with' => ' يجب أن يبدأ رقم مخبر التعويضات بـ 09 حصراً ',
             'lab_phone.*.unique' => 'هذا رقم مخبر التعويضات مستخدم سابقاً. يجب إدخال رقم آخر',
             'lab_type.required'      => 'نوع المخبر مطلوب.',
             'work_from_hour.required' => 'ساعة افتتاح المخبر مطلوبة.',

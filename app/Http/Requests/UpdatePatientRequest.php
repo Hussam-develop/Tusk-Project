@@ -2,10 +2,15 @@
 
 namespace App\Http\Requests;
 
+use app\Traits\handleResponseTrait;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UpdatePatientRequest extends FormRequest
 {
+    use handleResponseTrait;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -50,5 +55,13 @@ class UpdatePatientRequest extends FormRequest
             'address.string'      => ' العنوان يجب أن يكون نصًا.',
             'address.max'      => 'العنوان  يجب أن يكون اقل من 100 حرف.',
         ];
+    }
+    protected function failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors();
+
+        $response = $this->returnErrorMessage($errors->messages(), 422);
+
+        throw new HttpResponseException($response);
     }
 }

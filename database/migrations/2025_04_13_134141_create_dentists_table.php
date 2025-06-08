@@ -21,8 +21,8 @@ return new class extends Migration
             $table->integer('phone');
             $table->string('address');
 
-            $table->time('work_from_hour');
-            $table->time('work_to_hour');
+            // $table->time('work_from_hour');
+            // $table->time('work_to_hour');
 
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('email_is_verified')->default(0);

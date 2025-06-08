@@ -15,7 +15,7 @@ class AuthService
         $this->authRepo = $authRepo;
     }
 
-    public function login(string $guard,array $credentials): ?string
+    public function login(string $guard, array $credentials): ?string
     {
         Auth::shouldUse($guard);
         if (!$token = Auth::attempt($credentials)) {
@@ -27,10 +27,10 @@ class AuthService
 
     public function register(array $data, string $guard)
     {
-        $user = $this->authRepo->createUser($data,$guard);
-            $token = JWTAuth::fromUser($user, ['guard' => $guard]);
+        $user = $this->authRepo->createUser($data, $guard);
+        $token = JWTAuth::fromUser($user, ['guard' => $guard]);
 
-      //  $token = auth($guard)->login($user);
+        //  $token = auth($guard)->login($user);
         return [
             'user'  => $user,
             'token' => $token,

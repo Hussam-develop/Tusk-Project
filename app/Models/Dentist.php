@@ -18,8 +18,8 @@ class Dentist extends Authenticatable implements JWTSubject
         'password',
         'image_path',
 
-        'work_from_hour',
-        'work_to_hour',
+        // 'work_from_hour',
+        // 'work_to_hour',
 
         'phone', // phone clinic
         'address', //clinic address

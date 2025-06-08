@@ -266,12 +266,3 @@ Route::group([
 });
 
 //_____________________________________________________________________________________ end of Operating Payments نهاية المصاريف التشغيلية
-
-Route::group([
-    'middleware' => ['auth:sanctum'],
-    'prefix' => 'doctorTime',
-    'as' => 'doctorTime'
-], function () {
-    Route::get("/doctorTime", [DoctorTimeController::class, 'index']);
-    Route::post("/doctorTime", [DoctorTimeController::class, 'store']);
-});

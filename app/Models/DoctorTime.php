@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class DoctorTime extends Model
 {
     protected $fillable = [
-        'dentist_id',
+        "dentist_id",
         "day",
         "start_time",
         "end_time",

@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\registerRequest;
 use App\Models\Dentist;
-use App\Services\AuthService;
-use app\Traits\handleResponseTrait;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Services\AuthService;
+use Illuminate\Http\JsonResponse;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Http\Requests\LoginRequest;
+use App\Services\DoctorTimeService;
+use app\Traits\handleResponseTrait;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\registerRequest;
+use App\Repositories\DoctorTimeRepository;
 
 class AuthController extends Controller
 {
@@ -23,7 +25,11 @@ class AuthController extends Controller
 
     public function register(registerRequest $request)
     {
+        $doctorTimeRepository = new DoctorTimeRepository();
+
         $data = $this->authService->register($request->validated(), $request->guard);
+        $doctorTimeRepository->addDoctorTimesInRegister($request);
+
 
         $MailController = new MailController();
         $MailController->send_verification_code($request->guard, $request->email);
