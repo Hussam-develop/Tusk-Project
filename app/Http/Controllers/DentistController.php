@@ -2,27 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\addCategoryRequest;
-use App\Http\Requests\addItemRequest;
-use App\Http\Requests\add_nonrepeated_itemhistory;
-use App\Http\Requests\addSecretary;
-use App\Http\Requests\addSecretaryRequest;
-use App\Http\Requests\ItemhistoryRequest;
-use App\Http\Requests\updatesecretaryequest;
-use App\Services\CategoryService;
-use App\Services\itemhistoryService;
+use Illuminate\Http\Request;
 use App\Services\ItemService;
+use App\Services\CommentService;
+use App\Services\PatientService;
+use App\Services\CategoryService;
 use App\Services\LabmangerService;
 use App\Services\SecretaryService;
-use App\Services\SubCategoryService;
 use App\Services\TreatmentService;
-use App\Services\OperatingPaymentService;
+use App\Http\Requests\addSecretary;
+use App\Services\itemhistoryService;
+use App\Services\SubCategoryService;
+use App\Http\Requests\addItemRequest;
+use App\Http\Requests\commentrequest;
 use App\Services\AccountRecordService;
+use App\Http\Requests\addCategoryRequest;
+use App\Http\Requests\ItemhistoryRequest;
 
 
 
-use Illuminate\Http\Request;
-use App\Services\PatientService;
+use App\Services\OperatingPaymentService;
+use App\Http\Requests\addSecretaryRequest;
+use App\Http\Requests\updatesecretaryequest;
+use App\Http\Requests\add_nonrepeated_itemhistory;
 
 
 class DentistController extends Controller
@@ -37,7 +39,9 @@ class DentistController extends Controller
     protected $TreatmentService;
     protected $OperatingPaymentService;
     protected $AccountRecordService;
-    public function __construct(SecretaryService $secretaryService, CategoryService $categoryService, SubCategoryService $subCategoryService, ItemService $ItemService, itemhistoryService $ItemhistoryService, LabmangerService $LabmangerService, PatientService $PatientService, TreatmentService $TreatmentService, OperatingPaymentService $OperatingPaymentService, AccountRecordService $AccountRecordService)
+    protected $CommentService;
+
+    public function __construct(SecretaryService $secretaryService, CategoryService $categoryService, SubCategoryService $subCategoryService, ItemService $ItemService, itemhistoryService $ItemhistoryService, LabmangerService $LabmangerService, PatientService $PatientService, TreatmentService $TreatmentService, OperatingPaymentService $OperatingPaymentService, AccountRecordService $AccountRecordService, CommentService $CommentService)
     {
         $this->secretaryService = $secretaryService;
         $this->categoryService = $categoryService;
@@ -49,6 +53,7 @@ class DentistController extends Controller
         $this->TreatmentService = $TreatmentService;
         $this->OperatingPaymentService = $OperatingPaymentService;
         $this->AccountRecordService = $AccountRecordService;
+        $this->CommentService = $CommentService;
     }
 
     public function getSecretaries()
@@ -203,5 +208,18 @@ class DentistController extends Controller
     public function Account_records_of_lab($lab_id)
     {
         return $this->AccountRecordService->Account_records_of_lab($lab_id);
+    }
+    public function add_comment($medical_case_id, commentrequest $request)
+    {
+        $data = $request->validated();
+        return $this->CommentService->add_comment($medical_case_id, $data);
+    }
+    public function deleteComment($id)
+    {
+        return $this->CommentService->deleteComment($id);
+    }
+    public function showCommentsOfMedicalCase($id)
+    {
+        return $this->CommentService->showCommentsOfMedicalCase($id);
     }
 }

@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('medical_case_id')->constrained('medical_cases')->onDelete('cascade');
-            $table->foreignId('dentist_id')->constrained('dentists')->onDelete('cascade');
-            $table->foreignId('lab_manager_id')->constrained()->onDelete('cascade');
+            $table->foreignId('medical_case_id')->nullable()->default(null)->constrained('medical_cases')->onDelete('cascade');
+            // $table->foreignId('dentist_id')->nullable()->constrained('dentists')->onDelete('cascade');
+            // $table->foreignId('lab_manager_id')->nullable()->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('dentist_id')->nullable();
+            $table->unsignedBigInteger('lab_manager_id')->nullable();
             $table->string('comment');
             $table->timestamps();
         });

@@ -130,6 +130,11 @@ Route::group([
 
         Route::post('/add-case-images/{case_id}', [MedicalCaseController::class, 'add_case_images']);
         Route::get('/download-case-image/{case_id}', [MedicalCaseController::class, 'download_medical_case_image']);
+
+        // Comments
+        Route::post('/add-comment/{id}', [DentistController::class, 'add_comment']);
+        Route::delete('/delete-comment/{id}', [DentistController::class, 'deleteComment']);
+        Route::get('/show-comments/{id}', [DentistController::class, 'showCommentsOfMedicalCase']);
     });
 
     // Patient Payments
