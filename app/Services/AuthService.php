@@ -51,4 +51,12 @@ class AuthService
     {
         return $this->authRepo->getAuthenticatedUser();
     }
+    public function download_profile_image()
+    {
+        return $this->authRepo->download_profile_image();
+    }
+    public function edit_profile_image($request)
+    {
+        return $this->authRepo->edit_profile_image($request);
+    }
 }

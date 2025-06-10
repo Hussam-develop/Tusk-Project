@@ -94,6 +94,8 @@ Route::group([
 
     Route::get('show-times', [DoctorTimeController::class, 'getDoctorTimes']);
     Route::post('update-times', [DoctorTimeController::class, 'updateDoctorTimes']);
+    Route::get('/download-profile-image', [AuthController::class, 'download_profile_image']);
+    Route::post('/edit-profile-image', [AuthController::class, 'edit_profile_image']);
 
     // Treatments
 

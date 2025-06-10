@@ -62,6 +62,7 @@ class registerRequest extends FormRequest
             'last_name'  => ['required', 'string', 'min:3', 'max:30'],
             'phone'      => ['required', 'string', 'size:10', 'regex:/^[0-9]+$/', 'starts_with:09', 'unique:' . $this->getTableName($guard) . ',phone'],
             'address'    => ['required', 'string', 'min:10'],
+            'image'    => ['nullable', 'file']
         ];
 
         return match ($guard) {
@@ -90,6 +91,7 @@ class registerRequest extends FormRequest
             'guard.required'      => 'نوع المستخدم مطلوب.',
             'guard.in'            => 'يجب أن يكون نوع المستخدم طبيب أسنان أو مدير مخبر.',
             'address.required'       => 'عنوان العيادة مطلوب.',
+            'image.file'       => 'الصورة يجب أن تكون ملف',
             //'lab_register_date.required' => 'تاريخ تسجيل المخبر مطلوب.',
             // 'lab_register_date.date'     => 'يجب أن يكون تاريخ تسجيل المخبر تاريخًا صالحًا.',
             //'lab_logo.required'      => 'شعار المخبر مطلوب.',

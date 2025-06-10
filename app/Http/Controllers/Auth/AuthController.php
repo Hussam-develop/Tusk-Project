@@ -96,4 +96,12 @@ class AuthController extends Controller
 
         return $this->returnData('profile', $user, 'Generated User Profile Successfully', 200);
     }
+    public function download_profile_image()
+    {
+        return $this->authService->download_profile_image();
+    }
+    public function edit_profile_image(Request $request)
+    {
+        return $this->authService->edit_profile_image($request);
+    }
 }
