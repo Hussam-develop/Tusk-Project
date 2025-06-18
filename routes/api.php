@@ -273,3 +273,18 @@ Route::group([
 });
 
 //_____________________________________________________________________________________ end of Operating Payments نهاية المصاريف التشغيلية
+//_____________________________________________________________________________________ Lab Manager مدير المخبر
+
+Route::group([
+    'middleware' => ['auth.guardFromToken', 'auth:lab_manager'],
+    'prefix' => 'lab-manager',
+], function () {
+    Route::group([
+        'prefix' => 'statistics',
+    ], function () {
+        // هون اكتب الراوتات تبع الاحصائيات
+        // Route::get("/statistic1", [Controller::class, 'statistic1']);
+        // Route::get("/statistic2", [Controller::class, 'statistic2']);
+    });
+});
+//_____________________________________________________________________________________ end Lab Manager

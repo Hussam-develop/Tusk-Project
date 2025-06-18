@@ -117,7 +117,7 @@ class PatientRepository
     public function store(array $data)
     {
         $data['dentist_id'] = Auth::id();
-        $data['current_balance'] = 0;
+        // $data['current_balance'] = 0;
         return Patient::create($data);
     }
 
