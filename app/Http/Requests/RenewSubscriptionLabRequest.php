@@ -26,22 +26,22 @@ class RenewSubscriptionLabRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'lab_id' => 'required|exists:lab_managers,id',
+            'subscription_id' => 'required|exists:subscriptions,id',
             'months' => 'required|integer|min:1',
-            'subscription_value' => 'required|numeric|min:0'
+            // 'subscription_value' => 'required|numeric|min:0'
         ];
     }
     public function messages()
     {
         return [
-            'lab_id.required' => 'يجب تقديم معرف المخبر.',
-            'lab_id.exists' => 'معرف المخبر المدخل غير موجود.',
+            'subscription_id.required' => 'يجب تقديم معرف المخبر.',
+            'subscription_id.exists' => 'معرف المخبر المدخل غير موجود.',
             'months.required' => 'يجب تقديم عدد الشهور.',
             'months.integer' => 'يجب أن يكون عدد الشهور عدد صحيح.',
             'months.min' => 'يجب أن يكون عدد الشهور على الأقل 1.',
-            'subscription_value.required' => 'يجب تقديم قيمة الاشتراك.',
-            'subscription_value.numeric' => 'يجب أن تكون قيمة الاشتراك رقم.',
-            'subscription_value.min' => 'يجب أن تكون قيمة الاشتراك أكبر من أو تساوي 0.'
+            // 'subscription_value.required' => 'يجب تقديم قيمة الاشتراك.',
+            // 'subscription_value.numeric' => 'يجب أن تكون قيمة الاشتراك رقم.',
+            // 'subscription_value.min' => 'يجب أن تكون قيمة الاشتراك أكبر من أو تساوي 0.'
         ];
     }
     protected function failedValidation(Validator $validator)

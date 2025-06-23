@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->integer('register_subscription_duration');
             $table->rememberToken();
             $table->integer('phone');
             $table->string('address');
@@ -30,7 +31,8 @@ return new class extends Migration
             $table->string('image_path')->nullable();
             $table->boolean('register_accepted')->nullable()->default(null);
             $table->date('register_date')->nullable();
-            $table->boolean('subscription_is_valid_now')->default(0);
+            $table->boolean('subscription_is_valid_now')->nullable()->default(null);
+            $table->timestamps();
         });
     }
 

@@ -9,13 +9,14 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Dentist extends Authenticatable implements JWTSubject
 {
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'first_name',
         'last_name',
         'email',
         'password',
+        'register_subscription_duration',
         'image_path',
 
         // 'work_from_hour',
@@ -52,9 +53,10 @@ class Dentist extends Authenticatable implements JWTSubject
     }
     public function scopeSubscription_NOT_ValidNow(Builder $builder)
     {
-        $builder->where('register_accepted', 1)
-            ->where('subscription_is_valid_now', 0)
-            ->where('email_is_verified', 1);
+        $builder
+            ->where('subscription_is_valid_now', 0);
+        // ->where('register_accepted', 1)
+        //     ->where('email_is_verified', 1);
     }
 
     /// relations

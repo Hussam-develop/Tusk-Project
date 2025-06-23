@@ -30,7 +30,10 @@ class registerRequest extends FormRequest
         $commonRules = [
             'email'      => ['required', 'email', 'unique:' . $this->getTableName($guard) . ',email'],
             'guard'      => ['required', 'in:dentist,lab_manager'],
+            'register_subscription_duration'      => ['required', 'integer'],
 
+            // 'subscription_from_date'      => ['required', 'date'],
+            // 'subscription_to_date'      => ["required", 'date', 'after:subscription_from_date'],
 
             'password'   => [
                 'required',
@@ -40,7 +43,7 @@ class registerRequest extends FormRequest
                 'regex:/[A-Z]/',          // حرف كبير على الأقل
                 'regex:/[0-9]/',          // رقم واحد على الأقل
                 'regex:/[@$!%*#?&]/',     // رمز خاص واحد على الأقل
-                'confirmed',              // تأكيد كلمة المرور],
+                'confirmed',           // تأكيد كلمة المرور],
             ],
 
         ];
@@ -49,7 +52,24 @@ class registerRequest extends FormRequest
             'full_name'       => ['required', 'string', 'min:3', 'max:15'],
             'lab_name'        => ['required', 'string', 'max:30'],
             'lab_type'        => ['required', 'string', 'max:20'],
-            'lab_phone.*'     => ['required', 'string', 'size:10', 'regex:/^[0-9]+$/', 'unique:' . $this->getTableName($guard) . ',lab_phone'],
+
+            'lab_phone' => [
+                'required',
+                // 'unique:' . $this->getTableName($guard) . ',lab_phone',
+                function ($attribute, $value, $fail) {
+                    $phones = json_decode($value, true);
+
+                    if (!is_array($phones) || count($phones) <= 1) {
+                        return $fail('يجب إدخال رقم واحد على الأقل');
+                    }
+
+                    foreach ($phones as $phone) {
+                        if (!preg_match('/^[0-9]{10}$/', $phone)) {
+                            return $fail('كل رقم هاتف يجب أن يتكون من 10 أرقام فقط.');
+                        }
+                    }
+                }
+            ],
             'lab_province'    => ['required', 'string', 'max:15'],
             'lab_address'     => ['required', 'string', 'max:100'],
 
@@ -109,6 +129,14 @@ class registerRequest extends FormRequest
             'work_to_hour.date_format' => 'ساعة الإغلاق يجب أن تكون بصيغة (ساعة:دقيقة) مثل 17:00.',
             'work_to_hour.after' => 'ساعة الإغلاق يجب أن تكون بعد ساعة الافتتاح.',
             'lab_address.max' => 'العنوان يجب ألا يتجاوز 100 حرف ( بما في ذلك المسافات )',
+
+            'register_subscription_duration.required' => 'يجب إدخال مدة الاشتراك ',
+
+            // 'subscription_from_date.required' => 'يجب إدخال تاريخ بداية الاشتراك ',
+            // 'subscription_from_date.date' => 'تاريخ بداية الاشتراك ليس بالصيغة القياسية للتاريخ',
+            // 'subscription_to_date.required' => 'يجب إدخال تاريخ نهاية الاشتراك ',
+            // 'subscription_to_date.date' => 'تاريخ نهاية الاشتراك ليس بالصيغة القياسية للتاريخ',
+            // 'subscription_to_date.after' => 'تاريخ نهاية الاشتراك يجب أن يكون بعد تاريخ بداية الاشتراك',
 
         ];
     }

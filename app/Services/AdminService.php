@@ -13,14 +13,14 @@ class AdminService
         $this->adminRepository = $adminRepository;
     }
 
-    public function getLabs($perPage = 10)
+    public function getLabs(/*$perPage = 10*/)
     {
-        $labs = $this->adminRepository->getActiveLabs($perPage);
+        $labs = $this->adminRepository->getActiveLabs(/*$perPage*/);
         return $labs;
     }
-    public function getClinics($perPage = 10)
+    public function getClinics(/*$perPage = 10*/)
     {
-        $clinics = $this->adminRepository->getActiveClinics($perPage);
+        $clinics = $this->adminRepository->getActiveClinics(/*$perPage*/);
         return $clinics;
     }
     public function filterLabs($labName = null, $registerDate = null, $perPage = 10)
@@ -32,30 +32,26 @@ class AdminService
     {
         return $this->adminRepository->filterclinics($clinic_name, $register_date, $perPage);
     }
-    public function fetchLabsWithNullSubscription($perPage = 10)
+    public function fetchLabsWithNullSubscription(/*$perPage = 10*/)
     {
-        return $this->adminRepository->getLabsWithNullSubscription($perPage);
+        return $this->adminRepository->getLabsWithNullSubscription(/*$perPage*/);
     }
-    public function getClinicsWithNullSubscription($perPage = 10)
+    public function getClinicsWithNullSubscription(/*$perPage = 10*/)
     {
-        return $this->adminRepository->getClinicsWithNullSubscription($perPage);
+        return $this->adminRepository->getClinicsWithNullSubscription(/*$perPage*/);
     }
-    public function getLabsWithRegisterAcceptedZero($perPage = 10)
+    public function getLabsWithRegisterAcceptedZero(/*$perPage = 10*/)
     {
-        return $this->adminRepository->getLabsWithRegisterAcceptedZero($perPage);
+        return $this->adminRepository->getLabsWithRegisterAcceptedZero(/*$perPage*/);
     }
 
-    public function getClinicsWithRegisterAcceptedZero($perPage = 10)
+    public function getClinicsWithRegisterAcceptedZero(/*$perPage = 10*/)
     {
-        return $this->adminRepository->getClinicsWithRegisterAcceptedZero($perPage);
+        return $this->adminRepository->getClinicsWithRegisterAcceptedZero(/*$perPage*/);
     }
-    public function renewSubscription($labId, $months, $subscriptionValue)
+    public function renewSubscription($subscription_id, $months/*, $subscriptionValue*/)
     {
-        return $this->adminRepository->renewSubscription($labId, $months, $subscriptionValue);
-    }
-    public function renewClinicSubscription($clinicId, $months, $subscriptionValue)
-    {
-        return $this->adminRepository->renewClinicSubscription($clinicId, $months, $subscriptionValue);
+        return $this->adminRepository->renewSubscription($subscription_id, $months/*, $subscriptionValue*/);
     }
     public function updateRegisterAccepted($id)
     {

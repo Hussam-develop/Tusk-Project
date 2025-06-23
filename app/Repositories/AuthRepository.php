@@ -6,6 +6,7 @@ namespace App\Repositories;
 use Exception;
 use App\Models\Dentist;
 use App\Models\LabManager;
+use App\Models\Subscription;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use app\Traits\handleResponseTrait;
 use Illuminate\Support\Facades\Auth;
@@ -48,6 +49,10 @@ class AuthRepository implements AuthRepositoryInterface
             $request_data['password'] = Hash::make($request_data['password']);
 
             $user = $modelClass::create($request_data);
+            $user->subscription_is_valid_now = null;
+            $user->register_accepted = null;
+            $user->register_date = null;
+            $user->save();
             //$token = JWTAuth::fromUser($user, ['guard' => $guard]);
             #------------------------------------------------------------------------
             if ($guard == "dentist") {
@@ -68,6 +73,15 @@ class AuthRepository implements AuthRepositoryInterface
                     $image->move(public_path("project-files/profile-images"), $filename);
                 }
             }
+            #------------------------------------------------------------------------
+            // $registerSubscription = Subscription::create([
+            //     'subscriptionable_id' => $user->id, // LabManager or Dentist
+            //     'subscriptionable_type' => $user->getMorphClass(),
+            //     'subscription_from' => $request_data['subscription_from_date'],
+            //     'subscription_to' => $request_data['subscription_to_date'],
+            //     'subscription_is_valid' => 0,
+            //     'subscription_value' => null,
+            // ]);
             #------------------------------------------------------------------------
 
             return $user;

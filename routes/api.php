@@ -53,20 +53,19 @@ route::group(
         // 'middleware' => ['auth.admin'],
     ],
     function () {
-        Route::get('/subcribed-labs', [AdminController::class, 'labs']);
+        Route::get('/subscribed-labs', [AdminController::class, 'labs']);
         Route::get('/subscribed-clinics', [AdminController::class, 'clinics']);
         Route::post('/subscribed-labs/filter', [AdminController::class, 'filterLabs']);
         Route::post('/subscribed-clinics/filter', [AdminController::class, 'filterclinics']);
         Route::get('/labs/null-subscription', [AdminController::class, 'getLabsWithNullSubscription']);
         Route::get('/clinics/null-subscription', [AdminController::class, 'getClinicsWithNullSubscription']);
-        Route::get('/joinorderslabs', [AdminController::class, 'getLabsWithRegisterAcceptedZero']);
-        Route::get('/joinordersclinics', [AdminController::class, 'getClinicsWithRegisterAcceptedZero']);
         // Route::post('/api/renew-subscription-of-lab', [AdminController::class, 'renewLabSubscription'])->name('api.renew.subscription');
-        Route::post('/renew-subscription-of-lab', [AdminController::class, 'renewLabSubscription']);
+        Route::post('/renew-subscription', [AdminController::class, 'renewSubscription']);
 
-        Route::post('/renew-subscription-of-clinic', [AdminController::class, 'renewSubscription_of_clinic'])->name('api.renew.subscription.clinic');
-        Route::put('/lab-manager/accept-join-order-of-lab/{id}', [AdminController::class, 'updateRegisterAccepted']);
-        Route::put('/clinic/accept-join-order-of-clinic/{id}', [AdminController::class, 'updateRegisterAcceptedclinic']);
+        Route::get('/labs-register-requests', [AdminController::class, 'getLabsWithRegisterAcceptedZero']);
+        Route::get('/clinics-register-requests', [AdminController::class, 'getClinicsWithRegisterAcceptedZero']);
+        Route::put('/accept-lab-register/{id}', [AdminController::class, 'updateRegisterAccepted']);
+        Route::put('/accept-clinic-register/{id}', [AdminController::class, 'updateRegisterAcceptedclinic']);
     }
 );
 //_________________________________________________________________end admin routes

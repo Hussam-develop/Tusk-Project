@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\Dentist;
 use Illuminate\Http\Request;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\LoginRequest;
-use App\Services\DoctorTimeService;
 use app\Traits\handleResponseTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\registerRequest;
@@ -25,11 +23,13 @@ class AuthController extends Controller
 
     public function register(registerRequest $request)
     {
-        $doctorTimeRepository = new DoctorTimeRepository();
 
         $data = $this->authService->register($request->validated(), $request->guard);
-        $doctorTimeRepository->addDoctorTimesInRegister($request);
 
+        if ($request->guard == "dentist") {
+            $doctorTimeRepository = new DoctorTimeRepository();
+            $doctorTimeRepository->addDoctorTimesInRegister($request);
+        }
 
         $MailController = new MailController();
         $MailController->send_verification_code($request->guard, $request->email);
@@ -65,7 +65,7 @@ class AuthController extends Controller
 
     public function logout(Request $request): JsonResponse
     {
-        $this->authService->logout($request->get('guard'));
+        $this->authService->logout(/*$request->get('guard')*/);
 
         return $this->returnSuccessMessage('Successfully logged out', 200);
     }

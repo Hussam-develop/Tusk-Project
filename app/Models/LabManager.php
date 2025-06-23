@@ -10,12 +10,13 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class LabManager extends Authenticatable implements JWTSubject
 {
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'full_name',
         'password',
-        'phone',
+        'register_subscription_duration',
+        // 'phone',
         'email',
         'email_is_verified',
         'email_verified_at',
@@ -61,9 +62,9 @@ class LabManager extends Authenticatable implements JWTSubject
     }
     public function scopeSubscription_NOT_ValidNow(Builder $builder)
     {
-        $builder->where('register_accepted', 1)
-            ->where('subscription_is_valid_now', 0)
-            ->where('email_is_verified', 1);
+        $builder->where('subscription_is_valid_now', 0);
+        // ->where('register_accepted', 1)
+        // ->where('email_is_verified', 1);
     }
     public function accountRecords()
     {
