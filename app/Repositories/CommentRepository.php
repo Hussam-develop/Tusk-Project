@@ -13,8 +13,7 @@ class CommentRepository
 {
     public function add_comment($user_id, $type, $medical_case_id, $data)
     {
-
-        $data['medical_case_id'] = $medical_case_id;
+        $data['medical_case_id'] = (int) $medical_case_id;
         if ($type == 'dentist') {
 
             $data['dentist_id'] = $user_id;
@@ -24,7 +23,13 @@ class CommentRepository
             $data['dentist_id'] = NULL;
             $data['lab_manager_id'] = $user_id;
         }
-        return Comment::create($data);
+        return Comment::create([
+            'medical_case_id' => $data['medical_case_id'],
+            'dentist_id' => $data['dentist_id'],
+            'lab_manager_id' => $data['lab_manager_id'],
+
+            'comment' => $data['comment']
+        ]);
     }
     public function deleteComment($user_id, $type, $id)
     {
@@ -56,7 +61,7 @@ class CommentRepository
     }
     public function showCommentsOfMedicalCase($id)
     {
-        $comments = Comment::where('medical_case_id', $id)->orderBy('created_at', 'desc')->get();
+        $comments = Comment::where('medical_case_id', $id)->orderBy('created_at')->get();
 
         return $comments;
         ///// في كمالة

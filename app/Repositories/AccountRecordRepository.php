@@ -18,6 +18,7 @@ class AccountRecordRepository
         }
         $results = AccountRecord::where('lab_manager_id', $lab_id)
             ->where('dentist_id', $user_id)
+            ->where('type', "إضافة رصيد")
             ->orderBy('created_at', 'desc')
             ->get();
         return $results;

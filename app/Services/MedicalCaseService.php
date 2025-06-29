@@ -210,4 +210,21 @@ class MedicalCaseService
         }
         return $this->returnErrorMessage("حدث خطأ ما . لم يتم حذف الحالة المرضية !",  404);
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    ////////////////////   Lab Manager Methods    /////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////
+
+    public function show_lab_cases_by_type()
+    {
+        $medical_cases_by_type =  $this->repository->show_lab_cases_by_type();
+        if (
+            $medical_cases_by_type["pending_cases_0"]->isEmpty()
+            && $medical_cases_by_type["pending_cases_0"]->isEmpty()
+            && $medical_cases_by_type["pending_cases_0"]->isEmpty()
+        ) {
+            return $this->returnErrorMessage("لا توجد  حالات لهذا المخبر بعد ",  200);
+        }
+        return $this->returnData("medical_cases_by_type", $medical_cases_by_type, "الحالات حسب نوع الحالة", 200);
+    }
 }

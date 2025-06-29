@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Dentist;
 use App\Models\File;
 use App\Models\Patient;
 use App\Models\LabManager;
@@ -56,13 +57,20 @@ class MedicalCaseRepository
 
     public function getById($id)
     {
+
         $medicalCase = MedicalCase::findOrFail($id);
         $medicalCaseFiles = File::where("medical_case_id", $medicalCase->id)->get();
-        $patient_details = Patient::where("id", $medicalCase->patient_id)->get();
+        $dentist_details = Dentist::where("id", $medicalCase->dentist_id)
+            ->first();
+        $patient_details = Patient::where("id", $medicalCase->patient_id)
+            ->first();
 
         return [
             "medical_case_details" => $medicalCase,
-            "patient_details" => $patient_details,
+            "patient_full_name" => $patient_details->full_name,
+            "patient_gender" => $patient_details->gender,
+            "dentist_first_name" => $dentist_details->first_name,
+            "dentist_last_name" => $dentist_details->last_name,
             "medical_case_files" => $medicalCaseFiles,
         ];
     }
@@ -161,5 +169,58 @@ class MedicalCaseRepository
     public function delete($id)
     {
         return MedicalCase::destroy($id);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    ////////////////////   Lab Manager Methods    /////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////
+
+    public function show_lab_cases_by_type()
+    {
+        $lab_id = auth()->user()->id;
+
+        // 0: pending , 1 : accepted, 2 : in progress, 3: ready , 4:delivered
+
+        // $medical_cases_by_type = MedicalCase::where("lab_manager_id", $lab_id)
+        // ->get();
+
+        $medical_cases_by_type_pending_0 = MedicalCase::where("lab_manager_id", $lab_id)
+            ->where('status', 0)
+            ->orderByDesc('created_at')
+            ->with(['patient' => function ($query) {
+                $query->select('id', "full_name");
+            }])
+            ->with(['dentist' => function ($query) {
+                $query->select('id', 'first_name', 'last_name');
+            }])
+            ->get(['id', 'dentist_id', 'patient_id', 'created_at']);
+
+        $medical_cases_by_type_pending_1 = MedicalCase::where("lab_manager_id", $lab_id)
+            ->where('status', 1)
+            ->orderByDesc('created_at')
+            ->with(['patient' => function ($query) {
+                $query->select('id', "full_name");
+            }])
+            ->with(['dentist' => function ($query) {
+                $query->select('id', 'first_name', 'last_name');
+            }])
+            ->get(['id', 'dentist_id', 'patient_id', 'created_at']);
+
+        $medical_cases_by_type_pending_2 = MedicalCase::where("lab_manager_id", $lab_id)
+            ->where('status', 2)
+            ->orderByDesc('created_at')
+            ->with(['patient' => function ($query) {
+                $query->select('id', "full_name");
+            }])
+            ->with(['dentist' => function ($query) {
+                $query->select('id', 'first_name', 'last_name');
+            }])
+            ->get(['id', 'dentist_id', 'patient_id', 'created_at']);
+
+        return [
+            "pending_cases_0" => $medical_cases_by_type_pending_0,
+            "accepted_cases_1" => $medical_cases_by_type_pending_1,
+            "in_progress_2" => $medical_cases_by_type_pending_2,
+        ];
     }
 }

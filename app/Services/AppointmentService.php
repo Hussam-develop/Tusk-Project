@@ -41,7 +41,7 @@ class AppointmentService
             ->where("day", $dayName)
             ->first();
         if ($doctor_time->start_time == null) {
-            return $this->returnErrorMessage("يوم $dayName ليس ضمن أيام دوام العيادة . يرجى تغيير التاريخ أو تعديل أوقات الدوام ", 422);
+            return ['error' => "يوم $dayName ليس ضمن أيام دوام العيادة . يرجى تغيير التاريخ أو تعديل أوقات الدوام "];
         }
         $startTime = Carbon::createFromFormat('H:i:s', $doctor_time->start_time);
         $endTime = Carbon::createFromFormat('H:i:s', $doctor_time->end_time);

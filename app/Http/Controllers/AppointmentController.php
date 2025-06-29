@@ -23,7 +23,7 @@ class AppointmentController extends Controller
     {
 
         $result = $this->service->getAvailableSlots($request);
-        return $result;
+
         if (isset($result['error'])) {
             return response()->json(['message' => $result['error']], 422);
         }

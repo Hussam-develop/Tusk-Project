@@ -62,4 +62,14 @@ class MedicalCaseController extends Controller
         $data = $this->medicalCaseService->download_medical_case_image($case_id);
         return $data;
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    ////////////////////   Lab Manager Methods    /////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////
+
+    public function show_lab_cases_by_type()
+    {
+        $data = $this->medicalCaseService->show_lab_cases_by_type();
+        return $data;
+    }
 }

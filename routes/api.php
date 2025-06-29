@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\DoctorTimeController;
 use App\Models\MedicalCase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -11,6 +10,8 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\MailController;
 use App\Http\Controllers\TreatmentController;
+use App\Http\Controllers\DoctorTimeController;
+use App\Http\Controllers\LabClientsController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\MedicalCaseController;
 use App\Http\Controllers\PatientPaymentController;
@@ -193,21 +194,6 @@ Route::group([
     });
     //_____________________________________________________________________________________ نهاية مخابر الطبيب End of Labs Routes For Doctor
 
-    //_____________________________________________________________________________________مخابر الطبيب Labs Routes For Doctor
-    Route::group([
-        // 'middleware' => ['auth.guardFromToken', 'auth:dentist'],
-        'prefix' => 'labs',
-        'as' => 'labs'
-    ], function () {
-
-        Route::get('/show_labs_dentist_injoied', [DentistController::class, 'show_labs_dentist_injoied']);
-        Route::get('/show_account_of_dentist_in_lab/{id}', [DentistController::class, 'show_account_of_dentist_in_lab']);
-        Route::get('/show_all_labs_dentist_not_injoied', [DentistController::class, 'show_all_labs']);
-        Route::get('/show_lab_not_injoied_details/{id}', [DentistController::class, 'show_lab_not_injoied_details']);
-        Route::get('/submit_join_request_to_lab/{id}', [DentistController::class, 'submit_join_request_to_lab']);
-        Route::post('/filterd_labs', [DentistController::class, 'filter_not_join_labs']);
-    });
-    //_____________________________________________________________________________________ نهاية مخابر الطبيب End of Labs Routes For Doctor
 
     //patients routes :
     Route::group([
@@ -272,18 +258,46 @@ Route::group([
 });
 
 //_____________________________________________________________________________________ end of Operating Payments نهاية المصاريف التشغيلية
+
 //_____________________________________________________________________________________ Lab Manager مدير المخبر
 
 Route::group([
     'middleware' => ['auth.guardFromToken', 'auth:lab_manager'],
     'prefix' => 'lab-manager',
 ], function () {
+
+    // Medical Cases :
+    Route::group([
+        'prefix' => 'medical-cases',
+    ], function () {
+
+        Route::get("/show-lab-clients", [LabClientsController::class, 'show_lab_clients']);
+        Route::get("/show-lab-cases-groubed-by-case-type", [MedicalCaseController::class, 'show_lab_cases_by_type']);
+        Route::get('/get-medical-case-details/{medical_case_id}', [MedicalCaseController::class, 'get_medical_case_details']);
+
+
+        // Comments
+        Route::post('/add-comment/{id}', [DentistController::class, 'add_comment']);
+        Route::delete('/delete-comment/{id}', [DentistController::class, 'deleteComment']);
+        Route::get('/show-comments/{id}', [DentistController::class, 'showCommentsOfMedicalCase']);
+    });
+
+
+
+
+
+
+
+
     Route::group([
         'prefix' => 'statistics',
     ], function () {
         // هون اكتب الراوتات تبع الاحصائيات
-        // Route::get("/statistic1", [Controller::class, 'statistic1']);
-        // Route::get("/statistic2", [Controller::class, 'statistic2']);
+        Route::get("/categories_statistics", [LabManagerController::class, 'categories_statistics']);
+        Route::get("/Most_profitable_doctors", [LabManagerController::class, 'Most_profitable_doctors']);
+        //]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]احصائيات المواد
+        Route::get("/items_of_user", [LabManagerController::class, 'items_of_user']);
+        Route::get("/The_monthly_consumption_of_item/{itemid}", [LabManagerController::class, 'The_monthly_consumption_of_item']);
     });
 });
 //_____________________________________________________________________________________ end Lab Manager
