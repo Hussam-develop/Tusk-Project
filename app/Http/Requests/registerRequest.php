@@ -85,8 +85,18 @@ class registerRequest extends FormRequest
             'image'    => ['nullable', 'file']
         ];
 
+        $dentistTimesRules = [
+            'السبت' => ['nullable'],
+            'الأحد' => ['nullable'],
+            'الاثنين' => ['nullable'],
+            'الثلاثاء' => ['nullable'],
+            'الأربعاء' => ['nullable'],
+            'الخميس' => ['nullable'],
+            'الجمعة' => ['nullable'],
+        ];
+
         return match ($guard) {
-            'dentist'     => array_merge($commonRules, $dentistRules),
+            'dentist'     => array_merge($commonRules, $dentistRules, $dentistTimesRules),
             'lab_manager' => array_merge($commonRules, $labManagerRules),
         };
     }

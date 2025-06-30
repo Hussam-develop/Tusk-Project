@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\registerRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
+use App\Repositories\DoctorTimeRepository;
+use App\Http\Controllers\Auth\MailController;
 
 class AuthRepository implements AuthRepositoryInterface
 {
@@ -57,6 +59,11 @@ class AuthRepository implements AuthRepositoryInterface
             #------------------------------------------------------------------------
             if ($guard == "dentist") {
 
+                // add Doctor Times Schedule
+                $doctorTimeRepository = new DoctorTimeRepository();
+                $doctorTimeRepository->addDoctorTimesInRegister($request_data);
+
+                // add Doctor Image
                 $image = $request_data['image'];
 
                 if ($image !== null) {
@@ -83,6 +90,8 @@ class AuthRepository implements AuthRepositoryInterface
             //     'subscription_value' => null,
             // ]);
             #------------------------------------------------------------------------
+            $MailController = new MailController();
+            $MailController->send_verification_code($request_data['guard'], $request_data['email']);
 
             return $user;
         } catch (Exception $e) {

@@ -26,14 +26,6 @@ class AuthController extends Controller
 
         $data = $this->authService->register($request->validated(), $request->guard);
 
-        if ($request->guard == "dentist") {
-            $doctorTimeRepository = new DoctorTimeRepository();
-            $doctorTimeRepository->addDoctorTimesInRegister($request);
-        }
-
-        $MailController = new MailController();
-        $MailController->send_verification_code($request->guard, $request->email);
-
         return response()->json([
             'status' => 'success',
             'user'   => $data['user'],

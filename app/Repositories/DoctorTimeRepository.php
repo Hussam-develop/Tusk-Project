@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Dentist;
 use App\Models\DoctorTime;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DoctorTimeRepository
@@ -15,13 +16,19 @@ class DoctorTimeRepository
             ->whereNotNull("start_time")->get();
         return $doctorTimes;
     }
-    public function addDoctorTimesInRegister($request)
+    public function addDoctorTimesInRegister($request_as_array)
     {
-        if ($request->guard == "dentist") {
-            $doctor_is_registered = Dentist::where("email", $request->email)->first();
+        // $request = Request::create('/', 'POST', $request_as_array);
+
+        if ($request_as_array['guard'] == "dentist") {
+
+            $doctor_is_registered = Dentist::where("email", $request_as_array['email'])
+                ->first();
+
             if ($doctor_is_registered->exists()) {
 
-                $request_data = $request->all();
+                // $request_data = $request->all(); // if $request is request , not an array.
+                $request_data = $request_as_array;
                 $doctor_id = $doctor_is_registered->id;
                 $add_doctor_days = ["السبت", "الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة"];
 
