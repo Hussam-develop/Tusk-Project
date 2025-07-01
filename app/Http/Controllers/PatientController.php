@@ -29,7 +29,7 @@ class PatientController extends Controller
         try {
             $patients = $this->patientService->getAllWithFilter($request);
             if (!$patients) {
-                return $this->returnErrorMessage('المريض غير موجود', 404);
+                return $this->returnErrorMessage('المريض غير موجود', 200);
             }
             return $this->returnData('patients', $patients, 'بيانات كل المرضى', 200);
         } catch (Exception $e) {

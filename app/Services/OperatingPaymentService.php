@@ -51,7 +51,7 @@ class OperatingPaymentService
         }
         if ($result->isEmpty()) {
 
-            return $this->returnErrorMessage('لا يوجد دفعات تشغيلية', 404);
+            return $this->returnErrorMessage('لا يوجد دفعات تشغيلية', 200);
         }
 
         foreach ($result as &$res) {

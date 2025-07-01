@@ -51,7 +51,7 @@ class TreatmentService
             $file_path = public_path('project-files/' . $file->name);
             return Response::download($file_path, $file->name);
         } else
-            return $this->returnErrorMessage("الصورة غير موجودة", 404);
+            return $this->returnErrorMessage("الصورة غير موجودة", 200);
     }
     public function  add_treatment_image($treatment_id, Request $request)
     {

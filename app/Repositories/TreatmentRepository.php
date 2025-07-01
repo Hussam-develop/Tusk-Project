@@ -93,7 +93,7 @@ class TreatmentRepository
                 $treatment->delete();
                 $patient->current_balance += $request->cost;
                 $patient->save();
-                // return $this->returnErrorMessage("Rename the file" . $screenshot_image_name . "please," . "the File name is already taken", 404);
+                // return $this->returnErrorMessage("Rename the file" . $screenshot_image_name . "please," . "the File name is already taken", 200);
                 return $this->returnErrorMessage("أعد تسمية الصورة  " . $screenshot_image_name . " رجاءً وحاول مجدداً",  422);
             }
 

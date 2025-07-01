@@ -87,7 +87,7 @@ class MedicalCaseService
             $file_path = public_path('project-files/medical-cases/' . $file->name);
             return Response::download($file_path, $file->name);
         } else
-            return $this->returnErrorMessage("الصورة غير موجودة", 404);
+            return $this->returnErrorMessage("الصورة غير موجودة", 200);
     }
     public function  add_case_images_with_screenshot($case_id, Request $request)
     {
@@ -195,7 +195,7 @@ class MedicalCaseService
             }
             return $this->returnErrorMessage(422, "لم يتم التعديل لأن المخبر بدأ بتصنيع الحالة , يرجى التواصل مع مدير المخبر لحذف الحالة");
         }
-        return $this->returnErrorMessage("لم يتم إيجاد الحالة المرضية !",  404);
+        return $this->returnErrorMessage("لم يتم إيجاد الحالة المرضية !",  200);
     }
 
     public function delete($id)
@@ -208,7 +208,7 @@ class MedicalCaseService
             }
             return $this->returnErrorMessage("لم يتم حذف الحالة المرضية لأن مدير المخبر قد قبل الحالة !",  422);
         }
-        return $this->returnErrorMessage("حدث خطأ ما . لم يتم حذف الحالة المرضية !",  404);
+        return $this->returnErrorMessage("حدث خطأ ما . لم يتم حذف الحالة المرضية !",  200);
     }
 
     ///////////////////////////////////////////////////////////////////////////////

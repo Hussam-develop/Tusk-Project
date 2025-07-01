@@ -79,7 +79,7 @@ class PatientService
             $file_path = public_path('project-files/patients-images/' . $file->name);
             return Response::download($file_path, $file->name);
         } else
-            return $this->returnErrorMessage("الصورة غير موجودة", 404);
+            return $this->returnErrorMessage("الصورة غير موجودة", 200);
     }
 
     public function  add_patient_image($patient_id, $request)

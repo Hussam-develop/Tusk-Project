@@ -50,7 +50,7 @@ class MailController extends Controller
         $emails = $modelPath::pluck('email');
 
         if (!$emails->contains($email)) {
-            return $this->returnErrorMessage("الإيميل المدخل غير مسجل في التطبيق . استخدم إيميل آخر", 404);
+            return $this->returnErrorMessage("الإيميل المدخل غير مسجل في التطبيق . استخدم إيميل آخر", 200);
         }
         try {
             $verification_code = mt_rand(100000, 999999); //hash this in production , not testing

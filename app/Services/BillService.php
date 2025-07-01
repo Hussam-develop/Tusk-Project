@@ -30,7 +30,7 @@ class BillService
         if ($bill_details['bill']) {
             return $this->returnData("bill_details", $bill_details, "تفاصيل الفاتورة", 200);
         }
-        return $this->returnErrorMessage("حدث خطأ ما . لايمكن عرض تفاصيل الفاتورة",  404);
+        return $this->returnErrorMessage("حدث خطأ ما . لايمكن عرض تفاصيل الفاتورة",  200);
     }
 
     /////////////////////////////////////////////////

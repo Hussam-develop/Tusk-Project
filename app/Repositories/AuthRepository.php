@@ -115,7 +115,7 @@ class AuthRepository implements AuthRepositoryInterface
             $file_path = public_path('project-files/profile-images/' . $file);
             return Response::download($file_path, $file);
         } else
-            return $this->returnErrorMessage("الصورة غير موجودة", 404);
+            return $this->returnErrorMessage("الصورة غير موجودة", 200);
     }
     public function  edit_profile_image($request)
     {

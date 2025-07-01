@@ -39,7 +39,7 @@ class CommentService
         if ($fromrepo) {
             return $this->returnSuccessMessage(200, 'تم حذف  التعليق  بنجاح. ');
         }
-        return $this->returnErrorMessage('لم يتم حذف التعليق  لانه غير موجود او انك غير مخول ', 404);
+        return $this->returnErrorMessage('لم يتم حذف التعليق  لانه غير موجود او انك غير مخول ', 200);
     }
     public function showCommentsOfMedicalCase($id)
     {
@@ -47,7 +47,7 @@ class CommentService
 
         $fromrepo = $this->CommentRepository->showCommentsOfMedicalCase($id);
         if ($fromrepo->isEmpty()) {
-            return $this->returnErrorMessage('لا يوجد تعليقات', 404);
+            return $this->returnErrorMessage('لا يوجد تعليقات', 200);
         }
         return $this->returnData("comments", $fromrepo, "التعليقات", 200);
     }

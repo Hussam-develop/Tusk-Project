@@ -29,7 +29,7 @@ class SecretaryService
             // مراجعة السكرتيرات
             $secretaries = $this->secretaryRepository->getSecretariesByDentistId($dentistId);
             if ($secretaries->isEmpty()) {
-                return $this->returnErrorMessage('لا يوجد سكرتيرات .', 404);
+                return $this->returnErrorMessage('لا يوجد سكرتيرات .', 200);
             }
 
             return $this->returnData("secretaries", secretaryresource::collection($secretaries), " السكرتيرات ", 200);
@@ -44,7 +44,7 @@ class SecretaryService
             $secretary = $this->secretaryRepository->findSecretaryById($id);
 
             if (!$secretary) {
-                return $this->returnErrorMessage('السكرتيرة غير موجودة.', 404);
+                return $this->returnErrorMessage('السكرتيرة غير موجودة.', 200);
             }
 
             // تحديث البيانات
@@ -53,7 +53,7 @@ class SecretaryService
             // return response()->json(['message' => 'تم تعديل بيانات السكرتيرة بنجاح.'], 200);
             return $this->returnSuccessMessage(200, 'تم تعديل بيانات السكرتيرة ');
         } catch (\Exception $e) {
-            return $this->returnErrorMessage(' حدث خطأ اثناء تعديل بيانات السكرتيرة .', 404);
+            return $this->returnErrorMessage(' حدث خطأ اثناء تعديل بيانات السكرتيرة .', 200);
         }
     }
     public function removeSecretary($id)
@@ -66,7 +66,7 @@ class SecretaryService
             $secretary->delete();
             return $this->returnSuccessMessage(200, 'تم حذف السكرتيرة  ');
         }
-        return $this->returnErrorMessage('  السكرتيرة غير موجودة  .', 404);
+        return $this->returnErrorMessage('  السكرتيرة غير موجودة  .', 200);
     }
     public function addSecretary(array $data)
     {

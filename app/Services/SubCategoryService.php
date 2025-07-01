@@ -24,7 +24,7 @@ class SubCategoryService
         $subCategoryRepositories = $this->subCategoryRepository->getSubcategoriesByCategoryId($categoryId, $user->id, $type);
         if ($subCategoryRepositories->isEmpty()) {
 
-            return $this->returnErrorMessage('لا يوجد اصناف فرعية', 404);
+            return $this->returnErrorMessage('لا يوجد اصناف فرعية', 200);
         }
         // return $categories;
         return $this->returnData("subCategoryRepositories", subcategoryResource::collection($subCategoryRepositories), "  الاصناف الفرعية", 200);
@@ -38,7 +38,7 @@ class SubCategoryService
         if ($fromrepo) {
             return $this->returnSuccessMessage(200, 'تم حذف الفئة الفرعية  بنجاح. ');
         }
-        return $this->returnErrorMessage('لم يتم حذف الفئة الفرعية لانها غير موجودة او انك غير مخول ', 404);
+        return $this->returnErrorMessage('لم يتم حذف الفئة الفرعية لانها غير موجودة او انك غير مخول ', 200);
     }
     public function addsubcategory($category_id, array $data)
     {
@@ -53,9 +53,9 @@ class SubCategoryService
             if ($result) {
                 return $this->returnSuccessMessage(200, 'تم اضافة الفئة الفرعية ');
             }
-            return $this->returnErrorMessage(' حدث خطأ اثناءاضافة الفئة الفرعية .', 404);
+            return $this->returnErrorMessage(' حدث خطأ اثناءاضافة الفئة الفرعية .', 200);
         }
-        return $this->returnErrorMessage(' انت غير مخول لاضافة فئة فرعية لهذه الفئة', 404);
+        return $this->returnErrorMessage(' انت غير مخول لاضافة فئة فرعية لهذه الفئة', 200);
     }
 
     public function updateSubCategory($id, $data)
@@ -66,7 +66,7 @@ class SubCategoryService
         $subcategory = $this->subCategoryRepository->findSubCategoryById($id);
 
         if (!$subcategory) {
-            return $this->returnErrorMessage('الصنف الفرعي  غير موجود.', 404);
+            return $this->returnErrorMessage('الصنف الفرعي  غير موجود.', 200);
         }
         // تحديث البيانات
         $res = $this->subCategoryRepository->updateSubCategory($subcategory, $data, $user->id, $type);
@@ -75,7 +75,7 @@ class SubCategoryService
         }
 
 
-        return $this->returnErrorMessage(200, ' لم يتم تعديل  الصنف الفرعي لانك غير مخول  ', 404);
+        return $this->returnErrorMessage(200, ' لم يتم تعديل  الصنف الفرعي لانك غير مخول  ', 200);
     }
     public function sub_categories_statistics()
     {

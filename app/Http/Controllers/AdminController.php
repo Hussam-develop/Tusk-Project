@@ -29,7 +29,7 @@ class AdminController extends Controller
         $labs = $this->adminService->getLabs(/*$perPage*/);
 
         if ($labs->isEmpty()) {
-            return $this->returnErrorMessage('لا يوجد مخابر مشتركة بالمنصة.', 404);
+            return $this->returnErrorMessage('لا يوجد مخابر مشتركة بالمنصة.', 200);
         }
 
         return $this->returnData("subscribed-labs", $labs, "المخابر المشتركة", 200);
@@ -41,7 +41,7 @@ class AdminController extends Controller
         // $perPage = 10;
         $clinics = $this->adminService->getClinics(/*$perPage*/);
         if ($clinics->isEmpty()) {
-            return $this->returnErrorMessage('لا يوجد عيادات مشتركة بالمنصة.', 404);
+            return $this->returnErrorMessage('لا يوجد عيادات مشتركة بالمنصة.', 200);
         }
 
         return $this->returnData("subscribed-clinics", $clinics, "العيادات المشتركة", 200);
@@ -56,7 +56,7 @@ class AdminController extends Controller
 
         $labs = $this->adminService->filterLabs($labName, $registerDate, $perPage);
         if ($labs->isEmpty()) {
-            return $this->returnErrorMessage('لا يوجد مخابر  مشابهة للبحث.', 404);
+            return $this->returnErrorMessage('لا يوجد مخابر  مشابهة للبحث.', 200);
         }
         return $this->returnData("subscribed-and-filterd-labs", LabResource::collection($labs), "المخابر المشتركة والمفلترة", 200);
     }
@@ -68,7 +68,7 @@ class AdminController extends Controller
         $perPage = 10;
         $clinics = $this->adminService->filterclinics($clinic_name, $register_date, $perPage);
         if ($clinics->isEmpty()) {
-            return $this->returnErrorMessage('لا يوجد عيادات  مشابهة للبحث.', 404);
+            return $this->returnErrorMessage('لا يوجد عيادات  مشابهة للبحث.', 200);
         }
         return $this->returnData("subscribed-and-filterd-clinics", ClinicResource::collection($clinics), "  العيادات المشتركة والمفلترة", 200);
 
@@ -79,7 +79,7 @@ class AdminController extends Controller
         // $perPage = 10;
         $labs = $this->adminService->fetchLabsWithNullSubscription(/*$perPage*/);
         if ($labs->isEmpty()) {
-            return $this->returnErrorMessage('لا يوجد مخابر غير مجددة اشتراكها بالمنصة.', 404);
+            return $this->returnErrorMessage('لا يوجد مخابر غير مجددة اشتراكها بالمنصة.', 200);
         }
 
         return $this->returnData("non_subscribed_labs", $labs, "المخابر غير المجددة اشتراكها  ", 200);
@@ -89,7 +89,7 @@ class AdminController extends Controller
         // $perPage = 10;
         $clinics = $this->adminService->getClinicsWithNullSubscription(/*$perPage*/);
         if ($clinics->isEmpty()) {
-            return $this->returnErrorMessage('لا يوجد أطباء غير مجددين اشتراكهم بالمنصة.', 404);
+            return $this->returnErrorMessage('لا يوجد أطباء غير مجددين اشتراكهم بالمنصة.', 200);
         }
         return $this->returnData("non_subscribed_clinics", $clinics, "الأطباء غير المجددين اشتراكهم بالمنصة", 200);
     }
@@ -98,7 +98,7 @@ class AdminController extends Controller
         // $perPage = 10;
         $labs = $this->adminService->getLabsWithRegisterAcceptedZero(/*$perPage*/);
         if ($labs->isEmpty()) {
-            return $this->returnErrorMessage('لا يوجد مخابر مقدمة طلب انضمام للمنصة.', 404);
+            return $this->returnErrorMessage('لا يوجد مخابر مقدمة طلب انضمام للمنصة.', 200);
         }
         return $this->returnData("labs_register_requests", $labs, " المخابر المقدمة طلب انضمام ", 200);
 
@@ -110,7 +110,7 @@ class AdminController extends Controller
         // $perPage = 10;
         $clinics = $this->adminService->getClinicsWithRegisterAcceptedZero(/*$perPage*/);
         if ($clinics->isEmpty()) {
-            return $this->returnErrorMessage('لا يوجد عيادات  مقدمة طلب انضمام للمنصة.', 404);
+            return $this->returnErrorMessage('لا يوجد عيادات  مقدمة طلب انضمام للمنصة.', 200);
         }
         return $this->returnData("clinics_register_requests", $clinics, "العيادات المقدمة طلب انضمام ", 200);
 
@@ -146,7 +146,7 @@ class AdminController extends Controller
             // return response()->json(['message' => 'Updated successfully', 'data' => $labManager]);
             return $this->returnData("accept-register-clinic", "", "  تم قبول طلب انضمام الطبيب ", 200);
         }
-        // return response()->json(['message' => 'LabManager not found'], 404);
+        // return response()->json(['message' => 'LabManager not found'], 200);
         return $this->returnErrorMessage("حدث خطأ ما أثناء قبول طلب انضمام الطبيب ", 422);
     }
 }

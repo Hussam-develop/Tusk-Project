@@ -22,7 +22,7 @@ class CategoryService
         $categories = $this->categoryRepository->getCategoriesForCurrentUser();
         if ($categories->isEmpty()) {
 
-            return $this->returnErrorMessage('لا يوجد اصناف', 404);
+            return $this->returnErrorMessage('لا يوجد اصناف', 200);
         }
         // return $categories;
         return $this->returnData("categories", $categories, " الاصناف", 200);
@@ -48,7 +48,7 @@ class CategoryService
         if ($fromrepo) {
             return $this->returnSuccessMessage(200, 'تم حذف الفئة  بنجاح. ');
         }
-        return $this->returnErrorMessage('لم يتم حذف الفئة لانها غير موجودةاو انك غير مخول ', 404);
+        return $this->returnErrorMessage('لم يتم حذف الفئة لانها غير موجودةاو انك غير مخول ', 200);
     }
     public function updateCategory($id, $data)
     {
@@ -58,7 +58,7 @@ class CategoryService
         $category = $this->categoryRepository->findCategoryById($id);
 
         if (!$category) {
-            return $this->returnErrorMessage('الصنف غير موجودة.', 404);
+            return $this->returnErrorMessage('الصنف غير موجودة.', 200);
         }
         if ($category && $category->categoryable_id == $user->id && $category->categoryable_type == $type) {
 
@@ -67,6 +67,6 @@ class CategoryService
 
             return $this->returnSuccessMessage(200, 'تم تعديل  الصنف ');
         }
-        return $this->returnErrorMessage(200, 'لم يتم تعديل  الصنف لأنك غير مخول  ', 404);
+        return $this->returnErrorMessage(200, 'لم يتم تعديل  الصنف لأنك غير مخول  ', 200);
     }
 }
