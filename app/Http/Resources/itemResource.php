@@ -15,12 +15,23 @@ class itemResource extends JsonResource
     public function toArray(Request $request): array
     {
         return  [
+            'id' => $this->id,
             'name' => $this->name,
             'quantity' => $this->quantity,
             'standard_quantity' => $this->standard_quantity,
             'minimum_quantity' => $this->minimum_quantity,
-            'unit' => $this->unit,
             'is_static' => $this->is_static,
+            'unit' => $this->unit,
+            'item_history' => $this->itemHistory->map(function ($history) {
+                return [
+                    'item_id' => $history->item_id,
+                    'unit_price' => $history->unit_price,
+                    'total_price' => $history->total_price,
+                    'quantity' => $history->quantity,
+                    'created_at' => $history->created_at,
+                    'updated_at' => $history->updated_at,
+                ];
+            }),
         ];
     }
 }

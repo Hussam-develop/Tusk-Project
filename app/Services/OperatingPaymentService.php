@@ -46,9 +46,7 @@ class OperatingPaymentService
         $type = $user->getMorphClass();
         $result1 = $this->OperatingPaymentRepository->allOperatingPayment($user->id, $type);
         $result = $this->OperatingPaymentRepository->Operating_Payment_statistics($user->id, $type);
-        if ($result == 'ليس طبيب او مدير مخبر') {
-            return $this->returnErrorMessage('انت لست طبيب او مدير مخبر', 500);
-        }
+
         if ($result->isEmpty()) {
 
             return $this->returnErrorMessage('لا يوجد دفعات تشغيلية', 200);
@@ -96,5 +94,22 @@ class OperatingPaymentService
     public function delete($id)
     {
         return $this->repository->delete($id);
+    }
+    public function Operating_Payment_statistics1()
+    {
+        $user = auth()->user(); // المستخدم الحالي بعد تحديد Guard بواسطة Middleware
+        $type = $user->getMorphClass();
+        $result1 = $this->OperatingPaymentRepository->allOperatingPayment1($user->id, $type);
+        $result = $this->OperatingPaymentRepository->Operating_Payment_statistics1($user->id, $type);
+
+        if ($result->isEmpty()) {
+
+            return $this->returnErrorMessage('لا يوجد دفعات تشغيلية', 404);
+        }
+
+        foreach ($result as &$res) {
+            $res['percentage'] = $result1 > 0 ? number_format(($res['total_value'] * 100) / $result1, 2) : 0;
+        }
+        return $this->returnData("Operating_Payments", $result, " احصائيات الدفعات التشغيلية ", 200);
     }
 }

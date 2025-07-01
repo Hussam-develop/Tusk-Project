@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\MailController;
 use App\Http\Controllers\TreatmentController;
 use App\Http\Controllers\DoctorTimeController;
 use App\Http\Controllers\LabClientsController;
+use App\Http\Controllers\LabManagerController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\MedicalCaseController;
 use App\Http\Controllers\PatientPaymentController;
@@ -280,6 +281,23 @@ Route::group([
         Route::post('/add-comment/{id}', [DentistController::class, 'add_comment']);
         Route::delete('/delete-comment/{id}', [DentistController::class, 'deleteComment']);
         Route::get('/show-comments/{id}', [DentistController::class, 'showCommentsOfMedicalCase']);
+    });
+
+
+
+
+
+    // Lab Statistics
+    Route::group([
+        'prefix' => 'statistics',
+    ], function () {
+        // هون اكتب الراوتات تبع الاحصائيات
+        Route::get("/categories_statistics", [LabManagerController::class, 'categories_statistics']);
+        Route::get("/Most_profitable_doctors", [LabManagerController::class, 'Most_profitable_doctors']);
+        Route::get('/LabManager_Operating_Payment_statistics', [LabManagerController::class, 'Operating_Payment_statistics']);
+        //]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]احصائيات المواد
+        Route::get("/items_of_user", [LabManagerController::class, 'items_of_user']);
+        Route::get("/The_monthly_consumption_of_item/{itemid}", [LabManagerController::class, 'The_monthly_consumption_of_item']);
     });
 });
 //_____________________________________________________________________________________ end Lab Manager

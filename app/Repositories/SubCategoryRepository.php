@@ -3,20 +3,54 @@
 namespace App\Repositories;
 
 use App\Models\Category;
+use App\Models\InventoryEmployee;
 use App\Models\ItemHistory;
 use App\Models\Subcategory;
 use Carbon\Carbon;
 
 class SubCategoryRepository
 {
-    public function getSubcategoriesByCategoryId($categoryId, $id, $type)
+    public function getSubcategoriesByCategoryId($categoryId)
     {
         // أولاً، تأكد أن الفئة موجودة ومشروطة بالمستخدم والنوع
-        $category = Category::where('id', $categoryId)
-            ->where('categoryable_id', $id)
-            ->where('categoryable_type', $type)
-            ->with('subcategories') // تسجيل العلاقة المضافة
-            ->first();
+        // if($type =="labManager")
+        // {
+        //     $labManagerId =$id;
+        //     $employeeIds = InventoryEmployee::where('lab_manager_id', $labManagerId)
+        //                                     ->pluck('id');
+
+        // $category = Category::where(function($query) use ($labManagerId, $employeeIds) {
+        //             $query->where(function($q) use ($labManagerId) {
+        //                 $q->where('categoryable_type', 'labManager')
+        //                 ->where('categoryable_id', $labManagerId);
+        //             })
+        //             ->orWhere(function($q) use ($employeeIds) {
+        //                 $q->where('categoryable_type', 'inventoryEmployee')
+        //                 ->whereIn('categoryable_id', $employeeIds);
+        //             });
+        //         })
+        //     ->with('subcategories') // تسجيل العلاقة المضافة
+        //     ->first();
+        // }
+        // elseif ($type == "inventoryEmployee") {
+        //     $employeeId=$id;
+        //     $labManagerId = InventoryEmployee::where('id', $employeeId)->value('lab_manager_id');
+        //             $employeeIds = InventoryEmployee::where('lab_manager_id', $labManagerId)
+        //                                             ->pluck('id');
+        //     $category=Category::where(function($query) use ($labManagerId, $employeeIds) {
+        //                     $query->where(function($q) use ($labManagerId) {
+        //                         $q->where('categoryable_type', 'labManager')
+        //                         ->where('categoryable_id', $labManagerId);
+        //                     })
+        //                     ->orWhere(function($q) use ($employeeIds) {
+        //                         $q->where('categoryable_type', 'inventoryEmployee')
+        //                         ->whereIn('categoryable_id', $employeeIds);
+        //                     });
+        //                 })
+        //                 ->with('subcategories') // تسجيل العلاقة المضافة
+        //                 ->first();
+        // }
+        $category = Category::where('id', $categoryId)->with('subcategories')->first(); // تسجيل العلاقة المضافة
 
         // إذا وجد الفئة
         if ($category) {
@@ -28,23 +62,24 @@ class SubCategoryRepository
         return collect(); // أو [] حسب الأفضلية
     }
 
-    public function deleteSubCategory($userid, $type, $id)
+
+    public function deleteSubCategory($id)
     {
 
         $subcategory = Subcategory::where('id', $id)->first();
 
         if ($subcategory) {
-            $category = $subcategory->category; // هنا استدعاء العلاقة كـ نموذج، وليس كوظيفة
-            if (
-                $category &&
-                $category->categoryable_id == $userid &&
-                $category->categoryable_type == $type
-            ) {
+            // $category = $subcategory->category; // هنا استدعاء العلاقة كـ نموذج، وليس كوظيفة
+            // if (
+            //     $category &&
+            //     $category->categoryable_id == $userid &&
+            //     $category->categoryable_type == $type
+            // ) {
 
-                $subcategory->delete();
-                $subcategory->items()->delete();
-                return true;
-            }
+            $subcategory->delete();
+            $subcategory->items()->delete();
+            return true;
+            // }
         }
         return false;
     }
@@ -77,33 +112,26 @@ class SubCategoryRepository
     {
         return SubCategory::find($id);
     }
-    public function updateSubCategory($subcategory, $data, $userid, $type)
+    public function updateSubCategory($subcategory, $data)
     {
-        $category = $subcategory->category; // هنا استدعاء العلاقة كـ نموذج، وليس كوظيفة
-        if (
-            $category &&
-            $category->categoryable_id == $userid &&
-            $category->categoryable_type == $type
-        ) {
+        // $category = $subcategory->category; // هنا استدعاء العلاقة كـ نموذج، وليس كوظيفة
+        // if ($category) {
 
-            $subcategory->update($data);
-            return true;
-        }
+        $subcategory->update($data);
+        return true;
+        //}
 
-        return false;
+
     }
     public function all_total_prices_fo_all_subcategories($user_id, $type)
     {
-        if ($type != 'dentist') {
-            return 'ليس طبيب';
-        }
 
         $startLastMonth = Carbon::now()->subMonth()->startOfMonth();
         $endLastMonth = Carbon::now()->subMonth()->endOfMonth();
 
-        $totalSum = ItemHistory::whereHas('item', function ($query) use ($user_id) {
+        $totalSum = ItemHistory::whereHas('item', function ($query) use ($user_id, $type) {
             $query->where('creatorable_id', $user_id)
-                ->where('creatorable_type', 'dentist')
+                ->where('creatorable_type', $type)
                 ->where('is_static', 1)
             ;
         })
@@ -128,13 +156,14 @@ class SubCategoryRepository
         $startOfLastMonth = $startOfCurrentMonth->copy()->subMonth();
         $endOfLastMonth = $startOfCurrentMonth->copy()->subDay();
 
-        $subcategories = Subcategory::whereHas('items', function ($query) use ($userid) {
+        $subcategories = Subcategory::whereHas('items', function ($query) use ($userid, $type) {
             $query->where('creatorable_id', $userid)
-                ->where('creatorable_type', 'dentist');
+                ->where('creatorable_type', $type)
+                ->where('is_static', 1); //_______new new new
         })
-            ->with(['items' => function ($query) use ($userid) {
+            ->with(['items' => function ($query) use ($userid, $type) {
                 $query->where('creatorable_id', $userid)
-                    ->where('creatorable_type', 'dentist')
+                    ->where('creatorable_type', $type)
                     ->with(['itemHistory']);
             }])->get();
 

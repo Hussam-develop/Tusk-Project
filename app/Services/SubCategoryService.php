@@ -19,9 +19,9 @@ class SubCategoryService
     public function getSubcategoriesForCategory($categoryId)
     {
         // يمكن إضافة additional logic هنا إذا أردت
-        $user = auth()->user(); // المستخدم الحالي بعد تحديد Guard بواسطة Middleware
-        $type = $user->getMorphClass();
-        $subCategoryRepositories = $this->subCategoryRepository->getSubcategoriesByCategoryId($categoryId, $user->id, $type);
+        // $user = auth()->user(); // المستخدم الحالي بعد تحديد Guard بواسطة Middleware
+        // $type = $user->getMorphClass();
+        $subCategoryRepositories = $this->subCategoryRepository->getSubcategoriesByCategoryId($categoryId);
         if ($subCategoryRepositories->isEmpty()) {
 
             return $this->returnErrorMessage('لا يوجد اصناف فرعية', 200);
@@ -32,9 +32,9 @@ class SubCategoryService
     public function removeSubCategory($id)
     {
 
-        $user = auth()->user(); // المستخدم الحالي بعد تحديد Guard بواسطة Middleware
-        $type = $user->getMorphClass();
-        $fromrepo = $this->subCategoryRepository->deleteSubCategory($user->id, $type, $id);
+        // $user = auth()->user(); // المستخدم الحالي بعد تحديد Guard بواسطة Middleware
+        // $type = $user->getMorphClass();
+        $fromrepo = $this->subCategoryRepository->deleteSubCategory($id);
         if ($fromrepo) {
             return $this->returnSuccessMessage(200, 'تم حذف الفئة الفرعية  بنجاح. ');
         }
@@ -44,32 +44,32 @@ class SubCategoryService
     {
 
 
-        $user = auth()->user(); // المستخدم الحالي بعد تحديد Guard بواسطة Middleware
-        $type = $user->getMorphClass();
-        $check = $this->subCategoryRepository->Verify_permission_to_add_subcategory($category_id, $user->id, $type);
+        // $user = auth()->user(); // المستخدم الحالي بعد تحديد Guard بواسطة Middleware
+        // $type = $user->getMorphClass();
+        // $check = $this->subCategoryRepository->Verify_permission_to_add_subcategory($category_id, $user->id, $type);
 
-        if ($check) {
-            $result = $this->subCategoryRepository->addSubCategory($category_id, $data);
-            if ($result) {
-                return $this->returnSuccessMessage(200, 'تم اضافة الفئة الفرعية ');
-            }
-            return $this->returnErrorMessage(' حدث خطأ اثناءاضافة الفئة الفرعية .', 200);
+        // if ($check) {
+        $result = $this->subCategoryRepository->addSubCategory($category_id, $data);
+        if ($result) {
+            return $this->returnSuccessMessage(200, 'تم اضافة الفئة الفرعية ');
         }
-        return $this->returnErrorMessage(' انت غير مخول لاضافة فئة فرعية لهذه الفئة', 200);
+        return $this->returnErrorMessage(' حدث خطأ اثناءاضافة الفئة الفرعية .', 200);
+        // }
+        // return $this->returnErrorMessage(' انت غير مخول لاضافة فئة فرعية لهذه الفئة', 200);
     }
 
     public function updateSubCategory($id, $data)
     {
 
-        $user = auth()->user(); // المستخدم الحالي بعد تحديد Guard بواسطة Middleware
-        $type = $user->getMorphClass();
+        // $user = auth()->user(); // المستخدم الحالي بعد تحديد Guard بواسطة Middleware
+        // $type = $user->getMorphClass();
         $subcategory = $this->subCategoryRepository->findSubCategoryById($id);
 
         if (!$subcategory) {
             return $this->returnErrorMessage('الصنف الفرعي  غير موجود.', 200);
         }
         // تحديث البيانات
-        $res = $this->subCategoryRepository->updateSubCategory($subcategory, $data, $user->id, $type);
+        $res = $this->subCategoryRepository->updateSubCategory($subcategory, $data);
         if ($res) {
             return $this->returnSuccessMessage(200, ' تم تعديل  الصنف الفرعي  ');
         }
@@ -82,9 +82,7 @@ class SubCategoryService
         $user = auth()->user(); // المستخدم الحالي بعد تحديد Guard بواسطة Middleware
         $type = $user->getMorphClass();
         $result1 = $this->subCategoryRepository->all_total_prices_fo_all_subcategories($user->id, $type);
-        if ($result1 == 'ليس طبيب') {
-            return $this->returnErrorMessage('حدث خطأ  انت لست طبيب  ', 500);
-        }
+
         if ($result1 == 'ليس لديك كميات مواد') {
             return $this->returnErrorMessage('ليس لديك كميات مواد', 500);
         }

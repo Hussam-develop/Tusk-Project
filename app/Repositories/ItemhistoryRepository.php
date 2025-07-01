@@ -7,16 +7,11 @@ use App\Models\ItemHistory;
 
 class ItemhistoryRepository
 {
-    public function Verify_permission_to_add_itemhistory($itemid, $id, $type)
+    public function Verify_permission_to_add_itemhistory($itemid)
     {
         $item = Item::where('id', $itemid)->first();
 
-        if (
-            $item && $item->creatorable_id == $id &&
-            $item->creatorable_type == $type
-        ) {
-
-
+        if ($item) {
             return true;
         }
 
@@ -40,19 +35,74 @@ class ItemhistoryRepository
         return false;
     }
 
-    public function itemhistories($itemId, $id, $type)
+    public function itemhistories($itemId)
     {
-        $item = Item::where('id', $itemId)->where('creatorable_id', $id)
-            ->where('creatorable_type', $type)
-            ->first();
-
-
+        // if($type =="labManager")
+        // {
+        //     $labManagerId =$id;
+        //     $employeeIds = InventoryEmployee::where('lab_manager_id', $labManagerId)
+        //                                     ->pluck('id');
+        //     $item = Item::where(function($query) use ($labManagerId, $employeeIds)
+        //     {
+        //             $query->where(function($q) use ($labManagerId) {
+        //                 $q->where('creatorable_type', 'labManager')
+        //                 ->where('creatorable_id', $labManagerId);
+        //             })
+        //             ->orWhere(function($q) use ($employeeIds) {
+        //                 $q->where('creatorable_type', 'inventoryEmployee')
+        //                 ->whereIn('creatorable_id', $employeeIds);
+        //             });
+        //         })
+        //     ->with('itemHistory') // تسجيل العلاقة المضافة
+        //     ->first();
+        // }
+        // elseif ($type == "inventoryEmployee") {
+        //         $employeeId=$id;
+        //         $labManagerId = InventoryEmployee::where('id', $employeeId)->value('lab_manager_id');
+        //         $item = Item::where(function($query) use ($labManagerId, $employeeIds)
+        //     {
+        //             $query->where(function($q) use ($labManagerId) {
+        //                 $q->where('creatorable_type', 'labManager')
+        //                 ->where('creatorable_id', $labManagerId);
+        //             })
+        //             ->orWhere(function($q) use ($employeeIds) {
+        //                 $q->where('creatorable_type', 'inventoryEmployee')
+        //                 ->whereIn('creatorable_id', $employeeIds);
+        //             });
+        //         })
+        //     ->with('itemHistory') // تسجيل العلاقة المضافة
+        //     ->first();
+        // }
+        $item = Item::where('id', $itemId)->first();
 
         if ($item) {
-            return $item->itemHistory; // تلقائياً بعد التصفية
+            // ترتيب التاريخ من الأقدم للأحدث
+            $itemhistories = $item->itemHistory->sortBy('created_at');
+
+            $cumulativeValue = 0;
+            $result = [];
+
+            foreach ($itemhistories as $history) {
+                // إضافة كمية السجل إلى القيمة التراكمية
+                $cumulativeValue += $history->quantity;
+
+                // حساب 'recent_value' كـ 'new_value - quantity'
+                $recent_value = $cumulativeValue - $history->quantity;
+
+                // إضافة البيانات إلى النتيجة
+                $result[] = [
+                    'id' => $history->id,
+                    'created_at' => $history->created_at,
+                    'quantity' => $history->quantity,
+                    'new_value' => $cumulativeValue,
+                    'recent_value' => $recent_value,
+                ];
+            }
+            $reversedArray = array_reverse($result);
+            return $reversedArray;
         }
 
-        return collect(); // أو [] إذا لم توجد
+        return collect(); // أو يمكنك إرجاع مصفوفة فارغة [] إذا تفضل
     }
     public function Repeated_item_histories($user_id, $type)
     {
@@ -134,5 +184,31 @@ class ItemhistoryRepository
         // بعد ذلك، أنشئ الـ ItemHistory ومرر الـ item_id
 
         return 'تم';
+    }
+    public function The_monthly_consumption_of_item($itemid)
+    {
+        // إنشاء مصفوفة تحتوي على جميع الأشهر من 1 إلى 12
+        $allMonths = collect(range(1, 12));
+
+        // استعلام للحصول على الكميات السالبة
+        $stats = ItemHistory::where('item_id', $itemid)
+            ->where('quantity', '<', 0) // فقط الكميات السالبة
+            ->selectRaw("MONTH(created_at) as month, SUM(quantity) as total") // جمع الكميات السالبة
+            ->groupBy('month')
+            ->get()
+            ->keyBy('month'); // لتحويل النتائج إلى مصفوفة مفهرسة بالمؤشر 'month'
+
+        // دمج الأشهر مع النتائج لضمان وجود كل الأشهر
+        $results = $allMonths->map(function ($month) use ($stats) {
+            // إذا لم يوجد بيانات للشهر، القيمة تكون 0
+            return [
+                'month' => $month,
+                'Negative quantity' => $stats->has($month) ? abs($stats[$month]['total']) : 0 // استخدام abs لجعل القيمة موجبة
+            ];
+        });
+
+        // لتحويل النتيجة إلى مصفوفة أو عرضها كيفما تريد
+        $finalResults = $results->all();
+        return $finalResults;
     }
 }

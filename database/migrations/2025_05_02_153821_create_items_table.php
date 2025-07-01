@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('subcategory_id')->nullable()->constrained('sub_categories')->onDelete('cascade');
             $table->morphs('creatorable');
             $table->string('name');
-            $table->unsignedBigInteger('quantity')->nullable();
+            $table->bigInteger('quantity')->nullable();
             $table->unsignedBigInteger('standard_quantity')->default(0)->nullable();
             $table->unsignedBigInteger('minimum_quantity')->nullable();
             $table->boolean('is_static')->default(false);

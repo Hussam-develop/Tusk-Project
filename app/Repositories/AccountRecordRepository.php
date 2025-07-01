@@ -23,4 +23,30 @@ class AccountRecordRepository
             ->get();
         return $results;
     }
+    public function Most_profitable_doctors($user_id)
+    {
+
+        // حساب بداية ونهاية الشهر السابق
+        $startOfLastMonth = \Carbon\Carbon::now()->startOfMonth()->subMonth();
+        $endOfLastMonth = \Carbon\Carbon::now()->startOfMonth()->subSecond();
+
+        // استعلام يجلب البيانات ويجمع حسب dentist_id مع الاسم الكامل
+        $results = \App\Models\AccountRecord::where('lab_manager_id', $user_id)
+            ->where('type', 'سحب من الرصيد (فاتورة)')
+            ->whereBetween('created_at', [$startOfLastMonth, $endOfLastMonth])
+            ->whereHas('dentist') // تأكد من وجود علاقة في النموذج
+            ->with('dentist') // لتحميل البيانات
+            ->get()
+            ->groupBy('dentist_id')
+            ->map(function ($records, $dentistId) {
+                $dentist = $records->first()->dentist;
+                return [
+                    'fullname' => $dentist->last_name . ' ' . $dentist->first_name,
+                    'dentist_id' => $dentist->id,
+                    'total_signed_value' => $records->sum('signed_value'),
+                ];
+            })->values();
+
+        return $results;
+    }
 }

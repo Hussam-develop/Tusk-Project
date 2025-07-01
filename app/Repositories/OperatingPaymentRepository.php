@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Treatment;
 use App\Models\ItemHistory;
 use App\Models\OperatingPayment;
+use App\Models\InventoryEmployee;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -37,10 +38,6 @@ class OperatingPaymentRepository
     }
     public function Operating_Payment_statistics($user_id, $type)
     {
-        if ($type != 'dentist' && $type != 'labManager') {
-            return 'ليس طبيب او مدير مخبر';
-        }
-
         // تحديد الشهر الحالي وشهر السابق
         $currentMonth = Carbon::now()->month;
         $currentYear = Carbon::now()->year;
@@ -289,5 +286,80 @@ class OperatingPaymentRepository
     public function delete($id)
     {
         return OperatingPayment::destroy($id);
+    }
+    public function Operating_Payment_statistics1($user_id, $type)
+    {
+        $labManagerId = $user_id;
+        // نحصل على جميع الموظفين الذين ينتمون لهذا المدير
+        $employeeIds = InventoryEmployee::where('lab_manager_id', $labManagerId)
+            ->pluck('id');
+
+        // تحديد الشهر الحالي وشهر السابق
+        $currentMonth = Carbon::now()->month;
+        $currentYear = Carbon::now()->year;
+
+        // تحديد الشهر السابق
+        $previousMonth = $currentMonth - 1;
+        $previousYear = $currentMonth === 1 ? $currentYear - 1 : $currentYear;
+
+        // استعلام لجلب البيانات مع عدد مرات الظهور لكل اسم
+        $results = OperatingPayment::select(
+            'name',
+            DB::raw('SUM(value) as total_value'),
+            DB::raw('COUNT(*) as count')
+        )
+            ->whereYear('created_at', $previousYear)
+            ->whereMonth('created_at', $previousMonth)
+            ->where(function ($query) use ($employeeIds, $user_id) {
+                $query->where(function ($q) use ($employeeIds) {
+                    $q->where('creatorable_type', 'inventoryEmployee')
+                        ->whereIn('creatorable_id', $employeeIds);
+                })
+                    ->orWhere(function ($q) use ($user_id) {
+                        $q->where('creatorable_type', 'lab_manager')
+                            ->where('creatorable_id', $user_id);
+                    });
+            })
+            ->groupBy('name')
+            ->get();
+
+
+        return $results;
+    }
+    public function allOperatingPayment1($user_id, $type)
+    {
+        $currentMonth = Carbon::now()->month;
+        $currentYear = Carbon::now()->year;
+
+        $previousMonth = $currentMonth - 1;
+        $previousYear = $currentYear;
+
+        // إذا الشهر الحالي هو يناير، فالشهر السابق هو ديسمبر من السنة السابقة
+        if ($previousMonth == 0) {
+            $previousMonth = 12;
+            $previousYear -= 1;
+        }
+        $labManagerId = $user_id;
+
+        $employeeIds = InventoryEmployee::where('lab_manager_id', $labManagerId)
+            ->pluck('id');
+
+        // استعلام لجمع القيم
+        $totalValue = OperatingPayment::whereYear('created_at', $previousYear)
+            ->whereMonth('created_at', $previousMonth)
+            ->where(function ($query) use ($employeeIds, $user_id) {
+                $query->where(function ($q) use ($employeeIds) {
+                    $q->where('creatorable_type', 'inventoryEmployee')
+                        ->whereIn('creatorable_id', $employeeIds);
+                })
+                    ->orWhere(function ($q) use ($user_id) {
+                        $q->where('creatorable_type', 'lab_manager')
+                            ->where('creatorable_id', $user_id);
+                    });
+            })
+            ->sum('value');
+        // dd($totalValue);// تأكد من أن حقل المبلغ هو 'amount' أو الحقل المناسب لديك
+
+        return $totalValue;
     }
 }
