@@ -26,7 +26,7 @@ class ItemService
 
         if ($itemRepositories->isEmpty()) {
 
-            return $this->returnErrorMessage('لا يوجد مواد', 404);
+            return $this->returnErrorMessage('لا يوجد مواد', 200);
         }
         // return $categories;
         return $this->returnData("items", $itemRepositories, "   المواد", 200);
@@ -44,9 +44,9 @@ class ItemService
             if ($result) {
                 return $this->returnSuccessMessage(200, 'تم اضافة  المادة ');
             }
-            return $this->returnErrorMessage(' حدث خطأ اثناءاضافة المادة  .', 404);
+            return $this->returnErrorMessage(' حدث خطأ اثناءاضافة المادة  .', 200);
         }
-        return $this->returnErrorMessage('  انت غير مخول لاضافة المادة  لهذه الفئة الفرعية ', 404);
+        return $this->returnErrorMessage('  انت غير مخول لاضافة المادة  لهذه الفئة الفرعية ', 200);
     }
 
 
@@ -60,7 +60,7 @@ class ItemService
         if ($fromrepo) {
             return $this->returnSuccessMessage(200, 'تم حذف  المادة  بنجاح. ');
         }
-        return $this->returnErrorMessage('لم يتم حذف المادة  لانها غير موجودة او انك غير مخول ', 404);
+        return $this->returnErrorMessage('لم يتم حذف المادة  لانها غير موجودة او انك غير مخول ', 200);
     }
 
     public function updateItem($id, $data)
@@ -91,7 +91,7 @@ class ItemService
         $itemRepositories = $this->itemRepository->items_of_user($user->id, $type);
         if ($itemRepositories->isEmpty()) {
 
-            return $this->returnErrorMessage('لا يوجد مواد', 404);
+            return $this->returnErrorMessage('لا يوجد مواد', 200);
         }
         // return $categories;
         return $this->returnData("items", $itemRepositories, "المواد", 200);

@@ -32,9 +32,9 @@ class ItemhistoryService
             if ($result) {
                 return $this->returnSuccessMessage(200, 'تم اضافة الكمية  ');
             }
-            return $this->returnErrorMessage(' حدث خطأ اثناءاضافة الكمية .', 404);
+            return $this->returnErrorMessage(' حدث خطأ اثناءاضافة الكمية .', 200);
         }
-        return $this->returnErrorMessage(' انت غير مخول لاضافة الكمية', 404);
+        return $this->returnErrorMessage(' انت غير مخول لاضافة الكمية', 200);
     }
     public function itemhistories($itemId)
     {
@@ -44,7 +44,7 @@ class ItemhistoryService
         $itemhistoryRepositories = $this->itemhistoryRepository->itemhistories($itemId);
         // if ($itemhistoryRepositories->isEmpty()) {
 
-        //     return $this->returnErrorMessage('لا يوجد كميات ', 404);
+        //     return $this->returnErrorMessage('لا يوجد كميات ', 200);
         // }
         // return $categories;
         return $this->returnData("items", $itemhistoryRepositories, "سجل كميات المادة", 200);
