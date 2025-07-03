@@ -27,12 +27,12 @@ class StorePatientRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'full_name'       => ['required', 'string', 'max:30', 'unique:patients,full_name'],
+            'full_name'       => ['required', 'string', 'max:50', 'unique:patients,full_name'],
             'phone'            => ['required', 'string', 'regex:/^[0-9+\-\s]{7,20}$/', 'unique:patients,phone'],
             'birthday'         => ['required', 'date', 'before:today'],
             'is_smoker'        => ['required', 'boolean'],
             'address'          => ['required', 'string', 'max:100'],
-            'gender'           => ['required', 'in:ذكر,انثى'],
+            'gender'           => ['required', 'in:ذكر,أنثى'],
             'current_balance'  => ['nullable', 'numeric'],
             'medicine_name'    => ['nullable', 'string', 'max:100'],
             'illness_name'     => ['nullable', 'string', 'max:100'],

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use app\Traits\handleResponseTrait;
 use Illuminate\Support\Facades\Response;
 use App\Repositories\MedicalCaseRepository;
+use App\Http\Requests\ChangeCaseStatusRequest;
 
 class MedicalCaseService
 {
@@ -54,11 +55,11 @@ class MedicalCaseService
         $medical_case =  $this->repository->getById($medical_case_id);
         // dd($medical_case["medical_case_details"]["status"]);
         // dd(in_array($medical_case["medical_case_details"]["status"], [1, 2, 3, 4, 5]));
-        if ($medical_case["medical_case_details"]["status"] == 1/*"ordered(pending)"*/) {
+        if ($medical_case["medical_case_details"]["status"] == 0/*"ordered(pending)"*/) {
             $medical_case["medical_case_details"]->delete();
             return $this->returnSuccessMessage(200, "تم إلغاء إرسال الحالة للمخبر بنجاح");
         }
-        if (in_array($medical_case["medical_case_details"]["status"], [2, 3, 4, 5])) {
+        if (in_array($medical_case["medical_case_details"]["status"], [1, 2, 3, 4])) {
             $medical_case["medical_case_details"]->delete();
             return $this->returnErrorMessage("لم يتم حذف الحالة المرضية لأن مدير مدير المخبر قد قبل الحالة . يرجى التواصل مع مدير المخبر.",  422);
         }
@@ -68,7 +69,7 @@ class MedicalCaseService
     public function confirm_delivery($medical_case_id)
     {
         $medical_case =  $this->repository->getById($medical_case_id);
-        if ($medical_case["medical_case_details"]["status"] == 4/*"ready"*/) {
+        if ($medical_case["medical_case_details"]["status"] == 3/*"ready"*/) {
             $this->repository->confirm_delivery($medical_case["medical_case_details"]["id"]);
             return $this->returnSuccessMessage(200, "تم تغيير نوع الحالة إلى مستلمة بنجاح");
         }
@@ -89,23 +90,21 @@ class MedicalCaseService
         } else
             return $this->returnErrorMessage("الصورة غير موجودة", 200);
     }
-    public function  add_case_images_with_screenshot($case_id, Request $request)
+    public function add_case_images_with_screenshot($case_id, Request $request)
     {
         $medicalCase = MedicalCase::where("id", $case_id)->first();
         $files = $request->file('case_images');
-
         if ($files !== null) {
 
             foreach ($files as $file) {
 
-                $filename =  $file->getClientOriginalName();
-
-                $file_name_existed = File::where('name', $filename)->exists();
-                if ($file_name_existed) {
-                    $medicalCase->delete();
-                    return $this->returnErrorMessage("أعد تسمية الصورة  " . $filename . " رجاءً وحاول مجدداً",  422);
-                }
-
+                $filename = (string) date('Y_m_d_H_i_s_') . $file->getClientOriginalName();
+                // $file_name_existed = File::where('name', $filename)->exists();
+                // if ($file_name_existed) {
+                //     // $medicalCase->delete();
+                //     // return $this->returnErrorMessage("أعد تسمية الصورة  " . $filename . " رجاءً وحاول مجدداً",  422);
+                //     // $filename = (string) date('Y_m_d_H_i_s_') . $filename;
+                // }
                 $image = File::create([
                     'name' => $filename,
                     'is_case_image' => false,
@@ -119,13 +118,13 @@ class MedicalCaseService
         $case_screenshot = $request->file('case_screenshot');
         if ($case_screenshot !== null) {
 
-            $screenshot_image_name =  $case_screenshot->getClientOriginalName();
+            $screenshot_image_name =  (string) date('Y_m_d_H_i_s_') . $case_screenshot->getClientOriginalName();
 
-            $file_name_existed = File::where('name', $screenshot_image_name)->exists();
-            if ($file_name_existed) {
-                $medicalCase->delete();
-                return $this->returnErrorMessage("أعد تسمية الصورة  " . $screenshot_image_name . " رجاءً وحاول مجدداً",  422);
-            }
+            // $file_name_existed = File::where('name', $screenshot_image_name)->exists();
+            // if ($file_name_existed) {
+            //     $medicalCase->delete();
+            //     return $this->returnErrorMessage("أعد تسمية الصورة  " . $screenshot_image_name . " رجاءً وحاول مجدداً",  422);
+            // }
 
             $screenshot_image = File::create([
                 'name' => $screenshot_image_name,
@@ -226,5 +225,34 @@ class MedicalCaseService
             return $this->returnErrorMessage("لا توجد  حالات لهذا المخبر بعد ",  200);
         }
         return $this->returnData("medical_cases_by_type", $medical_cases_by_type, "الحالات حسب نوع الحالة", 200);
+    }
+    public function dentist_cases_by_created_date_descending($dentist_id)
+    {
+        $medical_cases_for_dentist =  $this->repository->dentist_cases_by_created_date_descending($dentist_id);
+        if (
+            $medical_cases_for_dentist["dentist"]
+            && $medical_cases_for_dentist["dentist_cases"]
+        ) {
+            return $this->returnData("medical_cases_for_dentist", $medical_cases_for_dentist, "حالات الطبيب", 200);
+        }
+        return $this->returnErrorMessage("حدث خطأ أثناء عرض تفاصيل هذا الزبون والحالات الخاصة به ",  200);
+    }
+    public function change_status(ChangeCaseStatusRequest $request)
+    {
+        $change_status =   $this->repository->change_status($request);
+        if ($change_status == "تم تغيير الحالة بنجاح") {
+            return $this->returnSuccessMessage(200, $change_status);
+        }
+
+        return $this->returnErrorMessage($change_status,  200);
+    }
+    public function add_medical_case_to_local_client($request)
+    {
+        $medical_case =  $this->repository->add_medical_case_to_local_client($request);
+        $addFilesToCase =  $this->add_case_images_with_screenshot($medical_case->id, $request);
+        if ($medical_case) {
+            return $this->returnSuccessMessage(201, "تم إنشاء الحالة بنجاح ");
+        }
+        return $this->returnErrorMessage("حدث خطأ ما الرجاء إعادة إضافة الحالة مرة أخرى",  200);
     }
 }

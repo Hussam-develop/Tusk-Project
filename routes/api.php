@@ -275,6 +275,9 @@ Route::group([
         Route::get("/show-lab-clients", [LabClientsController::class, 'show_lab_clients']);
         Route::get("/show-lab-cases-groubed-by-case-type", [MedicalCaseController::class, 'show_lab_cases_by_type']);
         Route::get('/get-medical-case-details/{medical_case_id}', [MedicalCaseController::class, 'get_medical_case_details']);
+        Route::post('/change-status', [MedicalCaseController::class, 'change_status']);
+        Route::post('/add-medical-case-to-local-client', [MedicalCaseController::class, 'add_medical_case_to_local_client']);
+        Route::get("/dentist-cases-by-created-date-descending/{dentist_id}", [MedicalCaseController::class, 'dentist_cases_by_created_date_descending']);
 
 
         // Comments

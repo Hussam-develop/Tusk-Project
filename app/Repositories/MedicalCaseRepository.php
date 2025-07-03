@@ -2,15 +2,19 @@
 
 namespace App\Repositories;
 
-use App\Models\Dentist;
+use Carbon\Carbon;
 use App\Models\File;
+use App\Models\Dentist;
 use App\Models\Patient;
+use App\Models\Treatment;
 use App\Models\LabManager;
 use App\Models\MedicalCase;
-use App\Models\Treatment;
+use App\Models\AccountRecord;
 use app\Traits\handleResponseTrait;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
+use App\Http\Requests\MedicalCaseRequest;
+use App\Http\Requests\ChangeCaseStatusRequest;
+use App\Http\Requests\StoreMedicalCaseAsManagerRequest;
 
 class MedicalCaseRepository
 {
@@ -41,7 +45,7 @@ class MedicalCaseRepository
     public function confirm_delivery($medical_case_id)
     {
         $medical_case = MedicalCase::where("id", $medical_case_id)->first();
-        $medical_case->status = 5;
+        $medical_case->status = 4;
         $medical_case->confirm_delivery = true;
         $medical_case->save();
         // $user->update(["confirm_delivery" => true]);
@@ -102,7 +106,7 @@ class MedicalCaseRepository
             'shade' => $data['shade'],
             'expected_delivery_date' => $data['expected_delivery_date'],
             'notes' => $data['notes'],
-            'status' => 1, //ordered
+            'status' => 0, //pending
             'confirm_delivery' => 0,
             'cost' => 0,
 
@@ -222,5 +226,126 @@ class MedicalCaseRepository
             "accepted_cases_1" => $medical_cases_by_type_pending_1,
             "in_progress_2" => $medical_cases_by_type_pending_2,
         ];
+    }
+    public function dentist_cases_by_created_date_descending($dentist_id)
+    {
+        $lab_id = Auth::id();
+        $dentist = Dentist::where("id", $dentist_id)
+            ->first([
+                'id',
+                'first_name',
+                'last_name',
+                // 'email',
+                'phone',
+                'address',
+            ]);
+        $dentist_current_balance = AccountRecord::where(
+            [
+                'dentist_id' => $dentist_id,
+                'lab_manager_id' => $lab_id
+            ]
+        )->latest()->first("current_account");
+
+        $dentist_cases = MedicalCase::where([
+            'dentist_id' => $dentist_id,
+            'lab_manager_id' => $lab_id
+        ])
+            ->orderByDesc('created_at')
+            ->with(['patient' => function ($query) {
+                $query->select('id', "full_name");
+            }])
+            ->get(['id', 'dentist_id', 'patient_id', 'expected_delivery_date', 'status', 'created_at']);
+
+        return [
+            "dentist" => $dentist,
+            "dentist_current_balance" => $dentist_current_balance,
+            "dentist_cases" => $dentist_cases,
+        ];
+    }
+    public function change_status(ChangeCaseStatusRequest $request)
+    {
+        $case_id = $request->case_id;
+        $case = MedicalCase::find($case_id);
+
+        if ($case) {
+
+            $old_status = $case->status;
+
+            if ($old_status == 4 || $old_status == 3) //"delivered"
+            {
+                return "الحالة هي 'جاهزة' ولايمكن تعديلها بعد الآن";
+            }
+
+            if ($old_status == 2 /*in_progress*/) {
+
+
+                $case->cost = $request->cost;
+                $case->save();
+            }
+            $case->status = (int) $old_status + 1;
+            $case->save();
+
+            return "تم تغيير الحالة بنجاح";
+        }
+        return " ! حدث خطأ أثناء تغيير الحالة ";
+    }
+    public function add_medical_case_to_local_client(StoreMedicalCaseAsManagerRequest $request)
+    {
+        $lab_manager_id = Auth::id();
+
+        $patient = Patient::firstOrCreate(
+            ['phone' => $request->patient_phone], // Search condition
+
+            [ // Data to use if creating a new patient
+                'dentist_id' => $request->dentist_id,
+                'full_name' => $request->patient_full_name,
+                'address' => "-",
+                'birthday' => $request->patient_birthdate,
+                'current_balance' => null,
+                'is_smoker' => $request->is_smoker,
+                'gender' => $request->patient_gender,
+                'medicine_name' => null,
+                'illness_name' => null,
+            ]
+        );
+        // calculate patient age
+        $patient_birthday = Carbon::parse($patient->birthday); // First date
+        $patient_date_at_case = Carbon::now()->format('Y-m-d')/*->toDateString()*/; // Second date
+        $patient_case_age_accurate = $patient_birthday->diffInYears($patient_date_at_case); //result in years with digit point
+        $patient_age_years = explode('.', $patient_case_age_accurate)[0]; //result just in years
+
+        $medicalCase = MedicalCase::create([
+            'dentist_id' => $request->dentist_id,
+            'lab_manager_id' => $lab_manager_id,
+            'patient_id' => $patient->id,
+
+            'age' => $patient_age_years,
+
+            'need_trial' => $request->need_trial,
+            'repeat' => $request->repeat,
+            'shade' => $request->shade,
+            'expected_delivery_date' => $request->expected_delivery_date,
+            'notes' => $request->notes,
+            'status' => 0, //pending
+            'confirm_delivery' => 0,
+            'cost' => 0,
+
+            'teeth_crown' => $request->teeth_crown,
+            'teeth_pontic' => $request->teeth_pontic,
+            'teeth_implant' => $request->teeth_implant,
+            'teeth_veneer' => $request->teeth_veneer,
+            'teeth_inlay' => $request->teeth_inlay,
+            'teeth_denture' => $request->teeth_denture,
+
+            'bridges_crown' => $request->bridges_crown,
+            'bridges_pontic' => $request->bridges_pontic,
+            'bridges_implant' => $request->bridges_implant,
+            'bridges_veneer' => $request->bridges_veneer,
+            'bridges_inlay' => $request->bridges_inlay,
+            'bridges_denture' => $request->bridges_denture,
+
+        ]);
+
+        return $medicalCase;
     }
 }

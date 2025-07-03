@@ -32,7 +32,7 @@ class UpdatePatientRequest extends FormRequest
             'birthday'         => ['nullable', 'date', 'before:today'],
             'is_smoker'        => ['nullable', 'boolean'],
             'address'          => ['nullable', 'string', 'max:100'],
-            'gender'           => ['nullable', 'in:ذكر,انثى'],
+            'gender'           => ['nullable', 'in:ذكر,أنثى'],
             // 'current_balance'  =>['nullable'],
             'medicine_name'    => ['nullable', 'string', 'max:100'],
             'illness_name'     => ['nullable', 'string', 'max:100'],

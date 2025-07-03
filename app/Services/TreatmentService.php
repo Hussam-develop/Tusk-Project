@@ -63,12 +63,12 @@ class TreatmentService
 
             foreach ($files as $file) {
 
-                $filename =  $file->getClientOriginalName();
+                $filename = (string) date('Y_m_d_H_i_s_') . $file->getClientOriginalName();
 
-                $file_name_existed = TreatmentImage::where('name', $filename)->exists();
-                if ($file_name_existed) {
-                    return $this->returnErrorMessage("أعد تسمية الصورة  " . $filename . " رجاءً وحاول مجدداً",  422);
-                }
+                // $file_name_existed = TreatmentImage::where('name', $filename)->exists();
+                // if ($file_name_existed) {
+                //     return $this->returnErrorMessage("أعد تسمية الصورة  " . $filename . " رجاءً وحاول مجدداً",  422);
+                // }
 
                 $image = TreatmentImage::create([
                     'name' => $filename,

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\MedicalCaseRequest;
-use App\Services\MedicalCaseService;
 use Illuminate\Http\Request;
+use App\Services\MedicalCaseService;
+use App\Http\Requests\MedicalCaseRequest;
+use App\Http\Requests\ChangeCaseStatusRequest;
+use App\Http\Requests\StoreMedicalCaseAsManagerRequest;
 
 class MedicalCaseController extends Controller
 {
@@ -70,6 +72,22 @@ class MedicalCaseController extends Controller
     public function show_lab_cases_by_type()
     {
         $data = $this->medicalCaseService->show_lab_cases_by_type();
+        return $data;
+    }
+    public function change_status(ChangeCaseStatusRequest $request)
+    {
+        $data = $this->medicalCaseService->change_status($request);
+        return $data;
+    }
+
+    public function add_medical_case_to_local_client(StoreMedicalCaseAsManagerRequest $request)
+    {
+        $data = $this->medicalCaseService->add_medical_case_to_local_client($request);
+        return $data;
+    }
+    public function dentist_cases_by_created_date_descending($dentist_id)
+    {
+        $data = $this->medicalCaseService->dentist_cases_by_created_date_descending($dentist_id);
         return $data;
     }
 }
