@@ -10,8 +10,10 @@ use App\Models\Treatment;
 use App\Models\LabManager;
 use App\Models\MedicalCase;
 use App\Models\AccountRecord;
+use Illuminate\Support\Facades\DB;
 use app\Traits\handleResponseTrait;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ManufacturedStatistic;
 use App\Http\Requests\MedicalCaseRequest;
 use App\Http\Requests\ChangeCaseStatusRequest;
 use App\Http\Requests\StoreMedicalCaseAsManagerRequest;
@@ -125,6 +127,9 @@ class MedicalCaseRepository
             'bridges_denture' => $data['bridges_denture'],
 
         ]);
+        if ($medicalCase) {
+            $this->add_case_to_manufactured_statistic($medicalCase);
+        }
         $treatment = Treatment::findOrFail($data['treatment_id']);
         $treatment->update([
             'medical_case_id' => $medicalCase->id,
@@ -345,7 +350,98 @@ class MedicalCaseRepository
             'bridges_denture' => $request->bridges_denture,
 
         ]);
-
+        if ($medicalCase) {
+            $this->add_case_to_manufactured_statistic($medicalCase);
+        }
         return $medicalCase;
+    }
+
+    // Statistics : monthly_number_of_manufactured_pieces
+
+    public function add_case_to_manufactured_statistic($medicalCase)
+    {
+        $teeth_bridges_array = [
+            'teeth_crown',
+            'teeth_pontic',
+            'teeth_implant',
+            'teeth_veneer',
+            'teeth_inlay',
+            'teeth_denture',
+            'bridges_crown',
+            'bridges_pontic',
+            'bridges_implant',
+            'bridges_veneer',
+            'bridges_inlay',
+            'bridges_denture',
+        ];
+        foreach ($teeth_bridges_array as $column) {
+            // dd($medicalCase->$column_type);
+            if ($medicalCase->$column !== null) {
+                $parts = explode(',', $medicalCase->$column);
+                // Step 1: Get the last value as piece_number
+                $piece_number = (int) array_pop($parts);
+                // Step 2: Count the remaining parts as manufactured_quantity
+                $manufactured_quantity = count($parts);
+
+                ManufacturedStatistic::create([
+                    'lab_manager_id' => $medicalCase->lab_manager_id,
+                    'medical_case_id' => $medicalCase->id,
+                    'piece_number' => $piece_number,
+                    'manufactured_quantity' => $manufactured_quantity,
+                ]);
+            }
+            // else {
+            //     // some logic maybe
+            // }
+        }
+    }
+    public function monthly_number_of_manufactured_pieces()
+    {
+        $lab_id = Auth::id();
+        // إنشاء مصفوفة تحتوي على جميع الأشهر من 1 إلى 12
+        // $allMonths = collect(range(1, 12));
+
+        // // استعلام للحصول على الكميات السالبة
+        // $stats = ManufacturedStatistic::where('lab_manager_id', $lab_id)
+        //     ->where('quantity', '<', 0) // فقط الكميات السالبة
+        //     ->selectRaw("MONTH(created_at) as month, SUM(quantity) as total") // جمع الكميات السالبة
+        //     ->groupBy('month')
+        //     ->get()
+        //     ->keyBy('month'); // لتحويل النتائج إلى مصفوفة مفهرسة بالمؤشر 'month'
+
+        // // دمج الأشهر مع النتائج لضمان وجود كل الأشهر
+        // $results = $allMonths->map(function ($month) use ($stats) {
+        //     // إذا لم يوجد بيانات للشهر، القيمة تكون 0
+        //     return [
+        //         'month' => $month,
+        //         'Negative quantity' => $stats->has($month) ? abs($stats[$month]['total']) : 0 // استخدام abs لجعل القيمة موجبة
+        //     ];
+        // });
+
+        // // لتحويل النتيجة إلى مصفوفة أو عرضها كيفما تريد
+        // $finalResults = $results->all();
+        // return $finalResults;
+        $ready_cases_ids = MedicalCase::where("lab_manager_id", $lab_id)
+            ->where('status', ">=", 3)
+            ->pluck("id"); //ready and delivered cases only
+        $results = ManufacturedStatistic::select(
+            DB::raw('MONTH(created_at) as month'),    // استخراج رقم الشهر من التاريخ
+            'piece_number',                              // نوع القطعة المصنعة
+            DB::raw('SUM(manufactured_quantity) as total') // حساب عدد القطع
+        )
+            ->whereIntegerInRaw("medical_case_id", $ready_cases_ids)
+            // ->where('lab_manager_id', $lab_id)
+            ->groupBy('month', 'piece_number')              // التجميع حسب الشهر والنوع
+            ->orderBy('month')                      // ترتيب النتائج حسب الشهر
+            ->get();
+
+        // تنظيم النتائج في مصفوفة مرتبة
+        $formattedResults = [];
+
+        foreach ($results as $result) {
+            $formattedResults[$result->month][$result->piece_number] = (int) $result->total;
+        }
+        // dd($formattedResults);
+        return $formattedResults;
     }
 }

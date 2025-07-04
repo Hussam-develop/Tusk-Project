@@ -255,4 +255,14 @@ class MedicalCaseService
         }
         return $this->returnErrorMessage("حدث خطأ ما الرجاء إعادة إضافة الحالة مرة أخرى",  200);
     }
+
+    // Statistics : monthly_number_of_manufactured_pieces
+    public function monthly_number_of_manufactured_pieces()
+    {
+        $statistic =  $this->repository->monthly_number_of_manufactured_pieces();
+        if ($statistic) {
+            return $this->returnData("manufactured_pieces_statistics", $statistic, "عدد القطع المصنعة شهرياً ", 200);
+        }
+        return $this->returnErrorMessage("حدث خطأ ما أثناء عرض إحصائية عدد القطع المصنعة شهرياً, الرجاء إعادة المحاولة مرة أخرى",  200);
+    }
 }

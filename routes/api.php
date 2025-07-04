@@ -301,6 +301,9 @@ Route::group([
         //]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]احصائيات المواد
         Route::get("/items_of_user", [LabManagerController::class, 'items_of_user']);
         Route::get("/The_monthly_consumption_of_item/{itemid}", [LabManagerController::class, 'The_monthly_consumption_of_item']);
+
+        // in two places : add case in dentist & add case in LabManager
+        Route::get("/monthly-number-of-manufactured-pieces", [LabManagerController::class, 'monthly_number_of_manufactured_pieces']);
     });
 });
 //_____________________________________________________________________________________ end Lab Manager
