@@ -63,8 +63,8 @@ class TreatmentRepository
 
             foreach ($files as $file) {
 
-                $filename =  $file->getClientOriginalName();
-
+                // $filename =  $file->getClientOriginalName();
+                $filename = (string) date('Y_m_d_H_i_s_') . $file->getClientOriginalName();
                 $file_name_existed = TreatmentImage::where('name', $filename)->exists();
                 if ($file_name_existed) {
                     $treatment->delete();
@@ -86,9 +86,9 @@ class TreatmentRepository
         $treatment_screenshot = $request->file('treatment_screenshot');
         if ($treatment_screenshot !== null) {
 
-            $screenshot_image_name =  $treatment_screenshot->getClientOriginalName();
-
-            $file_name_existed = TreatmentImage::where('name', $screenshot_image_name)->exists();
+            // $screenshot_image_name =  $treatment_screenshot->getClientOriginalName();
+            $screenshot_image_name = (string) date('Y_m_d_H_i_s_') . $treatment_screenshot->getClientOriginalName();
+            $file_name_existed = TreatmentImage::where('name', (string) date('Y_m_d_H_i_s_') . $treatment_screenshot)->exists();
             if ($file_name_existed) {
                 $treatment->delete();
                 $patient->current_balance += $request->cost;

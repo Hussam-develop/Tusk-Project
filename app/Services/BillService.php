@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Requests\BillRequest;
 use app\Traits\handleResponseTrait;
 use App\Repositories\BillRepository;
 
@@ -31,6 +32,48 @@ class BillService
             return $this->returnData("bill_details", $bill_details, "تفاصيل الفاتورة", 200);
         }
         return $this->returnErrorMessage("حدث خطأ ما . لايمكن عرض تفاصيل الفاتورة",  200);
+    }
+    public function addBill(BillRequest $request)
+    {
+        $addBill = $this->repository->addBill($request);
+        if ($addBill == "done") {
+            return $this->returnSuccessMessage(201, "تم إنشاء الفاتورة بنجاح");
+        }
+        return $this->returnErrorMessage($addBill,  200);
+    }
+    public function preview_bill(BillRequest $request)
+    {
+        $preview = $this->repository->preview_bill($request);
+        if ($preview["message_status"] == "done") {
+            return $this->returnData("preview", $preview["data"],  $preview["message"], 200);
+        }
+        return $this->returnErrorMessage($preview["message"],  200);
+    }
+    public function show_lab_bills()
+    {
+        $lab_bills = $this->repository->show_lab_bills();
+        if ($lab_bills["message_status"] == "done") {
+            return $this->returnData("lab_bills", $lab_bills["data"],  $lab_bills["message"], 200);
+        }
+        return $this->returnErrorMessage($lab_bills["message"],  200);
+    }
+    public function show_dentist_bills($dentist_id)
+    {
+        $dentist_bills = $this->repository->show_dentist_bills($dentist_id);
+        // dd($dentist_bills["message"]);
+        if ($dentist_bills["message_status"] == "done") {
+            return $this->returnData("dentist_bills", $dentist_bills["data"],  $dentist_bills["message"], 200);
+        }
+        return $this->returnErrorMessage($dentist_bills["message"],  200);
+    }
+    public function show_bill_details($bill_id)
+    {
+        $bill = $this->repository->show_bill_details($bill_id);
+        // dd($bill["message"]);
+        if ($bill["message_status"] == "done") {
+            return $this->returnData("bill", $bill["data"],  $bill["message"], 200);
+        }
+        return $this->returnErrorMessage($bill["message"],  200);
     }
 
     /////////////////////////////////////////////////

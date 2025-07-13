@@ -2,8 +2,10 @@
 
 use App\Models\MedicalCase;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BillController;
+use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DentistController;
 use App\Http\Controllers\PatientController;
@@ -129,7 +131,7 @@ Route::group([
         Route::post("/delete/{case_id}", [MedicalCaseController::class, 'delete_case']);
 
         Route::post('/request-cancellation/{medical_case_id}', [MedicalCaseController::class, 'delete_request']);
-        Route::post('/confirm-delivery/{medical_case_id}', [MedicalCaseController::class, 'confirm_delivery']);
+        Route::get('/confirm-delivery/{medical_case_id}', [MedicalCaseController::class, 'confirm_delivery']);
 
         Route::post('/add-case-images/{case_id}', [MedicalCaseController::class, 'add_case_images']);
         Route::get('/download-case-image/{case_id}', [MedicalCaseController::class, 'download_medical_case_image']);
@@ -269,6 +271,7 @@ Route::group([
 
     // Medical Cases :
     Route::group([
+
         'prefix' => 'medical-cases',
     ], function () {
 
@@ -284,6 +287,18 @@ Route::group([
         Route::post('/add-comment/{id}', [DentistController::class, 'add_comment']);
         Route::delete('/delete-comment/{id}', [DentistController::class, 'deleteComment']);
         Route::get('/show-comments/{id}', [DentistController::class, 'showCommentsOfMedicalCase']);
+    });
+
+    // Bills :
+    Route::group([
+        'prefix' => 'bills',
+    ], function () {
+
+        Route::get("/show-lab-bills", [BillController::class, 'show_lab_bills']);
+        Route::get("/show-dentist-bills/{dentist_id}", [BillController::class, 'show_dentist_bills']);
+        Route::get("/show-bill/{bill_id}", [BillController::class, 'show_bill_details']);
+        Route::post('/add', [BillController::class, 'addBill']);
+        Route::post('/preview-bill', [BillController::class, 'preview_bill']);
     });
 
 
@@ -305,5 +320,31 @@ Route::group([
         // in two places : add case in dentist & add case in LabManager
         Route::get("/monthly-number-of-manufactured-pieces", [LabManagerController::class, 'monthly_number_of_manufactured_pieces']);
     });
+});
+//_____________________________________________________________________________________ end Lab Manager
+
+
+
+
+//_____________________________________________________________________________________ Lab Manager مدير المخبر
+Route::get('/get-image/{filename}', function ($filename) {
+    $publicPath = public_path();
+
+    $filePath = collect(File::allFiles($publicPath))
+        ->first(function ($file) use ($filename) {
+            return $file->getFilename() === $filename;
+        });
+
+    if (!$filePath) {
+        // abort(404, 'Image not found');
+        return response()->json([
+            'status' => false,
+            'error_message' => "! لم يتم العثور على الصورة ",
+            'error_code' => 200,
+
+        ]);
+    }
+
+    return Response::file($filePath->getRealPath());
 });
 //_____________________________________________________________________________________ end Lab Manager

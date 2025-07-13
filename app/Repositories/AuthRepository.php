@@ -102,7 +102,16 @@ class AuthRepository implements AuthRepositoryInterface
 
     public function getAuthenticatedUser()
     {
+        $userType = Auth::user()->getMorphClass();
+        $last_subscription = Subscription::where("subscriptionable_id", Auth::id())
+            ->where('subscriptionable_type', $userType)->latest()->first();
         // Auth::shouldUse($guard);
+        if ($userType == "dentist" || $userType == "labManager") {
+            return [
+                "user" => Auth::user(),
+                "last_subscription" => $last_subscription
+            ];
+        }
         return Auth::user();
     }
 

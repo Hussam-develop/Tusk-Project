@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use Carbon\Carbon;
 use App\Models\Item;
 use App\Models\ItemHistory;
 
@@ -187,12 +188,16 @@ class ItemhistoryRepository
     }
     public function The_monthly_consumption_of_item($itemid)
     {
+        $startDate = Carbon::now()->subYear()->startOfYear();
+        $endDate = Carbon::now();
+
         // إنشاء مصفوفة تحتوي على جميع الأشهر من 1 إلى 12
         $allMonths = collect(range(1, 12));
 
         // استعلام للحصول على الكميات السالبة
         $stats = ItemHistory::where('item_id', $itemid)
             ->where('quantity', '<', 0) // فقط الكميات السالبة
+            ->whereBetween("created_at", [$startDate, $endDate])
             ->selectRaw("MONTH(created_at) as month, SUM(quantity) as total") // جمع الكميات السالبة
             ->groupBy('month')
             ->get()

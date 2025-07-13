@@ -421,6 +421,9 @@ class MedicalCaseRepository
         // // لتحويل النتيجة إلى مصفوفة أو عرضها كيفما تريد
         // $finalResults = $results->all();
         // return $finalResults;
+        $startDate = Carbon::now()->subYear()->startOfYear();
+        $endDate = Carbon::now();
+
         $ready_cases_ids = MedicalCase::where("lab_manager_id", $lab_id)
             ->where('status', ">=", 3)
             ->pluck("id"); //ready and delivered cases only
@@ -430,7 +433,8 @@ class MedicalCaseRepository
             DB::raw('SUM(manufactured_quantity) as total') // حساب عدد القطع
         )
             ->whereIntegerInRaw("medical_case_id", $ready_cases_ids)
-            // ->where('lab_manager_id', $lab_id)
+            ->whereBetween("created_at", [$startDate, $endDate])
+            // ->where('lab_manager_id', $lab_id) // not needed because of $ready_cases_ids
             ->groupBy('month', 'piece_number')              // التجميع حسب الشهر والنوع
             ->orderBy('month')                      // ترتيب النتائج حسب الشهر
             ->get();
