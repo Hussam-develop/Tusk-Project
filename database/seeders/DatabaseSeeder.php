@@ -2,22 +2,22 @@
 
 namespace Database\Seeders;
 
-use App\Models\DentistLabManager;
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Admin;
-use App\Models\Dentist;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Dentist;
 use App\Models\Secretary;
 use App\Models\Accountant;
 use App\Models\DoctorTime;
 use App\Models\LabManager;
+use App\Models\Subscription;
 use Illuminate\Database\Seeder;
 use Database\Seeders\BillSeeder;
 use Database\Seeders\itemSeeder;
 use App\Models\InventoryEmployee;
 use Database\Seeders\PatientSeeder;
 use Database\Seeders\CategorySeeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Database\Seeders\TreatmentSeeder;
 use Database\Seeders\itemhistoryseeder;
@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
             // 'type' => "admin",
             // 'register_accepted' => true,
             'email' => "admin@gmail.com",
-            'password' => Hash::make('password'),
+            'password' => Hash::make('password')
 
         ]);
         for ($i = 1; $i <= 5; $i++) {
@@ -60,14 +60,23 @@ class DatabaseSeeder extends Seeder
                 'verification_code' => 55555,
                 'email_verified_at' => now(),
                 'password' => Hash::make('password'),
+                "register_subscription_duration" => 3,
                 'address' => "سوق الحميدية", //clinic address
                 'image_path' => 'image_path',
-                'register_accepted' => true,
+                'register_accepted' => null,
 
                 // 'remember_token' => '',
                 'register_date' => now(),
-                'subscription_is_valid_now' => 1,
+                'subscription_is_valid_now' => null,
             ]);
+            // $registerSubscription = Subscription::create([
+            //     'subscriptionable_id' => $i, // LabManager or Dentist
+            //     'subscriptionable_type' => "dentist",
+            //     'subscription_from' => now(),
+            //     'subscription_to' => Carbon::now()->addMonths(2)->toDateString(),
+            //     'subscription_is_valid' => null,
+            //     'subscription_value' => null,
+            // ]);
         }
         $days = ["السبت", "الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة"];
 
@@ -96,26 +105,36 @@ class DatabaseSeeder extends Seeder
                 'verification_code' => 55555,
                 'email_verified_at' => now(),
                 'password' => Hash::make('password'),
+                "register_subscription_duration" => 3,
 
-                'register_accepted' => true,
+                'register_accepted' => null,
                 // 'remember_token' => '',
 
                 'lab_name' => "lab$i",
                 'lab_address' => "alzaheraa",
                 'lab_province' => "Damascus",
                 'lab_phone' => json_encode([
-                    'home' => fake()->phoneNumber(),
-                    'work' => fake()->phoneNumber(),
-                    'mobile' => fake()->phoneNumber(),
+                    '1' => fake()->phoneNumber(),
+                    '2' => fake()->phoneNumber(),
+                    '3' => fake()->phoneNumber(),
                 ]),
 
                 'register_date' => now(),
-                'subscription_is_valid_now' => 1,
+                // 'subscription_is_valid_now' => (bool)rand(0, 1),
+                'subscription_is_valid_now' => null,
                 'lab_logo' => "logo_path",
                 'lab_type' => "teeth",
                 'work_from_hour' => "09:00",
                 'work_to_hour' => "20:00",
             ]);
+            // $registerSubscription = Subscription::create([
+            //     'subscriptionable_id' => $i, // LabManager or Dentist
+            //     'subscriptionable_type' => "labManager",
+            //     'subscription_from' => now(),
+            //     'subscription_to' => Carbon::now()->addMonths(3)->toDateString(),
+            //     'subscription_is_valid' => null,
+            //     'subscription_value' => null,
+            // ]);
         }
 
         $dentists = Dentist::all();
@@ -139,80 +158,46 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
-        $labManager = LabManager::all()/*take(2)->get()*/;
-        foreach ($labManager as $index => $lab_manager) {
-
-            Accountant::create([
-                'lab_manager_id' => $lab_manager->id,
-                'full_name' => "المحاسب $index",
-                // 'address' => "damascus",
-                'is_staged' => false,
-                'password' => Hash::make('password'),
-                'phone' => "0999999999",
-                'email' => "accountant" . $index . "@gmail.com",
-                'remember_token' => "",
-                'email_is_verified' => 0,
-                'active' => 1,
-                'email_verified_at' => null,
-                'verification_code' => null,
-                'work_start_at' => now()
-
-
-            ]);
-
-            Accountant::create([
-                'lab_manager_id' => $lab_manager->id,
-                'full_name' => "المحاسب $index",
-                // 'address' => "damascus",
-                'is_staged' => false,
-                'password' => Hash::make('password'),
-                'phone' => "0999999999",
-                'email' => "accountant" . $index + 2 . "@gmail.com",
-                'remember_token' => "",
-                'email_is_verified' => 0,
-                'active' => rand(0, 1),
-                'email_verified_at' => null,
-                'verification_code' => null,
-                'work_start_at' => now()
+        $labManager = LabManager::all();
+        foreach ($labManager as $lab_manager) {
+            for ($i = 1; $i <= 2; $i++) {
+                Accountant::create([
+                    'lab_manager_id' => $lab_manager->id,
+                    'full_name' => "المحاسب $lab_manager->id.$i",
+                    // 'address' => "damascus",
+                    'is_staged' => false,
+                    'password' => Hash::make('password'),
+                    'phone' => "0999999999",
+                    'email' => "accountant" . $lab_manager->id . "." . $i . "@gmail.com",
+                    'remember_token' => "",
+                    'email_is_verified' => 0,
+                    'active' => 1,
+                    'email_verified_at' => null,
+                    'verification_code' => null,
+                    'work_start_at' => now()
 
 
-            ]);
+                ]);
+            }
 
+            for ($i = 1; $i <= 2; $i++) {
+                InventoryEmployee::create([
+                    'lab_manager_id' => $lab_manager->id,
+                    'full_name' => "موظف المخزون $lab_manager->id.$i",
+                    // 'address' => "damascus",
+                    'is_staged' => false,
+                    'password' => Hash::make('password'),
+                    'phone' => "0999999999",
+                    'email' => "inventory_employee" . $lab_manager->id . "." . $i . "@gmail.com",
+                    'remember_token' => "",
+                    'email_is_verified' => 0,
+                    'active' => rand(0, 1),
+                    'email_verified_at' => null,
+                    'verification_code' => null,
+                    'work_start_at' => now()
 
-
-            InventoryEmployee::create([
-                'lab_manager_id' => $lab_manager->id,
-                'full_name' => "موظف المخزون $index",
-                // 'address' => "damascus",
-                'is_staged' => false,
-                'password' => Hash::make('password'),
-                'phone' => "0999999999",
-                'email' => "inventory_employee" . $index . "@gmail.com",
-                'remember_token' => "",
-                'email_is_verified' => 0,
-                'active' => rand(0, 1),
-                'email_verified_at' => null,
-                'verification_code' => null,
-                'work_start_at' => now()
-
-            ]);
-            InventoryEmployee::create([
-                'lab_manager_id' => $lab_manager->id,
-                'full_name' => "موظف المخزون $index",
-                // 'address' => "damascus",
-                'is_staged' => false,
-                'password' => Hash::make('password'),
-                'phone' => "0999999999",
-                'email' => "inventory_employee" . $index + 2 . "@gmail.com",
-                'remember_token' => "",
-                'email_is_verified' => 0,
-                'active' => rand(0, 1),
-                'email_verified_at' => null,
-                'verification_code' => null,
-                'work_start_at' => now()
-
-
-            ]);
+                ]);
+            }
         }
 
         // $this->call([
