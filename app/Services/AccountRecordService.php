@@ -44,5 +44,9 @@ class AccountRecordService
 
         // return $result;
     }
+    public function createAccountRecourd($data)
+    {
+        $this->AccountRecordRepository->createAccountRecord($data);
+    }
 }
 //

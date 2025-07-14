@@ -514,24 +514,7 @@ class BillRepository
         if ($request->has('created_at')) {
             $query->whereDate('created_at', $request->input('created_at'));
         }
-        // dd($query->get());
-        $dentists_ids_array = $dentists_query->pluck("id")->toArray();
-        // dd($dentists_ids_array);
-        $states_from_clients = State::whereIn("client_id", $clients_ids_array)->get();
-        // dd($states_from_clients);
 
         $result = $query->get();
-
-        $intersectedStatesResult = $result->intersect($states_from_clients);
-        $intersectedStatesCount = $intersectedStatesResult->count();
-        if ($intersectedStatesCount == 0 /*$intersectedStatesResult->empty()*/) {
-            return $this->error(" please try another search", "No Search Results Found", 404);
-        }
-        return $this->success([
-            // "clients" => $states_from_clients,
-            // "results" => $result,
-            "count_of_states_found" => $intersectedStatesCount,
-            "intersectedStatesResult" => $intersectedStatesResult,
-        ], 'Searching done', 200);
     }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Models\AccountRecord;
 use App\Models\Dentist;
-use App\Models\DentistLabManager;
+use App\Models\Accountant;
 use App\Models\LabManager;
+use App\Models\AccountRecord;
+use App\Models\DentistLabManager;
+use App\Models\InventoryEmployee;
 
 
 
@@ -132,5 +134,138 @@ class LabmangerRepository
             return $labs;
         }
         return 'ليس طبيب';
+    }
+
+
+    public function find($id)
+    {
+        return LabManager::findOrFail($id);
+    }
+
+    public function getJoinRequests($labManager)
+    {
+        return $labManager->dentist()
+            ->wherePivot('request_is_accepted', false)
+            ->get();
+    }
+
+    public function getClients($labManager)
+    {
+        return $labManager->dentist()
+            ->with('latestAccountRecord')
+            ->wherePivot('request_is_accepted', true)
+            ->latest('dentist_labmanagers.created_at')
+            ->paginate(10);
+    }
+
+    public function approveRequest($labManager, $dentistId)
+    {
+        // تحديث قيمة request_is_accepted في جدول pivot
+
+        return $labManager->dentist()
+            ->updateExistingPivot($dentistId, ['request_is_accepted' => 1]);
+    }
+
+    public function getActiveInventoryEmployee($labManagerId)
+    {
+        return InventoryEmployee::where('lab_manager_id', $labManagerId)
+            ->where('active', 1)
+            ->first();
+    }
+
+    public function getInactiveInventoryEmployees($labManagerId)
+    {
+        return InventoryEmployee::where('lab_manager_id', $labManagerId)
+            ->where('active', 0)
+            ->get();
+    }
+
+    public function getActiveAccountant($labManagerId)
+    {
+        return Accountant::where('lab_manager_id', $labManagerId)
+            ->where('active', 1)
+            ->first();
+    }
+
+    public function getInactiveAccountants($labManagerId)
+    {
+        return Accountant::where('lab_manager_id', $labManagerId)
+            ->where('active', 0)
+            ->get();
+    }
+
+    public function findAccountant($accountantId)
+    {
+        return Accountant::where('id', $accountantId)
+            ->where('active', 1);
+    }
+
+    public function findInventoryEmployee($inventoryEmpId)
+    {
+        return InventoryEmployee::where('id', $inventoryEmpId)
+            ->where('active', 1);
+    }
+
+    // إضافة موظف (مخزون او محاسب)
+    public function addEmployee($data, $guard)
+    {
+        $models = [
+            'inventory_employee' => InventoryEmployee::class,
+            'accountant' => Accountant::class
+        ];
+
+        $modelClass = $models[$guard];
+        $user = $modelClass::create($data);
+    }
+
+
+
+    // تعديل موظف مخزون
+    public function updateInventoryEmployee($inventoryEmpId, $data)
+    {
+        $inventoryEmpQuery = $this->findInventoryEmployee($inventoryEmpId);
+        $inventoryEmpQuery->update($data);
+    }
+
+    // حذف موظف مخزون
+    public function InventoryEmployeeTermination($inventoryEmpId)
+    {
+        $inventoryEmpQuery = $this->findInventoryEmployee($inventoryEmpId);
+        $inventoryEmpQuery->update([
+            'active' => 0
+        ]);
+    }
+
+
+    // تعديل موظف مخزون
+    public function updateAccountant($accountantId, $data)
+    {
+        return Accountant::where('id', $accountantId)
+            ->where('active', 1)
+            ->update($data);
+    }
+
+    // حذف محاسب
+    public function AccountantTermination($accountantId)
+    {
+        $accountantQuery = $this->findAccountant($accountantId);
+        $accountantQuery->update([
+            'active' => 0
+        ]);
+    }
+
+
+
+    public function createDentist($data)
+    {
+
+        return Dentist::create($data);
+    }
+
+    public function joinToLabManager(Dentist $dentist, int $labManagerId): void
+    {
+        $dentist->lab()->attach($labManagerId, [
+            'request_is_accepted' => 1
+        ]);
     }
 }

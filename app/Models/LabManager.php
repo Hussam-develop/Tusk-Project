@@ -88,7 +88,10 @@ class LabManager extends Authenticatable implements JWTSubject
     }
     public function dentist()
     {
-        return $this->belongsToMany(Dentist::class, "dentist_labManagers", 'lab_manager_id', 'dentist_id');
+        // return $this->belongsToMany(Dentist::class, "dentist_labManagers", 'lab_manager_id', 'dentist_id');
+        return $this->belongsToMany(Dentist::class, "dentist_labManagers", 'lab_manager_id', 'dentist_id')
+            ->using(DentistLabManager::class)
+            ->withPivot('request_is_accepted', 'created_at', 'updated_at');
     }
     public function medicalCases()
     {

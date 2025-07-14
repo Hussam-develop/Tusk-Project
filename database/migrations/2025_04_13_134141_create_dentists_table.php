@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('email')->unique();
-            $table->string('password');
+            $table->string('email')->nullable()->unique();
+            $table->string('password')->nullable();
             $table->integer('register_subscription_duration');
             $table->rememberToken();
             $table->integer('phone');
@@ -26,7 +26,7 @@ return new class extends Migration
             // $table->time('work_to_hour');
 
             $table->timestamp('email_verified_at')->nullable();
-            $table->boolean('email_is_verified')->default(0);
+            $table->boolean('email_is_verified')->nullable()->default(0);
             $table->string('verification_code')->nullable();
             $table->string('image_path')->nullable();
             $table->boolean('register_accepted')->nullable()->default(null);

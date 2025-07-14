@@ -49,4 +49,20 @@ class AccountRecordRepository
 
         return $results;
     }
+    public function createAccountRecord($data)
+    {
+        // 3. إنشاء سجل محاسبي للطبيب
+        AccountRecord::create($data);
+        /*
+        'dentist_id' => $dentistId,
+        'lab_manager_id' => $lab_id,
+        'bill_id' => null, // لا توجد فاتورة حالياً
+        'type' => $type, // أو 'new_dentist'
+        'signed_value' => 0,
+        'current_account' => 0,
+        'creatorable_id' => $lab_id,
+        'creatorable_type' => get_class($this->user),
+        'note' => 'سجل مبدئي للطبيب الجديد من قبل مدير المخبر',
+         */
+    }
 }

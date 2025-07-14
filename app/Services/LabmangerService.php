@@ -9,15 +9,19 @@ use App\Repositories\LabmangerRepository;
 use app\Traits\handleResponseTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Models\LabManager;
+use DB;
+use Exception;
 
 class LabmangerService
 {
     use handleResponseTrait;
     protected $labmangerrepository;
-
-    public function __construct(LabmangerRepository $labmangerrepository)
+    protected $user;
+    public function __construct(LabmangerRepository $labmangerrepository, protected AccountRecordService $accountRecordService)
     {
         $this->labmangerrepository = $labmangerrepository;
+        $this->user = Auth::user();
     }
     public function get_labs_dentist_joined()
     {
@@ -83,6 +87,7 @@ class LabmangerService
 
         return $this->returnData(" Lab Details ", $Lab_details, 'تفاصيل المخبر ', 200);
     }
+    // id ارسال طلب انضمام لمخبر معين عن طريق
     public function submit_join_request_to_lab($id)
     {
         $user = auth()->user(); // المستخدم الحالي بعد تحديد Guard بواسطة Middleware
@@ -113,5 +118,155 @@ class LabmangerService
         }
 
         return $this->returnData("filterd labs ", $labs, " المخابر المشابهة للبحث  ", 200);
+    }
+
+
+    //عرض طلبات الانضمام الى مخبر معين
+    public function ShowJoinRequestsToLab()
+    {
+        // $labManager = auth()->user();
+
+        return $this->labmangerrepository->getJoinRequests($this->user);
+    }
+
+    //قبول طلب الانضمام الى مخبر معين
+    public function ApproveJoinRequestToLab($dentistId)
+    {
+        //$labManager = auth()->user();
+        $labManagerId = $this->user->id;
+        try {
+            DB::transaction(function () use ($labManagerId, $dentistId) {
+                $this->labmangerrepository->approveRequest($this->user, $dentistId);
+
+                $data_account_recourd = [
+                    'dentist_id' => $dentistId,
+                    'lab_manager_id' => $labManagerId,
+                    'bill_id' => null, // لا توجد فاتورة حالياً
+                    'type' => ' قبول طلب انضمام زبون ', // أو 'new_dentist'
+                    'signed_value' => 0,
+                    'current_account' => 0,
+                    'creatorable_id' => $labManagerId,
+                    'creatorable_type' => 'LabManager',
+                    'note' => 'قبول طلب انضمام زبون من قبل مدير المخبر',
+                ];
+                $this->accountRecordService->createAccountRecourd($data_account_recourd);
+            });
+        } catch (Exception $e) {
+            // تسجيل الخطأ في اللوج
+            Log::error('❌ Failed to add dentist for Lab Manager', [
+                'lab_manager_id' => $labManagerId,
+                'error_message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            throw new \RuntimeException('حدث خطأ أثناء قبول طلب انضمام الطبيب. يرجى المحاولة لاحقًا.');
+        }
+    }
+
+
+    //عرض العملاء (الاطباء الذين انقبلت طلبات انضمامهم)  في مخبر معين
+    public function ShowClientsInLab()
+    {
+
+        // $labManager = auth()->user();
+
+        return $this->labmangerrepository->getClients($this->user->id);
+    }
+
+    public function getEmployeesForLab()
+    {
+        // $labManager = auth()->user();
+        return [
+            'active_inventory_employee' => $this->labmangerrepository->getActiveInventoryEmployee($this->user->id),
+            'inactive_inventory_employees' => $this->labmangerrepository->getInactiveInventoryEmployees($this->user->id),
+
+            'active_accountant' => $this->labmangerrepository->getActiveAccountant($this->user->id),
+            'inactive_accountants' => $this->labmangerrepository->getInactiveAccountants($this->user->id),
+        ];
+    }
+
+    // إضافة موظف مخزون
+    public function addEmployee($data, $guard)
+    {
+        $data['lab_manager_id'] = $this->user->id;
+        return $this->labmangerrepository->addEmployee($data, $guard);
+    }
+
+    // تعديل موظف مخزون
+    public function updateInventoryEmployee($inventoryEmpId, $data)
+    {
+        $this->labmangerrepository->updateInventoryEmployee($inventoryEmpId, $data);
+    }
+
+    // حذف موظف مخزون
+    public function InventoryEmployeeTermination($inventoryEmpId)
+    {
+        $this->labmangerrepository->InventoryEmployeeTermination($inventoryEmpId);
+    }
+
+    // تعديل موظف مخزون
+    public function updateAccountant($accountantId, $data)
+    {
+        //  $this->labmangerrepository->updateAccountant($accountantId, $data);
+
+        try {
+            $accountant = $this->labmangerrepository->findAccountant($accountantId)->first();
+
+            if (!$accountant) {
+                throw new \RuntimeException("لا يوجد محاسب نشط بهذا المعرف: $accountantId");
+            }
+
+            $this->labmangerrepository->updateAccountant($accountant->id, $data);
+        } catch (Exception $e) {
+            Log::error('❌ فشل تعديل بيانات المحاسب', [
+                'accountant_id' => $accountantId,
+                'data' => $data,
+                'error_message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            throw new \RuntimeException('حدث خطأ أثناء تعديل بيانات المحاسب. الرجاء المحاولة لاحقًا.');
+        }
+    }
+
+    // حذف محاسب
+    public function AccountantTermination($accountantId)
+    {
+
+        $this->labmangerrepository->AccountantTermination($accountantId);
+    }
+
+
+
+    public function addDentistAsLocalClientForLabManager(array $data)
+    {
+        $labManagerId = $this->user->id;
+        try {
+            DB::transaction(function () use ($data, $labManagerId) {
+                $dentist = $this->labmangerrepository->createDentist($data);
+                $this->labmangerrepository->joinToLabManager($dentist, $labManagerId);
+                $data_account_recourd = [
+                    'dentist_id' => $dentist->id,
+                    'lab_manager_id' => $labManagerId,
+                    'bill_id' => null, // لا توجد فاتورة حالياً
+                    'type' => 'اضافة زبون محليا', // أو 'new_dentist'
+                    'signed_value' => 0,
+                    'current_account' => 0,
+                    'creatorable_id' => $labManagerId,
+                    'creatorable_type' => 'LabManager',
+                    'note' => 'سجل مبدئي للطبيب الجديد من قبل مدير المخبر',
+                ];
+                $this->accountRecordService->createAccountRecourd($data_account_recourd);
+            });
+        } catch (Exception $e) {
+            // تسجيل الخطأ في اللوج
+            Log::error('❌ Failed to add dentist for Lab Manager', [
+                'lab_manager_id' => $labManagerId,
+                'data' => $data,
+                'error_message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            throw new \RuntimeException('حدث خطأ أثناء إضافة الطبيب. يرجى المحاولة لاحقًا.');
+        }
     }
 }

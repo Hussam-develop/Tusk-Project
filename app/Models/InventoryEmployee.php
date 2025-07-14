@@ -9,14 +9,14 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class InventoryEmployee extends Authenticatable implements JWTSubject
 {
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
 
         'lab_manager_id',
 
-        'first_name',
-        'last_name',
+        'full_name',
+        'active',
         'email',
         'password',
         'is_staged',
@@ -25,6 +25,7 @@ class InventoryEmployee extends Authenticatable implements JWTSubject
         'email_is_verified',
         'email_verified_at',
         'verification_code',
+        'work_start_at',
 
         'created_at',
         'updated_at'

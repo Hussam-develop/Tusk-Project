@@ -23,6 +23,9 @@ class AuthRepository implements AuthRepositoryInterface
     protected array $models = [
         'dentist'     => \App\Models\Dentist::class,
         'lab_manager' => \App\Models\LabManager::class,
+        'inventory_employee' => \App\Models\InventoryEmployee::class,
+        'accountant' => \App\Models\Accountant::class,
+
     ];
 
 
@@ -32,7 +35,7 @@ class AuthRepository implements AuthRepositoryInterface
 
         try {
             return JWTAuth::parseToken()->refresh();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return null;
         }
     }

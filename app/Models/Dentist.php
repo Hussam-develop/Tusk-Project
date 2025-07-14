@@ -60,7 +60,10 @@ class Dentist extends Authenticatable implements JWTSubject
     }
 
     /// relations
-
+    public function latestAccountRecord()
+    {
+        return $this->hasOne(AccountRecord::class)->latestOfMany();
+    }
     public function accountRecords()
     {
         return $this->hasMany(AccountRecord::class);
@@ -81,9 +84,16 @@ class Dentist extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Patient::class);
     }
+
     public function labManager()
     {
         return $this->belongsToMany(LabManager::class, "dentist_labManagers", 'dentist_id', 'lab_manager_id');
+    }
+    public function lab()
+    {
+        return $this->belongsToMany(LabManager::class, "dentist_labManagers", 'dentist_id', 'lab_manager_id')
+            ->using(DentistLabManager::class)
+            ->withPivot('request_is_accepted', 'created_at', 'updated_at');
     }
     public function medicalCases()
     {

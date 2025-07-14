@@ -19,6 +19,8 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\MedicalCaseController;
 use App\Http\Controllers\PatientPaymentController;
 use App\Http\Controllers\OperatingPaymentController;
+use App\Http\Controllers\LabManager\ClientsController;
+use App\Http\Controllers\LabManager\EmployeesController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
@@ -319,6 +321,30 @@ Route::group([
 
         // in two places : add case in dentist & add case in LabManager
         Route::get("/monthly-number-of-manufactured-pieces", [LabManagerController::class, 'monthly_number_of_manufactured_pieces']);
+    });
+
+    // Join Requests طلبات انضمام الأطباء للمخبر
+    Route::get('/join-requests', [ClientsController::class, 'showJoinRequestsToLab']);
+    Route::post('/join-requests/{dentistId}/approve', [ClientsController::class, 'approveJoinRequestToLab']);
+
+    //Lab Clients
+    Route::get('/clients', [ClientsController::class, 'showLabClients']);
+    //Route::get('/clients/{clientId}/details', [ClientsController::class, 'showClientInLab']);
+    Route::post('/clients/add-local-client/', [ClientsController::class, 'addDentistAsLocalClientForLabManager']);
+
+    //ادارة موظفين المخبر
+    Route::group([
+        'prefix' => 'employees',
+    ], function () {
+        //عرض كل الموظفين
+        Route::get('/', [EmployeesController::class, 'showLabEmployees']);
+        //ادارة موظفين المخزون
+        Route::post('/create', [EmployeesController::class, 'addEmployee']);
+        Route::put('/inventory-employees/{id}/update', action: [EmployeesController::class, 'updateInventoryEmployee']);
+        Route::post('/inventory-employees/{id}/employee-termination', [EmployeesController::class, 'inventoryEmployeeTermination']);
+        //ادارة المحاسبين
+        Route::post('/accountants/{id}/update', action: [EmployeesController::class, 'updateAccountant']);
+        Route::post('/accountants/{id}/accountant-termination', [EmployeesController::class, 'AccountantTermination']);
     });
 });
 //_____________________________________________________________________________________ end Lab Manager
