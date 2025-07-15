@@ -479,42 +479,75 @@ class BillRepository
             ? Auth::id() // labManager
             : Auth::user()->labManager->id; // accountant
 
-        $dentists_ids_for_lab = Bill::where('lab_manager_id', $lab_id)
-            ->pluck('dentist_id');
-
-        $dentists_for_lab = Dentist::whereIntegerInRaw("id", $dentists_ids_for_lab)
-            ->get(["id", "first_name", "last_name"]);
-
-        $matched_dentist = $dentists_for_lab->first(function ($dentist) use ($request) {
-            return ($dentist->first_name . ' ' . $dentist->last_name) === $request->dentist_full_name;
-        });
-
-        $bills = collect();
-
-        if ($matched_dentist) {
-            $bills = Bill::where('lab_manager_id', $lab_id)
-                ->where('dentist_id', $matched_dentist->id)
-                ->get();
-        }
-
         $query = Bill::query();
         // $clients_query = User::query();
 
-        if ($request->has('dentist_name')) {
-
-            $dentists = Dentist::all();
-            foreach ($dentists as $user) {
-                $dentists_query->where('first_name', 'like', '%' . $request->input('dentist_name') . '%')
-                    ->orWhere('last_name', 'like', '%' . $request->input('dentist_name') . '%');
-            }
-        }
         if ($request->has('bill_number')) {
             $query->where('bill_number', 'like', '%' . $request->input('bill_number') . '%');
         }
-        if ($request->has('created_at')) {
-            $query->whereDate('created_at', $request->input('created_at'));
+
+        if ($request->has('bill_date')) {
+            $query->whereDate('created_at', $request->input('bill_date'));
+        }
+        if ($request->has('dentist_name')) {
+            $dentists_ids_for_lab = Bill::where('lab_manager_id', $lab_id)
+                ->distinct()
+                ->pluck('dentist_id');
+
+            $dentists_for_lab = Dentist::whereIntegerInRaw("id", $dentists_ids_for_lab)
+                ->get(["id", "first_name", "last_name"]);
+
+            $dentists_full_name_array = [];
+
+            foreach ($dentists_for_lab as $dentist) {
+                $full_name = $dentist->first_name . ' ' . $dentist->last_name;
+                $dentists_full_name_array[$dentist->id] = $full_name;
+            }
+
+            $target_name = $request->dentist_name;
+            $founded_dentists_ids = [];
+
+            foreach ($dentists_full_name_array as $id => $full_name) {
+                if (stripos($full_name, $target_name) !== false) {
+                    $founded_dentists_ids[] = $id;
+                }
+            }
+            // dd($founded_dentists_ids);
+            if ($founded_dentists_ids) {
+                $query->where('lab_manager_id', $lab_id)
+                    ->whereIntegerInRaw('dentist_id', $founded_dentists_ids)
+                    ->get();
+            }
         }
 
-        $result = $query->get();
+        $result = $query->with(['dentist' => function ($query) {
+            $query->select('id', "first_name", 'last_name');
+        }])->get(["id", "dentist_id", "bill_number", "total_cost", "created_at"]);
+        $result_count = $query->count();
+
+
+        if ($result->isEmpty() || ($request->keys() === ['dentist_name'] && empty($founded_dentists_ids))) {
+            return [
+                "message" => "لا توجد فواتير مطابقة",
+                "message_status" => "error"
+            ];
+        }
+        if ($result->isNotEmpty()) {
+
+            return [
+                "data" => [
+                    "results" => $result,
+                    "results_count" => $result_count,
+                ],
+                "message" => "نتائج البحث عن الفواتير",
+                "message_status" => "done",
+
+
+            ];
+        }
+        return [
+            "message" => "حدث خطأ أثناء البحث عن الفواتير",
+            "message_status" => "error"
+        ];
     }
 }

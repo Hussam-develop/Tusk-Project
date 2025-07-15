@@ -26,7 +26,7 @@ class EmployeesController extends Controller
     {
         $data = $this->labmanagerService->getEmployeesForLab();
 
-        return $this->returnData('employees', new LabEmployeesResource($data), '', 400);
+        return $this->returnData('employees', new LabEmployeesResource($data), 'الموظفين', 200);
     }
 
     // اضافة موظف مخزون

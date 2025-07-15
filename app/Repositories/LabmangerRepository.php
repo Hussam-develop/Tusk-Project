@@ -145,12 +145,13 @@ class LabmangerRepository
     public function getJoinRequests($labManager)
     {
         return $labManager->dentist()
-            ->wherePivot('request_is_accepted', false)
+            ->wherePivot('request_is_accepted', null)
             ->get();
     }
 
-    public function getClients($labManager)
+    public function getClients($labManagerId)
     {
+        $labManager = LabManager::find($labManagerId);
         return $labManager->dentist()
             ->with('latestAccountRecord')
             ->wherePivot('request_is_accepted', true)
@@ -258,7 +259,7 @@ class LabmangerRepository
 
     public function createDentist($data)
     {
-
+        // $data['register_subscription_duration'] = null;
         return Dentist::create($data);
     }
 

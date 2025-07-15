@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('email')->nullable()->unique();
             $table->string('password')->nullable();
-            $table->integer('register_subscription_duration');
+            $table->integer('register_subscription_duration')->nullable()->default(null);
             $table->rememberToken();
             $table->integer('phone');
             $table->string('address');

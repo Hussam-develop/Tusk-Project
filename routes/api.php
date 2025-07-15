@@ -298,6 +298,7 @@ Route::group([
 
         Route::get("/show-lab-bills", [BillController::class, 'show_lab_bills']);
         Route::get("/show-dentist-bills/{dentist_id}", [BillController::class, 'show_dentist_bills']);
+        Route::get("/search", [BillController::class, 'search_filter_bills']);
         Route::get("/show-bill/{bill_id}", [BillController::class, 'show_bill_details']);
         Route::post('/add', [BillController::class, 'addBill']);
         Route::post('/preview-bill', [BillController::class, 'preview_bill']);

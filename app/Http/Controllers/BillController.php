@@ -47,4 +47,9 @@ class BillController extends Controller
         $data = $this->billService->show_bill_details($bill_id);
         return $data;
     }
+    public function search_filter_bills(Request $request)
+    {
+        $data = $this->billService->search_filter_bills($request);
+        return $data;
+    }
 }

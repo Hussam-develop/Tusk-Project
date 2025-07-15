@@ -160,7 +160,7 @@ class DatabaseSeeder extends Seeder
         }
         $labManager = LabManager::all();
         foreach ($labManager as $lab_manager) {
-            for ($i = 1; $i <= 2; $i++) {
+            for ($i = 1; $i < 2; $i++) {
                 Accountant::create([
                     'lab_manager_id' => $lab_manager->id,
                     'full_name' => "المحاسب $lab_manager->id.$i",
@@ -172,15 +172,30 @@ class DatabaseSeeder extends Seeder
                     'remember_token' => "",
                     'email_is_verified' => 0,
                     'active' => 1,
-                    'email_verified_at' => null,
-                    'verification_code' => null,
+                    'email_verified_at' => now(),
+                    'verification_code' => 555555,
                     'work_start_at' => now()
-
-
+                ]);
+            }
+            for ($i = 2; $i <= 5; $i++) {
+                Accountant::create([
+                    'lab_manager_id' => $lab_manager->id,
+                    'full_name' => "المحاسب $lab_manager->id.$i",
+                    // 'address' => "damascus",
+                    'is_staged' => false,
+                    'password' => Hash::make('password'),
+                    'phone' => "0999999999",
+                    'email' => "accountant" . $lab_manager->id . "." . $i . "@gmail.com",
+                    'remember_token' => "",
+                    'email_is_verified' => 0,
+                    'active' => 0,
+                    'email_verified_at' => now(),
+                    'verification_code' => 555555,
+                    'work_start_at' => now()
                 ]);
             }
 
-            for ($i = 1; $i <= 2; $i++) {
+            for ($i = 1; $i < 2; $i++) {
                 InventoryEmployee::create([
                     'lab_manager_id' => $lab_manager->id,
                     'full_name' => "موظف المخزون $lab_manager->id.$i",
@@ -191,9 +206,27 @@ class DatabaseSeeder extends Seeder
                     'email' => "inventory_employee" . $lab_manager->id . "." . $i . "@gmail.com",
                     'remember_token' => "",
                     'email_is_verified' => 0,
-                    'active' => rand(0, 1),
-                    'email_verified_at' => null,
-                    'verification_code' => null,
+                    'active' => 1,
+                    'email_verified_at' => now(),
+                    'verification_code' => 555555,
+                    'work_start_at' => now()
+
+                ]);
+            }
+            for ($i = 2; $i <= 5; $i++) {
+                InventoryEmployee::create([
+                    'lab_manager_id' => $lab_manager->id,
+                    'full_name' => "موظف المخزون $lab_manager->id.$i",
+                    // 'address' => "damascus",
+                    'is_staged' => false,
+                    'password' => Hash::make('password'),
+                    'phone' => "0999999999",
+                    'email' => "inventory_employee" . $lab_manager->id . "." . $i . "@gmail.com",
+                    'remember_token' => "",
+                    'email_is_verified' => 0,
+                    'active' => 0,
+                    'email_verified_at' => now(),
+                    'verification_code' => 555555,
                     'work_start_at' => now()
 
                 ]);

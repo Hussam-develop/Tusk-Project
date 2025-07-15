@@ -2,16 +2,16 @@
 
 namespace App\Services;
 
-use App\Http\Controllers\Auth\MailController;
-
-use App\Http\Resources\latestAccountInLabResource;
-use App\Repositories\LabmangerRepository;
-use app\Traits\handleResponseTrait;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use App\Models\LabManager;
-use DB;
 use Exception;
+
+use App\Models\LabManager;
+use Illuminate\Support\Facades\DB;
+use app\Traits\handleResponseTrait;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use App\Repositories\LabmangerRepository;
+use App\Http\Controllers\Auth\MailController;
+use App\Http\Resources\latestAccountInLabResource;
 
 class LabmangerService
 {
@@ -142,7 +142,7 @@ class LabmangerService
                     'dentist_id' => $dentistId,
                     'lab_manager_id' => $labManagerId,
                     'bill_id' => null, // لا توجد فاتورة حالياً
-                    'type' => ' قبول طلب انضمام زبون ', // أو 'new_dentist'
+                    'type' => 'إنشاء حساب طبيب', // أو 'new_dentist'
                     'signed_value' => 0,
                     'current_account' => 0,
                     'creatorable_id' => $labManagerId,
@@ -239,25 +239,28 @@ class LabmangerService
 
     public function addDentistAsLocalClientForLabManager(array $data)
     {
+
         $labManagerId = $this->user->id;
         try {
-            DB::transaction(function () use ($data, $labManagerId) {
-                $dentist = $this->labmangerrepository->createDentist($data);
-                $this->labmangerrepository->joinToLabManager($dentist, $labManagerId);
-                $data_account_recourd = [
-                    'dentist_id' => $dentist->id,
-                    'lab_manager_id' => $labManagerId,
-                    'bill_id' => null, // لا توجد فاتورة حالياً
-                    'type' => 'اضافة زبون محليا', // أو 'new_dentist'
-                    'signed_value' => 0,
-                    'current_account' => 0,
-                    'creatorable_id' => $labManagerId,
-                    'creatorable_type' => 'LabManager',
-                    'note' => 'سجل مبدئي للطبيب الجديد من قبل مدير المخبر',
-                ];
-                $this->accountRecordService->createAccountRecourd($data_account_recourd);
-            });
+            $transaction =
+                DB::transaction(function () use ($data, $labManagerId) {
+                    $dentist = $this->labmangerrepository->createDentist($data);
+                    $this->labmangerrepository->joinToLabManager($dentist, $labManagerId);
+                    $data_account_recourd = [
+                        'dentist_id' => $dentist->id,
+                        'lab_manager_id' => $labManagerId,
+                        'bill_id' => null, // لا توجد فاتورة حالياً
+                        'type' => 'اضافة زبون محليا', // أو 'new_dentist'
+                        'signed_value' => 0,
+                        'current_account' => 0,
+                        'creatorable_id' => $labManagerId,
+                        'creatorable_type' => 'LabManager',
+                        'note' => 'سجل مبدئي للطبيب الجديد من قبل مدير المخبر',
+                    ];
+                    $this->accountRecordService->createAccountRecourd($data_account_recourd);
+                });
         } catch (Exception $e) {
+            // dd($e->getMessage());
             // تسجيل الخطأ في اللوج
             Log::error('❌ Failed to add dentist for Lab Manager', [
                 'lab_manager_id' => $labManagerId,
@@ -265,7 +268,6 @@ class LabmangerService
                 'error_message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
-
             throw new \RuntimeException('حدث خطأ أثناء إضافة الطبيب. يرجى المحاولة لاحقًا.');
         }
     }

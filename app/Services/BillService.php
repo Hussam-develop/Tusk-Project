@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\BillRequest;
 use app\Traits\handleResponseTrait;
 use App\Repositories\BillRepository;
@@ -69,6 +70,15 @@ class BillService
     public function show_bill_details($bill_id)
     {
         $bill = $this->repository->show_bill_details($bill_id);
+        // dd($bill["message"]);
+        if ($bill["message_status"] == "done") {
+            return $this->returnData("bill", $bill["data"],  $bill["message"], 200);
+        }
+        return $this->returnErrorMessage($bill["message"],  200);
+    }
+    public function search_filter_bills(Request $request)
+    {
+        $bill = $this->repository->search_filter_bills($request);
         // dd($bill["message"]);
         if ($bill["message_status"] == "done") {
             return $this->returnData("bill", $bill["data"],  $bill["message"], 200);
