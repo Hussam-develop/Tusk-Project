@@ -165,7 +165,9 @@ class BillRepository
             ? Auth::id() // labManager
             : Auth::user()->labManager->id; // accountant
 
-        $bill = Bill::find($bill_id);
+        $bill = Bill::where("id", $bill_id)
+            ->get(['id', 'dentist_id', 'lab_manager_id', 'bill_number', 'total_cost', 'date_from', 'date_to', 'created_at']);
+
         $bill_cases = BillCase::where('bill_id', $bill_id)
             ->with([
                 'medicalCase' => function ($query) {
@@ -177,14 +179,14 @@ class BillRepository
             ->get();
 
 
-        if ((!$bill->exists()) || $bill_cases->isEmpty()) {
+        if (($bill->isEmpty())/*!$bill->exists())*/ || $bill_cases->isEmpty()) {
             return [
                 "message" => "حدث خطأ أثناء عرض نفاصيل الفاتورة",
                 "message_status" => "error"
             ];
         }
 
-        if ($bill->exists() && $bill_cases->isNotEmpty()) {
+        if (($bill->isNotEmpty())/*!$bill->exists())*/ && $bill_cases->isNotEmpty()) {
 
             return [
                 "data" => [
