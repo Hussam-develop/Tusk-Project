@@ -31,7 +31,7 @@ class LabmangerService
         if (!$labs) {
             return $this->returnErrorMessage('حدث خطأ  انت لست طبيب  ', 500);
         }
-        if ($labs->isEmpty()) {
+        if (empty($labs)) {
             return $this->returnErrorMessage('لست مشترك عند اي مخير ', 500);
         }
 

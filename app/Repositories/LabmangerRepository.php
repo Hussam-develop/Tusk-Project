@@ -19,7 +19,19 @@ class LabmangerRepository
             $dentist = Dentist::find($id);
 
             $labs = $dentist->labManager()->where('request_is_accepted', 1)->select('lab_name', 'lab_logo')->get();
-            return $labs;
+
+            $dentistAccounts = AccountRecord::where('dentist_id', $id)
+                ->select('lab_manager_id', 'current_account')
+                ->whereNotNull('lab_manager_id') // optional: skip nulls
+                ->orderByDesc('created_at')
+                ->get()
+                ->unique('lab_manager_id')
+                ->values();
+
+            return [
+                "labs" => $labs,
+                "dentist_accounts" => $dentistAccounts
+            ];
         }
         return false;
     }
@@ -63,12 +75,10 @@ class LabmangerRepository
             $lab = LabManager::find($lab_id);
 
             if ($lab) {
-                // دمج الاسم الأول والاسم الأخير
-                $full_name = $lab->first_name . ' ' . $lab->last_name;
-
                 // عرض التفاصيل مع الاسم المدمج
                 return [
-                    'full_name' => $full_name,
+                    "id" => $lab_id,
+                    'full_name' => $lab->full_name,
                     'work_from_hour' => $lab->work_from_hour,
                     'work_to_hour' => $lab->work_to_hour,
                     'lab_phone' => $lab->lab_phone,
