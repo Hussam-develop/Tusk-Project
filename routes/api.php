@@ -22,6 +22,9 @@ use App\Http\Controllers\OperatingPaymentController;
 use App\Http\Controllers\LabManager\ClientsController;
 use App\Http\Controllers\LabManager\EmployeesController;
 
+Route::get('test', function () {
+    return "Hello World";
+});
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
