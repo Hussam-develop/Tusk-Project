@@ -23,7 +23,7 @@ use App\Http\Controllers\LabManager\ClientsController;
 use App\Http\Controllers\LabManager\EmployeesController;
 
 Route::get('test', function () {
-    return "     Welcome to Tusk platform   ";
+    return "Welcome to Tusk platform";
 });
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
