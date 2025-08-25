@@ -55,4 +55,8 @@ class LabManagerController extends Controller
     {
         return $this->OperatingPaymentService->Operating_Payment_statistics1();
     }
+    public function showLabItemsHistories()
+    {
+        return $this->ItemService->showLabItemsHistories();
+    }
 }

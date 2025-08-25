@@ -31,6 +31,17 @@ class ItemService
         // return $categories;
         return $this->returnData("items", $itemRepositories, "   المواد", 200);
     }
+    public function showLabItemsHistories()
+    {
+        $lab_Item_Histories = $this->itemRepository->showLabItemsHistories();
+
+        if ($lab_Item_Histories->isEmpty()) {
+
+            return $this->returnErrorMessage('لا يوجد مواد لعرضها حتى الآن', 200);
+        }
+        // return $categories;
+        return $this->returnData("lab_items_history", $lab_Item_Histories, "مواد المخبر", 200);
+    }
     public function additem($subcategory_id, array $data)
     {
 

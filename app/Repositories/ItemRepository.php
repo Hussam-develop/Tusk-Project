@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\Item;
 use App\Models\Subcategory;
 use App\Models\InventoryEmployee;
-
+use App\Models\ItemHistory;
 
 class ItemRepository
 {
@@ -78,8 +78,10 @@ class ItemRepository
             $itemsWithHistory = $Subcategory->items->map(function ($item) {
                 // الحصول على آخر سجل ItemHistory
                 $latestHistory = $item->itemHistory->first();
+                // $item_id = $item->id;
 
                 return [
+                    // "item_id" => $item_id,
                     'item' => $item,
                     'unit_price' => $latestHistory ? $latestHistory->unit_price : null,
                     'created_at' => $latestHistory ? $latestHistory->created_at : null,
@@ -93,6 +95,53 @@ class ItemRepository
         // في حال لم توجد الفئة
         return collect();
     }
+    public function showLabItemsHistories()
+    {
+
+        $user = auth()->user(); // المستخدم الحالي بعد تحديد Guard بواسطة Middleware
+        $type = $user->getMorphClass();
+        //  dd($type); // نوع المستخدم، مثلاً App\Models\Admin
+        if ($type == "labManager") {
+
+            // أولاً، نحصل على الـ ID الخاص بـ labManager
+            $labManagerId = $user->id;
+
+            // نحصل على جميع الموظفين الذين ينتمون لهذا المدير
+            $employeeIds = InventoryEmployee::where('lab_manager_id', $labManagerId)
+                ->pluck('id');
+        } elseif ($type == "inventoryEmployee") {
+            // لموظف المخزون، عرض الأصناف الخاصة به بالإضافة إلى أصناف المدير الذي يتبع له
+            $employeeId = $user->id;
+
+            // الحصول على الـ ID الخاص بمدير المخبر لهذا الموظف
+            $labManagerId = InventoryEmployee::where('id', $employeeId)->value('lab_manager_id');
+            $employeeIds = InventoryEmployee::where('lab_manager_id', $labManagerId)
+                ->pluck('id');
+        }
+
+        $items_ids = Item::where(function ($query) use ($labManagerId, $employeeIds) {
+            $query->where(function ($q) use ($labManagerId) {
+                $q->where('creatorable_type', 'labManager')
+                    ->where('creatorable_id', $labManagerId)
+                    ->where("is_static", 1);
+            })
+                ->orWhere(function ($q) use ($employeeIds) {
+                    $q->where('creatorable_type', 'inventoryEmployee')
+                        ->where("is_static", 1)
+                        ->whereIn('creatorable_id', $employeeIds);
+                });
+        })->pluck("id");
+
+        $items_with_histories = ItemHistory::whereIntegerInRaw("item_id", $items_ids)
+            ->with(['item' => function ($query) {
+                $query->select('id', 'name');
+            }])
+            ->orderByDesc('created_at')
+            ->get(['id', 'item_id', 'quantity', 'unit_price', 'total_price', 'created_at']);
+
+        return $items_with_histories;
+    }
+
     public function Verify_permission_to_add_item($subcategoryId)
     {
         $subcategory = Subcategory::where('id', $subcategoryId)->first();
