@@ -49,6 +49,7 @@ class AuthRepository implements AuthRepositoryInterface
     public function createUser(array $request_data, $guard)
     {
         // dd($request_data);
+        // return $request_data;
         $modelClass = $this->models[$guard];
         try {
             $request_data['password'] = Hash::make($request_data['password']);
@@ -69,12 +70,13 @@ class AuthRepository implements AuthRepositoryInterface
                 'verification_code' => null,
                 'register_accepted' => null,
                 'register_date' => null,
-                'subscription_is_valid_now' => null,
+                'subscription_is_valid_now' => null
             ]);
             // $user->subscription_is_valid_now = null;
             // $user->register_accepted = null;
             // $user->register_date = null;
             $user->save();
+
             //$token = JWTAuth::fromUser($user, ['guard' => $guard]);
             #------------------------------------------------------------------------
             if ($guard == "dentist") {
@@ -84,20 +86,22 @@ class AuthRepository implements AuthRepositoryInterface
                 $doctorTimeRepository->addDoctorTimesInRegister($request_data);
 
                 // add Doctor Image
-                $image = $request_data['image'];
+                if (!empty($request_data['image'])) {
+                    $image = $request_data['image'];
 
-                if ($image !== null) {
+                    if ($image !== null) {
 
-                    $filename =  $image->getClientOriginalName();
+                        $filename =  $image->getClientOriginalName();
 
-                    $file_name_existed = Dentist::where('image_path', $filename)->exists();
-                    if ($file_name_existed) {
-                        $filename = $this->insertRandomNumberBeforeLastDot($filename);
+                        $file_name_existed = Dentist::where('image_path', $filename)->exists();
+                        if ($file_name_existed) {
+                            $filename = $this->insertRandomNumberBeforeLastDot($filename);
+                        }
+                        $user->image_path = $filename;
+                        $user->save();
+
+                        $image->move(public_path("project-files/profile-images"), $filename);
                     }
-                    $user->image_path = $filename;
-                    $user->save();
-
-                    $image->move(public_path("project-files/profile-images"), $filename);
                 }
             }
             #------------------------------------------------------------------------

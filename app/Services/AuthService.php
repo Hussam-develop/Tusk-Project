@@ -27,8 +27,8 @@ class AuthService
 
     public function register(array $data, string $guard)
     {
-        // dd($data);
         $user = $this->authRepo->createUser($data, $guard);
+        // return $user;
         $token = JWTAuth::fromUser($user, ['guard' => $guard]);
 
         //  $token = auth($guard)->login($user);

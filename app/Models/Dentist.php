@@ -17,16 +17,17 @@ class Dentist extends Authenticatable implements JWTSubject
         'email',
         'password',
         'register_subscription_duration',
-        'image_path',
+        //remember Token
+        'phone', // phone clinic
 
         // 'work_from_hour',
         // 'work_to_hour',
 
-        'phone', // phone clinic
         'address', //clinic address
-        'email_is_verified',
         'email_verified_at',
+        'email_is_verified',
         'verification_code',
+        'image_path',
         'register_accepted',
         'register_date',
         'subscription_is_valid_now',
