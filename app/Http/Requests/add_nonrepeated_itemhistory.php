@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-use app\Traits\handleResponseTrait;
+use app\Traits\HandleResponseTrait;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
@@ -13,7 +13,7 @@ class Add_nonrepeated_itemhistory extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    use handleResponseTrait;
+    use HandleResponseTrait;
 
     public function authorize(): bool
     {

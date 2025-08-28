@@ -2,7 +2,7 @@
 
 namespace app\Traits;
 
-trait handleResponseTrait
+trait HandleResponseTrait
 {
 
     public function returnErrorMessage($errorMessage, $errorCode)
