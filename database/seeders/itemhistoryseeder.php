@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class itemhistoryseeder extends Seeder
+class Itemhistoryseeder extends Seeder
 {
     public function run(): void
     {

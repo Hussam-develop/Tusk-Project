@@ -6,7 +6,7 @@ use App\Models\AccountRecord;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class accountrecord_seeder extends Seeder
+class Accountrecord_seeder extends Seeder
 {
     /**
      * Run the database seeds.

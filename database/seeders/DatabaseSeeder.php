@@ -14,13 +14,13 @@ use App\Models\LabManager;
 use App\Models\Subscription;
 use Illuminate\Database\Seeder;
 use Database\Seeders\BillSeeder;
-use Database\Seeders\itemSeeder;
+use Database\Seeders\ItemSeeder;
 use App\Models\InventoryEmployee;
 use Database\Seeders\PatientSeeder;
 use Database\Seeders\CategorySeeder;
 use Illuminate\Support\Facades\Hash;
 use Database\Seeders\TreatmentSeeder;
-use Database\Seeders\itemhistoryseeder;
+use Database\Seeders\Itemhistoryseeder;
 use Database\Seeders\SubCategorySeeder;
 use Database\Seeders\OperatingPaymentSeeder;
 use Database\Seeders\DentistLabManagerSeeder;
@@ -235,15 +235,15 @@ class DatabaseSeeder extends Seeder
 
         // $this->call([
         //     DentistLabManagerSeeder::class,
-        //     itemhistoryseeder::class,
+        //     Itemhistoryseeder::class,
         //     OperatingPaymentSeeder::class,
         //     PatientSeeder::class,
         //     TreatmentSeeder::class,
-        //     accountrecord_seeder::class,
+        //     Accountrecord_seeder::class,
         //     BillSeeder::class,
         //     CategorySeeder::class,
         //     SubCategorySeeder::class,
-        //     itemSeeder::class,
+        //     ItemSeeder::class,
         // ]);
     }
 }
