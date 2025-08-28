@@ -15,7 +15,6 @@ trait handleResponseTrait
         ]);
     }
 
-
     public function returnData($key, $value, $msg, $successCode)
     {
         return response()->json([
