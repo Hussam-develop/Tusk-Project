@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class registerRequest extends FormRequest
+class RegisterRequest extends FormRequest
 {
     use handleResponseTrait;
     /*

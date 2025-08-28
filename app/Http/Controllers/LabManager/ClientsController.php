@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\LabManager;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\storeDentistRequest;
+use App\Http\Requests\StoreDentistRequest;
 use App\Http\Resources\DentistResource;
 use App\Services\AccountRecordService;
 use App\Services\LabmangerService;
@@ -48,7 +48,7 @@ class ClientsController extends Controller
 
 
     // إضافة زبون محليا
-    public function addDentistAsLocalClientForLabManager(storeDentistRequest $request)
+    public function addDentistAsLocalClientForLabManager(StoreDentistRequest $request)
     {
         try {
             $this->labmanagerService->addDentistAsLocalClientForLabManager($request->validated());

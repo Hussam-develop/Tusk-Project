@@ -78,7 +78,7 @@ class ItemhistoryService
         }
         return $this->returnData("Non_Rpeated_items", itemhistoryresource::collection($itemhistoryRepositories), " كميات المواد النادرة", 200);
     }
-    public function add_nonrepeated_itemhistory(array $data)
+    public function Add_nonrepeated_itemhistory(array $data)
     {
 
 
@@ -86,7 +86,7 @@ class ItemhistoryService
         $type = $user->getMorphClass();
 
 
-        $result = $this->itemhistoryRepository->add_nonrepeated_itemhistory($user->id, $type, $data);
+        $result = $this->itemhistoryRepository->Add_nonrepeated_itemhistory($user->id, $type, $data);
         if ($result === 'ليس طبيب') {
             return $this->returnErrorMessage('حدث خطأانت لست طبيب ', 500);
         }

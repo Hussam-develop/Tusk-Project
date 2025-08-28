@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class updatesecretaryequest extends FormRequest
+class Updatesecretaryequest extends FormRequest
 {
     use handleResponseTrait;
     /**

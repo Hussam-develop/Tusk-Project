@@ -9,7 +9,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\LoginRequest;
 use app\Traits\handleResponseTrait;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\registerRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Repositories\DoctorTimeRepository;
 
 class AuthController extends Controller
@@ -21,7 +21,7 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
-    public function register(registerRequest $request)
+    public function register(RegisterRequest $request)
     {
 
         $data = $this->authService->register($request->validated(), $request->guard);

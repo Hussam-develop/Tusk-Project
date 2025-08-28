@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class addSecretaryRequest extends FormRequest
+class AddSecretaryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

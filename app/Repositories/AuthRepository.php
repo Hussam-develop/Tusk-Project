@@ -11,7 +11,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use app\Traits\handleResponseTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\registerRequest;
+use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 use App\Repositories\DoctorTimeRepository;

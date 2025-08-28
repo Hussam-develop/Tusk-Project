@@ -250,7 +250,7 @@ Route::group([
     Route::get('/itemhistories/{itemid}', [DentistController::class, 'itemhistories']);
     Route::get('/Repeated_item_histories', [DentistController::class, 'Repeated_item_histories']);
     Route::get('/Non_Repeated_item_histories', [DentistController::class, 'Non_Repeated_item_histories']);
-    Route::post('/add_nonrepeated_itemhistory', [DentistController::class, 'add_nonrepeated_itemhistory']);
+    Route::post('/add_nonrepeated_itemhistory', [DentistController::class, 'Add_nonrepeated_itemhistory']);
     //Items : Repeated Items History for dashboard
     Route::get('/lab-items-history', [LabManagerController::class, 'showLabItemsHistories']);
 });

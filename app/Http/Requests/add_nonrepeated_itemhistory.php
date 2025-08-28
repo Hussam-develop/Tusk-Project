@@ -8,7 +8,7 @@ use app\Traits\handleResponseTrait;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class add_nonrepeated_itemhistory extends FormRequest
+class Add_nonrepeated_itemhistory extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

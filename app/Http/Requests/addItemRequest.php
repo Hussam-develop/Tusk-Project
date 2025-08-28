@@ -8,7 +8,7 @@ use app\Traits\handleResponseTrait;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class addItemRequest extends FormRequest
+class AddItemRequest extends FormRequest
 {
     use handleResponseTrait;
 

@@ -146,7 +146,7 @@ class ItemhistoryRepository
         return $itemHistories;
     }
 
-    public function add_nonrepeated_itemhistory($user_id, $type, $data)
+    public function Add_nonrepeated_itemhistory($user_id, $type, $data)
     {
 
         if ($type != 'dentist') {

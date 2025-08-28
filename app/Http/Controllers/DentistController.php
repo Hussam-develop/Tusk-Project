@@ -13,18 +13,18 @@ use App\Services\TreatmentService;
 use App\Http\Requests\addSecretary;
 use App\Services\itemhistoryService;
 use App\Services\SubCategoryService;
-use App\Http\Requests\addItemRequest;
-use App\Http\Requests\commentrequest;
+use App\Http\Requests\AddItemRequest;
+use App\Http\Requests\Commentrequest;
 use App\Services\AccountRecordService;
-use App\Http\Requests\addCategoryRequest;
+use App\Http\Requests\AddCategoryRequest;
 use App\Http\Requests\ItemhistoryRequest;
 
 
 
 use App\Services\OperatingPaymentService;
-use App\Http\Requests\addSecretaryRequest;
-use App\Http\Requests\updatesecretaryequest;
-use App\Http\Requests\add_nonrepeated_itemhistory;
+use App\Http\Requests\AddSecretaryRequest;
+use App\Http\Requests\Updatesecretaryequest;
+use App\Http\Requests\Add_nonrepeated_itemhistory;
 
 
 class DentistController extends Controller
@@ -60,7 +60,7 @@ class DentistController extends Controller
     {
         return $this->secretaryService->getSecretaries();
     }
-    public function updateSecretary($id, updatesecretaryequest $request)
+    public function updateSecretary($id, Updatesecretaryequest $request)
     {
         $data = $request->validated();
         return $this->secretaryService->updateSecretary($id, $data);
@@ -69,7 +69,7 @@ class DentistController extends Controller
     {
         return $this->secretaryService->removeSecretary($id);
     }
-    public function addSecretary(addSecretaryRequest $request)
+    public function addSecretary(AddSecretaryRequest $request)
     {
         $data = $request->validated();
         return $this->secretaryService->addSecretary($data);
@@ -85,7 +85,7 @@ class DentistController extends Controller
         $subcategories = $this->subCategoryService->getSubcategoriesForCategory($categoryId);
         return $subcategories;
     }
-    public function addcategory(addCategoryRequest $request)
+    public function addcategory(AddCategoryRequest $request)
     {
         $data = $request->validated();
         return $this->categoryService->addcategory($data);
@@ -99,7 +99,7 @@ class DentistController extends Controller
     {
         return $this->categoryService->removeCategory($id);
     }
-    public function updateCategory($id, addCategoryRequest $request)
+    public function updateCategory($id, AddCategoryRequest $request)
     {
         $data = $request->validated();
         return $this->categoryService->updateCategory($id, $data);
@@ -108,17 +108,17 @@ class DentistController extends Controller
     {
         return $this->subCategoryService->removeSubCategory($id);
     }
-    public function addsubcategory($id, addCategoryRequest $request)
+    public function addsubcategory($id, AddCategoryRequest $request)
     {
         $data = $request->validated();
         return $this->subCategoryService->addsubcategory($id, $data);
     }
-    public function updateSubCategory($id, addCategoryRequest $request)
+    public function updateSubCategory($id, AddCategoryRequest $request)
     {
         $data = $request->validated();
         return $this->subCategoryService->updateSubCategory($id, $data);
     }
-    public function additem($id, addItemRequest $request)
+    public function additem($id, AddItemRequest $request)
     {
         $data = $request->validated();
         return $this->itemService->additem($id, $data);
@@ -129,7 +129,7 @@ class DentistController extends Controller
         return $this->itemService->removeItem($id);
     }
 
-    public function updateitem($id, addItemRequest $request)
+    public function updateitem($id, AddItemRequest $request)
     {
         $data = $request->validated();
         return $this->itemService->updateItem($id, $data);
@@ -200,16 +200,16 @@ class DentistController extends Controller
         return $this->ItemhistoryService->Non_Repeated_item_histories();
     }
 
-    public function add_nonrepeated_itemhistory(add_nonrepeated_itemhistory $request)
+    public function Add_nonrepeated_itemhistory(Add_nonrepeated_itemhistory $request)
     {
         $data = $request->validated();
-        return $this->ItemhistoryService->add_nonrepeated_itemhistory($data);
+        return $this->ItemhistoryService->Add_nonrepeated_itemhistory($data);
     }
     public function Account_records_of_lab($lab_id)
     {
         return $this->AccountRecordService->Account_records_of_lab($lab_id);
     }
-    public function add_comment($medical_case_id, commentrequest $request)
+    public function add_comment($medical_case_id, Commentrequest $request)
     {
         $data = $request->validated();
         return $this->CommentService->add_comment($medical_case_id, $data);
