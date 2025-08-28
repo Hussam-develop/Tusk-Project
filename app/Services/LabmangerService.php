@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\LabmangerRepository;
 use App\Http\Controllers\Auth\MailController;
-use App\Http\Resources\latestAccountInLabResource;
+use App\Http\Resources\LatestAccountInLabResource;
 
 class LabmangerService
 {
@@ -54,7 +54,7 @@ class LabmangerService
         return $this->returnData(" Latest Account of this lab ", $Account, " اخر سجل حساب لدي  ", 200);
 
 
-        //latestAccountInLabResource::collection(
+        //LatestAccountInLabResource::collection(
     }
     public function show_all_labs()
     {

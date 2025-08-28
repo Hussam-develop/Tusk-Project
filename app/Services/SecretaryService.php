@@ -6,7 +6,7 @@ use app\Traits\handleResponseTrait;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Resources\secretaryresource;
+use App\Http\Resources\Secretaryresource;
 use App\Repositories\SecretaryRepository;
 use App\Http\Controllers\Auth\MailController;
 
@@ -32,7 +32,7 @@ class SecretaryService
                 return $this->returnErrorMessage('لا يوجد سكرتيرات .', 200);
             }
 
-            return $this->returnData("secretaries", secretaryresource::collection($secretaries), " السكرتيرات ", 200);
+            return $this->returnData("secretaries", Secretaryresource::collection($secretaries), " السكرتيرات ", 200);
         } catch (\Exception $e) {
             return $this->returnErrorMessage('حدث خطأ أثناء جلب السكرتيرات.', 500);
         }

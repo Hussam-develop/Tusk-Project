@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-// use App\Http\Resources\subcategoryResource;
+// use App\Http\Resources\SubcategoryResource;
 use app\Traits\handleResponseTrait;
-use App\Http\Resources\itemhistoryresource;
+use App\Http\Resources\Itemhistoryresource;
 use App\Repositories\itemhistoryRepository;
 
 class ItemhistoryService
@@ -62,7 +62,7 @@ class ItemhistoryService
 
             return $this->returnErrorMessage(' لا يوجد كميات متكررة ', 200);
         }
-        return $this->returnData("Rpeated_items", itemhistoryresource::collection($itemhistoryRepositories), " كميات المواد المتكررة", 200);
+        return $this->returnData("Rpeated_items", Itemhistoryresource::collection($itemhistoryRepositories), " كميات المواد المتكررة", 200);
     }
     public function Non_Repeated_item_histories()
     {
@@ -76,7 +76,7 @@ class ItemhistoryService
 
             return $this->returnErrorMessage(' لا يوجد كميات متكررة ', 200);
         }
-        return $this->returnData("Non_Rpeated_items", itemhistoryresource::collection($itemhistoryRepositories), " كميات المواد النادرة", 200);
+        return $this->returnData("Non_Rpeated_items", Itemhistoryresource::collection($itemhistoryRepositories), " كميات المواد النادرة", 200);
     }
     public function Add_nonrepeated_itemhistory(array $data)
     {

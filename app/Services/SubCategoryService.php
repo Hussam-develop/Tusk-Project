@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Http\Resources\subcategoryResource;
+use App\Http\Resources\SubcategoryResource;
 use App\Repositories\SubCategoryRepository;
 use app\Traits\handleResponseTrait;
 
@@ -27,7 +27,7 @@ class SubCategoryService
             return $this->returnErrorMessage('لا يوجد اصناف فرعية', 200);
         }
         // return $categories;
-        return $this->returnData("subCategoryRepositories", subcategoryResource::collection($subCategoryRepositories), "  الاصناف الفرعية", 200);
+        return $this->returnData("subCategoryRepositories", SubcategoryResource::collection($subCategoryRepositories), "  الاصناف الفرعية", 200);
     }
     public function removeSubCategory($id)
     {

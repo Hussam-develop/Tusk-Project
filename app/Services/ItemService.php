@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-// use App\Http\Resources\subcategoryResource;
-use App\Http\Resources\itemResource;
+// use App\Http\Resources\SubcategoryResource;
+use App\Http\Resources\ItemResource;
 use App\Repositories\ItemRepository;
 use app\Traits\handleResponseTrait;
 
