@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Patient;
 use App\Models\PatientImage;
-use app\Traits\handleResponseTrait;
+use app\Traits\HandleResponseTrait;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\PatientRepository;
@@ -15,7 +15,7 @@ use App\Http\Controllers\Auth\MailController;
 
 class PatientService
 {
-    use handleResponseTrait;
+    use HandleResponseTrait;
 
     public function __construct(protected PatientRepository $patientRepository)
     {

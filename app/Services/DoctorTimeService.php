@@ -3,11 +3,11 @@
 namespace App\Services;
 
 use App\Repositories\DoctorTimeRepository;
-use app\Traits\handleResponseTrait;
+use app\Traits\HandleResponseTrait;
 
 class DoctorTimeService
 {
-    use handleResponseTrait;
+    use HandleResponseTrait;
     protected $repository;
 
     public function __construct(DoctorTimeRepository $repository)

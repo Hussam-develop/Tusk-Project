@@ -3,13 +3,13 @@
 
 namespace App\Services;
 
-use app\Traits\handleResponseTrait;
+use app\Traits\HandleResponseTrait;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\LabClientsRepository;
 
 class LabClientsService
 {
-    use handleResponseTrait;
+    use HandleResponseTrait;
 
     public function __construct(protected LabClientsRepository $repository)
     {

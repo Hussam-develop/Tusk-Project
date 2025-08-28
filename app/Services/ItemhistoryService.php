@@ -3,13 +3,13 @@
 namespace App\Services;
 
 // use App\Http\Resources\SubcategoryResource;
-use app\Traits\handleResponseTrait;
+use app\Traits\HandleResponseTrait;
 use App\Http\Resources\Itemhistoryresource;
 use App\Repositories\itemhistoryRepository;
 
 class ItemhistoryService
 {
-    use handleResponseTrait;
+    use HandleResponseTrait;
     protected $itemhistoryRepository;
 
     public function __construct(itemhistoryRepository $itemhistoryRepository)

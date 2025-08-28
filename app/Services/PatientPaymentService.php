@@ -3,14 +3,14 @@
 namespace App\Services;
 
 use App\Models\Patient;
-use app\Traits\handleResponseTrait;
+use app\Traits\HandleResponseTrait;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\TreatmentRepository;
 use App\Repositories\PatientPaymentRepository;
 
 class PatientPaymentService
 {
-    use handleResponseTrait;
+    use HandleResponseTrait;
 
     protected $repository;
 

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\AdminService;
 use App\Http\Resources\LabResource;
-use app\Traits\handleResponseTrait;
+use app\Traits\HandleResponseTrait;
 use App\Http\Resources\ClinicResource;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\RenewSubscriptionRequest;
@@ -14,7 +14,7 @@ use App\Http\Requests\RenewSubscriptionClinicRequest;
 
 class AdminController extends Controller
 {
-    use handleResponseTrait;
+    use HandleResponseTrait;
     protected $adminService;
 
 

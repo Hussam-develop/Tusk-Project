@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Http\Controllers\Auth\MailController;
 
 use App\Repositories\AccountRecordRepository;
-use app\Traits\handleResponseTrait;
+use app\Traits\HandleResponseTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 
 class AccountRecordService
 {
-    use handleResponseTrait;
+    use HandleResponseTrait;
     protected $AccountRecordRepository;
 
     public function __construct(AccountRecordRepository $AccountRecordRepository)

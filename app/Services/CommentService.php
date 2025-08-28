@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Http\Controllers\Auth\MailController;
 
-use app\Traits\handleResponseTrait;
+use app\Traits\HandleResponseTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\CommentRepository;
@@ -13,7 +13,7 @@ use App\Repositories\CommentRepository;
 
 class CommentService
 {
-    use handleResponseTrait;
+    use HandleResponseTrait;
     protected $CommentRepository;
 
     public function __construct(CommentRepository $CommentRepository)

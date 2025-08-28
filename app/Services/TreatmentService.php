@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Patient;
 use App\Models\Treatment;
 use App\Models\TreatmentImage;
-use app\Traits\handleResponseTrait;
+use app\Traits\HandleResponseTrait;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\TreatmentRequest;
 use Illuminate\Support\Facades\Response;
@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 
 class TreatmentService
 {
-    use handleResponseTrait;
+    use HandleResponseTrait;
 
     protected $repository;
 
