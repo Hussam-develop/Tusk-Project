@@ -56,7 +56,7 @@ class AuthRepository implements AuthRepositoryInterface
             $request_data['image_path'] = null;
 
             // $user = $modelClass::create($request_data);    Mahnoud replace that with :
-            $user = $modelClass::create([
+            $user = $modelClass::create($request_data/* or : [
                 'first_name' => $request_data["first_name"],
                 'last_name' => $request_data["last_name"],
                 'email' => $request_data["email"],
@@ -71,7 +71,7 @@ class AuthRepository implements AuthRepositoryInterface
                 'register_accepted' => null,
                 'register_date' => null,
                 'subscription_is_valid_now' => null
-            ]);
+            ]*/);
             // $user->subscription_is_valid_now = null;
             // $user->register_accepted = null;
             // $user->register_date = null;
