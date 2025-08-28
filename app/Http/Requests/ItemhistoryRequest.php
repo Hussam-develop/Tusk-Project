@@ -10,6 +10,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ItemhistoryRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      */

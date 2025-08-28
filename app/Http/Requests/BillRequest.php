@@ -10,6 +10,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class BillRequest extends FormRequest
 {
+
     use handleResponseTrait;
 
     /**

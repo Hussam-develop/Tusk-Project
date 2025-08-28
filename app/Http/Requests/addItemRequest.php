@@ -10,6 +10,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class AddItemRequest extends FormRequest
 {
+
     use handleResponseTrait;
 
     /**

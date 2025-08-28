@@ -9,6 +9,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class RenewSubscriptionClinicRequest extends FormRequest
 {
+
     use handleResponseTrait;
     /**
      * Determine if the user is authorized to make this request.

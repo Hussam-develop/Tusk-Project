@@ -9,6 +9,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class MedicalCaseRequest extends FormRequest
 {
+
     use handleResponseTrait;
 
     /**

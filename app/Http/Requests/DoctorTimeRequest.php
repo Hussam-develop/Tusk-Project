@@ -9,6 +9,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class DoctorTimeRequest extends FormRequest
 {
+
     use handleResponseTrait;
     public function authorize(): bool
     {

@@ -10,6 +10,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class Commentrequest extends FormRequest
 {
+
     use handleResponseTrait;
 
     /**

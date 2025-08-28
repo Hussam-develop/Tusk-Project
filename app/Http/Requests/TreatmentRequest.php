@@ -9,6 +9,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class TreatmentRequest extends FormRequest
 {
+
     use handleResponseTrait;
 
     /**
