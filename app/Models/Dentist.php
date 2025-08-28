@@ -28,7 +28,7 @@ class Dentist extends Authenticatable implements JWTSubject
         'email_verified_at',
         'verification_code',
         'register_accepted',
-        'clinic_register_date',
+        'register_date',
         'subscription_is_valid_now',
     ];
 

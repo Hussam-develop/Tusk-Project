@@ -98,7 +98,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"امجد احمد\",\r\n    \"clinic_register_date\": \"2025-05-04\"\r\n}",
+							"raw": "{\r\n    \"name\": \"امجد احمد\",\r\n    \"register_date\": \"2025-05-04\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

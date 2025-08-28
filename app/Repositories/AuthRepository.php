@@ -48,15 +48,32 @@ class AuthRepository implements AuthRepositoryInterface
 
     public function createUser(array $request_data, $guard)
     {
-
+        // dd($request_data);
         $modelClass = $this->models[$guard];
         try {
             $request_data['password'] = Hash::make($request_data['password']);
+            $request_data['image_path'] = null;
 
-            $user = $modelClass::create($request_data);
-            $user->subscription_is_valid_now = null;
-            $user->register_accepted = null;
-            $user->register_date = null;
+            // $user = $modelClass::create($request_data);    Mahnoud replace that with :
+            $user = $modelClass::create([
+                'first_name' => $request_data["first_name"],
+                'last_name' => $request_data["last_name"],
+                'email' => $request_data["email"],
+                'password' => $request_data["password"],
+                'register_subscription_duration' => $request_data["register_subscription_duration"],
+                'image_path' => $request_data["image_path"],
+                'phone' => $request_data["phone"],
+                'address' => $request_data["address"],
+                'email_is_verified' => null,
+                'email_verified_at' => null,
+                'verification_code' => null,
+                'register_accepted' => null,
+                'register_date' => null,
+                'subscription_is_valid_now' => null,
+            ]);
+            // $user->subscription_is_valid_now = null;
+            // $user->register_accepted = null;
+            // $user->register_date = null;
             $user->save();
             //$token = JWTAuth::fromUser($user, ['guard' => $guard]);
             #------------------------------------------------------------------------
