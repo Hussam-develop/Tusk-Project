@@ -2,14 +2,14 @@
 
 namespace App\Http\Requests;
 
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class DoctorTimeRequest extends FormRequest
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
     public function authorize(): bool
     {
         return true;

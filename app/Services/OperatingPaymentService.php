@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 use App\Repositories\PatientRepository;
 use App\Repositories\OperatingPaymentRepository;
 
 class OperatingPaymentService
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
 
     protected $repository;
     protected $OperatingPaymentRepository;

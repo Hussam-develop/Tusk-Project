@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +12,7 @@ use App\Http\Controllers\Auth\MailController;
 
 class SecretaryService
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
     protected $secretaryRepository;
 
     public function __construct(SecretaryRepository $secretaryRepository)

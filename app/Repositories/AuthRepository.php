@@ -8,7 +8,7 @@ use App\Models\Dentist;
 use App\Models\LabManager;
 use App\Models\Subscription;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
@@ -19,7 +19,7 @@ use App\Http\Controllers\Auth\MailController;
 
 class AuthRepository implements AuthRepositoryInterface
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
     protected array $models = [
         'dentist'     => \App\Models\Dentist::class,
         'lab_manager' => \App\Models\LabManager::class,

@@ -6,7 +6,7 @@ use Exception;
 use App\Mail\VerifyMail;
 use Illuminate\Http\Request;
 use App\Mail\SendWelcomeMail;
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +18,7 @@ use App\Http\Requests\Mails\ForgetPasswordRequest;
 
 class MailController extends Controller
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
     private function getModel(string $guard): string
     {
         return match ($guard) {

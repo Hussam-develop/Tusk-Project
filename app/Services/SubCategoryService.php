@@ -4,11 +4,11 @@ namespace App\Services;
 
 use App\Http\Resources\SubcategoryResource;
 use App\Repositories\SubCategoryRepository;
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 
 class SubCategoryService
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
     protected $subCategoryRepository;
 
     public function __construct(SubCategoryRepository $subCategoryRepository)

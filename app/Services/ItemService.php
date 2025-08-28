@@ -5,11 +5,11 @@ namespace App\Services;
 // use App\Http\Resources\SubcategoryResource;
 use App\Http\Resources\ItemResource;
 use App\Repositories\ItemRepository;
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 
 class ItemService
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
     protected $itemRepository;
 
     public function __construct(ItemRepository $itemRepository)

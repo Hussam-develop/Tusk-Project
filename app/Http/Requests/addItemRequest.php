@@ -4,13 +4,13 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class AddItemRequest extends FormRequest
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
 
     /**
      * Determine if the user is authorized to make this request.

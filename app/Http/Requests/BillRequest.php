@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 use App\Rules\DateAfterOneDayAtLeastRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
@@ -10,7 +10,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class BillRequest extends FormRequest
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
 
     /**
      * Determine if the user is authorized to make this request.

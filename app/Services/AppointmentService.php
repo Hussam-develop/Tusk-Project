@@ -4,14 +4,14 @@ namespace App\Services;
 
 use App\Models\DoctorTime;
 use App\Repositories\AppointmentRepository;
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AppointmentService
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
     protected $repo;
 
     public function __construct(AppointmentRepository $repo)

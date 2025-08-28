@@ -4,12 +4,12 @@ namespace App\Services;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\BillRequest;
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 use App\Repositories\BillRepository;
 
 class BillService
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
 
     protected $repository;
 

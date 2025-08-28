@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 use App\Repositories\CategoryRepository;
 use App\Repositories\SubCategoryRepository;
 
 class CategoryService
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
 
     protected $categoryRepository;
     protected $subCategoryRepository;

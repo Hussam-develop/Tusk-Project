@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TreatmentRequest;
 use App\Models\Patient;
 use App\Services\TreatmentService;
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 use Illuminate\Http\Request;
 
 class TreatmentController extends Controller
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
 
     public function __construct(protected TreatmentService $treatmentService)
     {

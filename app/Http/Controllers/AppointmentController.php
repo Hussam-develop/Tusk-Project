@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BookAnAppointmentRequest;
 use App\Models\Appointment;
 use App\Services\AppointmentService;
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
 
     public function __construct(protected AppointmentService $service)
     {

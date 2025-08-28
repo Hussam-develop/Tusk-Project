@@ -6,7 +6,7 @@ use Exception;
 use Illuminate\Http\Request;
 use App\Services\PatientService;
 use Illuminate\Http\JsonResponse;
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StorePatientRequest;
@@ -14,7 +14,7 @@ use App\Http\Requests\UpdatePatientRequest;
 
 class PatientController extends Controller
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
     protected $patientService;
 
     public function __construct(PatientService $patientService)

@@ -10,12 +10,12 @@ use App\Http\Requests\UpdateAccountantRequest;
 use App\Http\Requests\UpdateInventoryImpRequest;
 use App\Http\Resources\LabEmployeesResource;
 use App\Services\LabmangerService;
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 use Illuminate\Http\Request;
 
 class EmployeesController extends Controller
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
     public function __construct(protected LabmangerService $labmanagerService)
     {
         $this->labmanagerService = $labmanagerService;

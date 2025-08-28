@@ -5,14 +5,14 @@ namespace App\Services;
 use App\Models\File;
 use App\Models\MedicalCase;
 use Illuminate\Http\Request;
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 use Illuminate\Support\Facades\Response;
 use App\Repositories\MedicalCaseRepository;
 use App\Http\Requests\ChangeCaseStatusRequest;
 
 class MedicalCaseService
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
 
     protected $repository;
 

@@ -11,7 +11,7 @@ use App\Models\LabManager;
 use App\Models\MedicalCase;
 use App\Models\AccountRecord;
 use Illuminate\Support\Facades\DB;
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ManufacturedStatistic;
 use App\Http\Requests\MedicalCaseRequest;
@@ -20,7 +20,7 @@ use App\Http\Requests\StoreMedicalCaseAsManagerRequest;
 
 class MedicalCaseRepository
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
     public function get_labs_by_labtype($lab_type)
     {
         // $labs = LabManager::where("lab_type", $lab_type)->get("lab_name");

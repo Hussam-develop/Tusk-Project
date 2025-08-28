@@ -6,7 +6,7 @@ use Exception;
 
 use App\Models\LabManager;
 use Illuminate\Support\Facades\DB;
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\LabmangerRepository;
@@ -15,7 +15,7 @@ use App\Http\Resources\LatestAccountInLabResource;
 
 class LabmangerService
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
     protected $labmangerrepository;
     protected $user;
     public function __construct(LabmangerRepository $labmangerrepository, protected AccountRecordService $accountRecordService)

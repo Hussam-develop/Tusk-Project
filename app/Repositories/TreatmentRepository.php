@@ -8,13 +8,13 @@ use App\Models\Treatment;
 use App\Models\LabManager;
 use App\Models\TreatmentImage;
 use Illuminate\Support\Facades\DB;
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\TreatmentResource;
 
 class TreatmentRepository
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
 
     public function show_patient_treatments($dentist_id, $patient_id)
     {

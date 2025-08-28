@@ -3,14 +3,14 @@
 namespace App\Http\Requests;
 
 use Illuminate\Validation\Rule;
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class LoginRequest extends FormRequest
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
     /*
      * Determine if the user is authorized to make this request.
      */

@@ -7,14 +7,14 @@ use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\LoginRequest;
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Repositories\DoctorTimeRepository;
 
 class AuthController extends Controller
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
 
     public function __construct(protected AuthService $authService)
     {

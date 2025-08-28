@@ -7,13 +7,13 @@ use App\Http\Requests\StoreDentistRequest;
 use App\Http\Resources\DentistResource;
 use App\Services\AccountRecordService;
 use App\Services\LabmangerService;
-use app\Traits\HandleResponseTrait;
+use app\Traits\handleResponseTrait;
 use Exception;
 use Illuminate\Http\Request;
 
 class ClientsController extends Controller
 {
-    use HandleResponseTrait;
+    use handleResponseTrait;
     public function __construct(protected LabmangerService $labmanagerService)
     {
         $this->labmanagerService = $labmanagerService;
