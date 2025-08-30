@@ -21,6 +21,7 @@ use App\Http\Controllers\PatientPaymentController;
 use App\Http\Controllers\OperatingPaymentController;
 use App\Http\Controllers\LabManager\ClientsController;
 use App\Http\Controllers\LabManager\EmployeesController;
+use App\Models\LabManager;
 
 Route::get('test', function () {
     return "💚  Welcome to Tusk platform  💚";
@@ -309,6 +310,8 @@ Route::group([
         Route::post('/preview-bill', [BillController::class, 'preview_bill']);
     });
 
+    Route::get("/show-dentist-payments-in-lab/{dentist_id}", [LabManagerController::class, 'show_dentist_payments_in_lab']);
+    Route::post("/add-dentist-payments-in-lab/{dentist_id}", [LabManagerController::class, 'add_dentist_payments_in_lab']);
 
 
 
@@ -336,6 +339,7 @@ Route::group([
     //Lab Clients
     Route::get('/clients', [ClientsController::class, 'showLabClients']);
     //Route::get('/clients/{clientId}/details', [ClientsController::class, 'showClientInLab']);
+    //😅😅😅📍📍📍📍
     Route::post('/clients/add-local-client/', [ClientsController::class, 'addDentistAsLocalClientForLabManager']);
 
     //ادارة موظفين المخبر

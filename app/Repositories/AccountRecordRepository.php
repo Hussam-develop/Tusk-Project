@@ -2,10 +2,13 @@
 
 namespace App\Repositories;
 
-use App\Models\AccountRecord;
-
 use App\Models\Dentist;
+use App\Models\Accountant;
+
+use Illuminate\Http\Request;
+use App\Models\AccountRecord;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\AddPaymentRequest;
 
 
 
@@ -48,6 +51,57 @@ class AccountRecordRepository
             })->values();
 
         return $results;
+    }
+    public function show_dentist_payments_in_lab($labManagerid, $dentist_id)
+    {
+
+        $dentist_payments  = AccountRecord::where('lab_manager_id', $labManagerid)
+            ->where('dentist_id', $dentist_id)
+            ->where('type', 'إضافة رصيد')
+            ->orderBy('created_at', 'desc')
+            ->get(["id", "signed_value", "created_at"]);
+
+
+        return $dentist_payments;
+    }
+
+    public function add_dentist_payments_in_lab($dentist_id, AddPaymentRequest $request)
+    {
+        $user = auth()->user(); // المستخدم الحالي بعد تحديد Guard بواسطة Middleware
+        $type = $user->getMorphClass();
+        $labManagerId = null;
+        //  dd($type); // نوع المستخدم، مثلاً App\Models\Admin
+        if ($type == "labManager") {
+            $labManagerId = $user->id;
+        }
+        if ($type == "accountant") {
+            $employeeId = $user->id;
+            $labManagerId = Accountant::where('id', $employeeId)->value('lab_manager_id');
+        }
+
+        $record = AccountRecord::where('dentist_id', $dentist_id)
+            ->where('lab_manager_id', $labManagerId)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        $previous_client_account_value = optional($record)->current_account ?? 0;
+
+
+        $add_dentist_payments  = AccountRecord::create([
+            'dentist_id' => $dentist_id,
+            'lab_manager_id' => $labManagerId,
+            'bill_id' => null,
+
+            'creatorable_id' => $user->id,
+            'creatorable_type' => $type,
+            'note' => "-",
+            'type' => "إضافة رصيد",
+            'signed_value' => $request->value,
+            'current_account' => $previous_client_account_value + $request->value,
+
+        ]);
+
+        return $add_dentist_payments;
     }
     public function createAccountRecord($data)
     {

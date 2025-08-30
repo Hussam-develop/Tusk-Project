@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\AccountRecordService;
+use Illuminate\Http\Request;
+use App\Services\ItemService;
 use App\Services\CategoryService;
 use App\Services\ItemhistoryService;
-use App\Services\ItemService;
 use App\Services\MedicalCaseService;
+use App\Services\AccountRecordService;
+use App\Http\Requests\AddPaymentRequest;
 use App\Services\OperatingPaymentService;
-use Illuminate\Http\Request;
 
 
 class LabManagerController extends Controller
@@ -58,5 +59,13 @@ class LabManagerController extends Controller
     public function showLabItemsHistories()
     {
         return $this->ItemService->showLabItemsHistories();
+    }
+    public function show_dentist_payments_in_lab($dentist_id)
+    {
+        return $this->AccountRecordService->show_dentist_payments_in_lab($dentist_id);
+    }
+    public function add_dentist_payments_in_lab($dentist_id, AddPaymentRequest $request)
+    {
+        return $this->AccountRecordService->add_dentist_payments_in_lab($dentist_id, $request);
     }
 }
